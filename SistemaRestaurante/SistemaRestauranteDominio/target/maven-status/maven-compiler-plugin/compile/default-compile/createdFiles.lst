@@ -1,0 +1,12 @@
+itson\sistemarestaurantedominio\Usuario.class
+itson\sistemarestaurantedominio\UnidadIngrediente.class
+itson\sistemarestaurantedominio\dtos\CorreoContraseniaInicioSesionDTO.class
+itson\sistemarestaurantedominio\dtos\NuevoIngredienteDTO.class
+itson\sistemarestaurantedominio\Producto.class
+itson\sistemarestaurantedominio\Comanda.class
+itson\sistemarestaurantedominio\EstadoComanda.class
+itson\sistemarestaurantedominio\TipoProducto.class
+itson\sistemarestaurantedominio\Ingrediente.class
+itson\sistemarestaurantedominio\ProductoComanda.class
+itson\sistemarestaurantedominio\Cliente.class
+itson\sistemarestaurantedominio\IngredienteProducto.class
