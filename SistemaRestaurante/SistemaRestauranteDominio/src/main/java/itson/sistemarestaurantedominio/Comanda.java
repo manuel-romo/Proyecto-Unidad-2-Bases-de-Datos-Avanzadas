@@ -56,6 +56,10 @@ public class Comanda implements Serializable {
     @JoinColumn(name = "id_cliente", nullable = true)
     private Cliente cliente;
     
+    @ManyToOne()
+    @JoinColumn(name = "id_mesa", nullable = true)
+    private Mesa mesa;
+    
     public Long getId() {
         return id;
     }
@@ -104,8 +108,14 @@ public class Comanda implements Serializable {
         this.cliente = cliente;
         
     }
-    
-    
+
+    public Mesa getMesa() {
+        return mesa;
+    }
+
+    public void setMesa(Mesa mesa) {
+        this.mesa = mesa;
+    }
 
     @Override
     public int hashCode() {

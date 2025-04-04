@@ -135,8 +135,6 @@ public class Cliente implements Serializable {
         comandas.add(comanda);
         comanda.setCliente(this);
     }
-    
-    
 
     @Override
     public int hashCode() {
