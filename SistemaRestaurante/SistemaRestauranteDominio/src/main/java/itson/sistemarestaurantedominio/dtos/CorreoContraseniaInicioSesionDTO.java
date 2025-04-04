@@ -1,4 +1,3 @@
-
 package itson.sistemarestaurantedominio.dtos;
 
 public class CorreoContraseniaInicioSesionDTO {
