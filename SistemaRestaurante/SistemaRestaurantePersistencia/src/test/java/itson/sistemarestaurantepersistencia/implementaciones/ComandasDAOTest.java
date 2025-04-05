@@ -97,10 +97,10 @@ public class ComandasDAOTest {
         entityManager.persist(leche);
         entityManager.persist(frijol);
         
-        Producto carneAsada = new Producto("Carne asada", 100F, TipoProducto.PLATILLO, true);
-        Producto carneMachaca = new Producto("Carne machaca", 90F, TipoProducto.PLATILLO, true);
-        Producto tacosCecina = new Producto("Tacos de cecina", 120F, TipoProducto.PLATILLO, true);
-        Producto arrozLeche = new Producto("Arroz con leche", 30F, TipoProducto.BEBIDA, true);
+        Producto carneAsada = new Producto("Carne asada", 100F, TipoProducto.PLATILLO, true, "");
+        Producto carneMachaca = new Producto("Carne machaca", 90F, TipoProducto.PLATILLO, true, "");
+        Producto tacosCecina = new Producto("Tacos de cecina", 120F, TipoProducto.PLATILLO, true, "");
+        Producto arrozLeche = new Producto("Arroz con leche", 30F, TipoProducto.BEBIDA, true, "");
         
         entityManager.persist(carneAsada);
         entityManager.persist(carneMachaca);

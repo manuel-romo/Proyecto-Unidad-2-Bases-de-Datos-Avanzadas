@@ -1,3 +1,4 @@
 itson\sistemarestaurantepersistencia\implementaciones\ComandasDAOTest.class
 itson\sistemarestaurantepersistencia\implementaciones\IngredientesDAOTest.class
 itson\sistemarestaurantepersistencia\implementaciones\UsuariosDAOTest.class
+itson\sistemarestaurantepersistencia\implementaciones\ProductosDAOTest.class

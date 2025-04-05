@@ -53,9 +53,9 @@ public class IngredientesDAOTest {
         ingredientesRegistrados.add(lechuga);
         ingredientesRegistrados.add(rabano);
         
-        Producto ensalada = new Producto("Ensalada", 50F, TipoProducto.PLATILLO, true);
-        Producto hotCakes = new Producto("HotCakes", 90F, TipoProducto.PLATILLO, true);
-        Producto pastel = new Producto("Pastel", 120F, TipoProducto.POSTRE, true);
+        Producto ensalada = new Producto("Ensalada", 50F, TipoProducto.PLATILLO, true, "");
+        Producto hotCakes = new Producto("HotCakes", 90F, TipoProducto.PLATILLO, true, "");
+        Producto pastel = new Producto("Pastel", 120F, TipoProducto.POSTRE, true, "");
              
         IngredienteProducto cantidadLechugaEnsalada = new IngredienteProducto(1500F, ensalada, lechuga);
         IngredienteProducto cantidadRabanoEnsalada = new IngredienteProducto(600F, ensalada, rabano);

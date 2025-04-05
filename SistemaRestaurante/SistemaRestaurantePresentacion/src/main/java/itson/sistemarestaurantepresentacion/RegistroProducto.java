@@ -3,13 +3,19 @@ package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.TipoProducto;
 import itson.sistemarestaurantedominio.Usuario;
+import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.IUsuariosBO;
+import itson.sistemarestaurantenegocio.excepciones.NombreProductoInvalidoException;
+import itson.sistemarestaurantenegocio.excepciones.PrecioProductoInvalidoException;
+import itson.sistemarestaurantenegocio.excepciones.ProductoYaExisteException;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantepresentacion.utils.ImagenesUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -25,6 +31,7 @@ public class RegistroProducto extends JFrame {
     private IUsuariosBO usuariosBO;
     private IProductosBO productosBO;
     private Long idUsuario;
+    private String rutaImagenProducto;
     
     private static final Logger LOG = Logger.getLogger(RegistroProducto.class.getName());
     
@@ -35,11 +42,12 @@ public class RegistroProducto extends JFrame {
         this.usuariosBO = usuariosBO;
         this.productosBO = productosBO;
         this.idUsuario = idUsuario;
+        this.rutaImagenProducto = "/imagenPlatilloPredeterminada.png";
         
         cargarNombreUsuarioEncabezado();
     }
     
-    private void cargarNombreUsuarioEncabezado() throws UsuarioInexistenteException{
+    private void cargarNombreUsuarioEncabezado() throws UsuarioInexistenteException {
         
         Usuario usuario = usuariosBO.consultarUsuarioId(idUsuario);
 
@@ -53,12 +61,11 @@ public class RegistroProducto extends JFrame {
               
     }
     
-    private void mostrarSelectorArchivos(){
+    private void mostrarSelectorArchivos() {
 
         JFileChooser fileChooser = new JFileChooser();
         
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Imagen JPG y PNG", 
-                "jpg", "png");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Imagen JPG y PNG", "jpg", "png");
         
         fileChooser.setFileFilter(filter);
         
@@ -67,32 +74,118 @@ public class RegistroProducto extends JFrame {
         if (respuesta == JFileChooser.APPROVE_OPTION) {
             Path pathImagenSeleccionada = fileChooser.getSelectedFile().toPath();
              
-            try {
-                byte[] bytesImagenSeleccionada = Files.readAllBytes(pathImagenSeleccionada);
+            String carpetaProyecto = System.getProperty("user.dir");
                 
-                ImageIcon imagenProducto = new ImageIcon(bytesImagenSeleccionada);
-                
-                ImageIcon imagenRedimensionada = ImagenesUtils.redimensionarImagen(imagenProducto, 200, 200);
-                
-                etqImagenProducto.setIcon(imagenRedimensionada);
-                
-            } catch (IOException ex) {
-                LOG.severe("Error al cargar la imagen. " + ex.getMessage());
-                JOptionPane.showMessageDialog(
+            Path imagenes = Paths.get(carpetaProyecto, "imagenes");
+
+            if (!Files.exists(imagenes)) {
+                try {
+                    Files.createDirectories(imagenes);
+                    JOptionPane.showMessageDialog(
                     this,
-                    """
-                        No se pudo cargar la imagen seleccionada.
-                    """, 
-                    "No se pudo cargar la imagen",
-                            JOptionPane.ERROR_MESSAGE);
+                    "Se ha creado la carpeta \"imagenes\" en la ruta: " + imagenes.toAbsolutePath(),
+                    "Carpeta \"imagenes\" creada",
+                    JOptionPane.INFORMATION_MESSAGE);
+                    
+                } catch (IOException ex) {
+                    System.err.println("Error al crear la carpeta \"imagenes\". " + ex.getMessage());
+                    LOG.severe("Error al crear la carpeta \"imagenes\". " + ex.getMessage());
+                    this.rutaImagenProducto = "/imagenPlatilloPredeterminada.png";
+                    return;
+                }
             }
             
+            Path imagenesProductos = Paths.get(imagenes.toString(), "imagenesProductos");
             
+            if (!Files.exists(imagenesProductos)) {
+                try {
+                    Files.createDirectories(imagenesProductos);
+                    JOptionPane.showMessageDialog(
+                    this,
+                    "Se ha creado la carpeta \"imagenesProductos\" en la ruta: " + imagenesProductos.toAbsolutePath(),
+                    "Carpeta \"imagenesProductos\" creada",
+                    JOptionPane.INFORMATION_MESSAGE);
+                    
+                } catch (IOException ex) {
+                    System.err.println("Error al crear la carpeta \"imagenesProductos\". " + ex.getMessage());
+                    LOG.severe("Error al crear la carpeta \"imagenesProductos\". " + ex.getMessage());
+                    this.rutaImagenProducto = "/imagenPlatilloPredeterminada.png";
+                    return;
+                }
+            }
+            
+            try {
+                Path nuevaDireccionImagen = imagenesProductos.resolve(pathImagenSeleccionada.getFileName());
+                Files.copy(pathImagenSeleccionada, nuevaDireccionImagen, StandardCopyOption.REPLACE_EXISTING);
+
+                JOptionPane.showMessageDialog(
+                        this, 
+                        "Se ha guardado la imagen en la carpeta: " + imagenesProductos.toString(), 
+                        "Imagen guardada",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                try {
+                    byte[] bytesImagenSeleccionada = Files.readAllBytes(pathImagenSeleccionada);
+
+                    ImageIcon imagenProducto = new ImageIcon(bytesImagenSeleccionada);
+
+                    ImageIcon imagenRedimensionada = ImagenesUtils.redimensionarImagen(imagenProducto, 200, 200);
+
+                    etqImagenProducto.setIcon(imagenRedimensionada);
+                    
+                    rutaImagenProducto = nuevaDireccionImagen.toString();
+                
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        """
+                        No se pudo cargar la imagen seleccionada.
+                        """, 
+                        "No se pudo cargar la imagen",
+                                JOptionPane.ERROR_MESSAGE);
+
+                    LOG.severe("Error al cargar la imagen. " + ex.getMessage());
+                    this.rutaImagenProducto = "/imagenPlatilloPredeterminada.png";
+                }
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(
+                        this, 
+                        "Error al guardar la imagen en la carpeta \"imagenesProductos\".", 
+                        "Error al guardar la imagen",
+                        JOptionPane.ERROR_MESSAGE);
+                
+                LOG.severe("Error al guardar la imagen. " + ex.getMessage());
+                this.rutaImagenProducto = "/imagenPlatilloPredeterminada.png";
+            }
         }
     }
     
-    
-
+    private void registrarProducto(){
+        
+        String nombreProducto = campoTextoNombreProducto.getText();
+        String precioProductoCadena = campoTextoPrecioProducto.getText();      
+        String direccionImagenString = rutaImagenProducto;
+        TipoProducto tipoProducto = (TipoProducto) comboBoxTipoProducto.getSelectedItem();
+        
+        NuevoProductoDTO nuevoProductoDTO = new NuevoProductoDTO(nombreProducto, precioProductoCadena, tipoProducto, true, direccionImagenString);
+        
+        try {
+            productosBO.registrarProducto(nuevoProductoDTO);
+            JOptionPane.showMessageDialog(this, "El producto se ha registrado exitosamente", 
+                    "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+            
+        } catch (NombreProductoInvalidoException ex) {
+            LOG.severe("Nombre de producto inváldio. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Nombre de producto inválido", JOptionPane.ERROR_MESSAGE);
+        } catch (PrecioProductoInvalidoException ex){
+            LOG.severe("Precio del producto inválido. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Precio del producto inválido", JOptionPane.ERROR_MESSAGE);  
+        } catch (ProductoYaExisteException ex){
+            LOG.severe("Producto existente. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Producto existente", JOptionPane.ERROR_MESSAGE);
+        }
+    }
  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -106,11 +199,13 @@ public class RegistroProducto extends JFrame {
         etqBuscarIngrediente = new javax.swing.JLabel();
         campoTextoBuscarIngrediente = new javax.swing.JTextField();
         etqPanelPrecioTipoProducto = new javax.swing.JPanel();
-        etqSignoPesos = new javax.swing.JLabel();
+        etqPrecioNombre = new javax.swing.JLabel();
+        campoTextoNombreProducto = new javax.swing.JTextField();
+        etqPrecioProducto = new javax.swing.JLabel();
         campoTextoPrecioProducto = new javax.swing.JTextField();
-        etqPrecioProducto1 = new javax.swing.JLabel();
-        etqPrecioProducto2 = new javax.swing.JLabel();
+        etqTipoProducto = new javax.swing.JLabel();
         comboBoxTipoProducto = new javax.swing.JComboBox<>(TipoProducto.values());
+        etqSignoPesos = new javax.swing.JLabel();
         etqRegistrarProducto = new javax.swing.JLabel();
         btnSubirFotografia = new javax.swing.JButton();
         etqImagenProducto = new javax.swing.JLabel();
@@ -182,8 +277,18 @@ public class RegistroProducto extends JFrame {
 
         etqPanelPrecioTipoProducto.setBackground(new java.awt.Color(255, 255, 204));
 
-        etqSignoPesos.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        etqSignoPesos.setText("$");
+        etqPrecioNombre.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        etqPrecioNombre.setText("Nombre");
+
+        campoTextoNombreProducto.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        campoTextoNombreProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoTextoNombreProductoActionPerformed(evt);
+            }
+        });
+
+        etqPrecioProducto.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        etqPrecioProducto.setText("Precio del producto");
 
         campoTextoPrecioProducto.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         campoTextoPrecioProducto.addActionListener(new java.awt.event.ActionListener() {
@@ -192,11 +297,8 @@ public class RegistroProducto extends JFrame {
             }
         });
 
-        etqPrecioProducto1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        etqPrecioProducto1.setText("Precio del producto");
-
-        etqPrecioProducto2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        etqPrecioProducto2.setText("Precio del producto");
+        etqTipoProducto.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        etqTipoProducto.setText("Tipo del producto");
 
         comboBoxTipoProducto.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         comboBoxTipoProducto.setModel(new DefaultComboBoxModel<>(TipoProducto.values()));
@@ -208,36 +310,48 @@ public class RegistroProducto extends JFrame {
             }
         });
 
+        etqSignoPesos.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        etqSignoPesos.setText("$");
+
         javax.swing.GroupLayout etqPanelPrecioTipoProductoLayout = new javax.swing.GroupLayout(etqPanelPrecioTipoProducto);
         etqPanelPrecioTipoProducto.setLayout(etqPanelPrecioTipoProductoLayout);
         etqPanelPrecioTipoProductoLayout.setHorizontalGroup(
             etqPanelPrecioTipoProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(etqPanelPrecioTipoProductoLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(etqSignoPesos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(24, 24, 24)
                 .addGroup(etqPanelPrecioTipoProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(etqPrecioProducto1)
-                    .addComponent(campoTextoPrecioProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(etqPanelPrecioTipoProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(comboBoxTipoProducto, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(etqPrecioProducto2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(124, Short.MAX_VALUE))
+                    .addGroup(etqPanelPrecioTipoProductoLayout.createSequentialGroup()
+                        .addComponent(etqPrecioNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(218, 218, 218)
+                        .addComponent(etqPrecioProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, etqPanelPrecioTipoProductoLayout.createSequentialGroup()
+                        .addComponent(campoTextoNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(etqSignoPesos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(etqPanelPrecioTipoProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(etqTipoProducto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(campoTextoPrecioProducto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+                            .addComponent(comboBoxTipoProducto, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(76, 76, 76))
         );
         etqPanelPrecioTipoProductoLayout.setVerticalGroup(
             etqPanelPrecioTipoProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(etqPanelPrecioTipoProductoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(etqPrecioProducto1)
+                .addGap(20, 20, 20)
+                .addGroup(etqPanelPrecioTipoProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(etqPrecioNombre)
+                    .addComponent(etqPrecioProducto))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(etqPanelPrecioTipoProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoTextoNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(campoTextoPrecioProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(etqSignoPesos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(etqPrecioProducto2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(etqTipoProducto)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comboBoxTipoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         etqRegistrarProducto.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -315,7 +429,7 @@ public class RegistroProducto extends JFrame {
                         .addGap(30, 30, 30)
                         .addComponent(etqPanelPrecioTipoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnRegistrar))
@@ -325,25 +439,29 @@ public class RegistroProducto extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void campoTextoPrecioProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoTextoPrecioProductoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoTextoPrecioProductoActionPerformed
-
     private void btnSubirFotografiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirFotografiaActionPerformed
         mostrarSelectorArchivos();
     }//GEN-LAST:event_btnSubirFotografiaActionPerformed
 
-    private void comboBoxTipoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxTipoProductoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxTipoProductoActionPerformed
-
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:
+        registrarProducto();
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void campoTextoNombreProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoTextoNombreProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoTextoNombreProductoActionPerformed
+
+    private void campoTextoPrecioProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoTextoPrecioProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoTextoPrecioProductoActionPerformed
+
+    private void comboBoxTipoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxTipoProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxTipoProductoActionPerformed
 
 
 
@@ -352,17 +470,19 @@ public class RegistroProducto extends JFrame {
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSubirFotografia;
     private javax.swing.JTextField campoTextoBuscarIngrediente;
+    private javax.swing.JTextField campoTextoNombreProducto;
     private javax.swing.JTextField campoTextoPrecioProducto;
     private javax.swing.JComboBox<TipoProducto> comboBoxTipoProducto;
     private javax.swing.JLabel etqBuscarIngrediente;
     private javax.swing.JLabel etqImagenProducto;
     private javax.swing.JLabel etqNombreUsuario;
     private javax.swing.JPanel etqPanelPrecioTipoProducto;
-    private javax.swing.JLabel etqPrecioProducto1;
-    private javax.swing.JLabel etqPrecioProducto2;
+    private javax.swing.JLabel etqPrecioNombre;
+    private javax.swing.JLabel etqPrecioProducto;
     private javax.swing.JLabel etqRegistrarProducto;
     private javax.swing.JLabel etqSeleccionarIngrediente;
     private javax.swing.JLabel etqSignoPesos;
+    private javax.swing.JLabel etqTipoProducto;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

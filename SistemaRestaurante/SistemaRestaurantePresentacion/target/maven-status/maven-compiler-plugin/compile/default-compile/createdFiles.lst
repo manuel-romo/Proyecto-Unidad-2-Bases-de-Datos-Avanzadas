@@ -10,6 +10,7 @@ itson\sistemarestaurantepresentacion\IngredientesPrincipal.class
 itson\sistemarestaurantepresentacion\ProductosPrincipal.class
 itson\sistemarestaurantepresentacion\MenuPrincipal$2.class
 itson\sistemarestaurantepresentacion\MenuPrincipal$3.class
+itson\sistemarestaurantepresentacion\RegistroProducto$6.class
 itson\sistemarestaurantepresentacion\RegistroProducto$1.class
 itson\sistemarestaurantepresentacion\RegistroProducto.class
 itson\sistemarestaurantepresentacion\MenuPrincipal$5.class
@@ -27,4 +28,5 @@ itson\sistemarestaurantepresentacion\CrearComanda.class
 itson\sistemarestaurantepresentacion\RegistroIngrediente$4.class
 itson\sistemarestaurantepresentacion\InicioSesion$1.class
 itson\sistemarestaurantepresentacion\MenuPrincipal$4.class
+itson\sistemarestaurantepresentacion\ProductosPrincipal$2.class
 itson\sistemarestaurantepresentacion\RegistroProducto$2.class

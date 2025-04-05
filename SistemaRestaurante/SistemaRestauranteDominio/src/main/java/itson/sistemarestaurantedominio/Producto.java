@@ -19,11 +19,12 @@ import javax.persistence.Table;
 @Table(name = "productos")
 public class Producto implements Serializable {
 
-    public Producto(String nombre, Float precio, TipoProducto tipo, Boolean habilitado) {
+    public Producto(String nombre, Float precio, TipoProducto tipo, Boolean habilitado, String direccionImagen) {
         this.nombre = nombre;
         this.precio = precio;
         this.tipo = tipo;
         this.habilitado = habilitado;
+        this.direccionImagen = direccionImagen;
     }
 
     public Producto() {
@@ -46,6 +47,9 @@ public class Producto implements Serializable {
     
     @Column(name = "habilitado", nullable = false)
     private Boolean habilitado;
+    
+    @Column(name = "direccion_imagen", nullable = false)
+    private String direccionImagen;
     
     @OneToMany(mappedBy = "producto")
     private List<IngredienteProducto> ingredientes = new ArrayList<>();
@@ -91,6 +95,14 @@ public class Producto implements Serializable {
         this.habilitado = habilitado;
     }
 
+    public String getDireccionImagen() {
+        return direccionImagen;
+    }
+
+    public void setDireccionImagen(String direccionImagen) {
+        this.direccionImagen = direccionImagen;
+    }
+
     public List<IngredienteProducto> getIngredientes() {
         return ingredientes;
     }
@@ -134,7 +146,7 @@ public class Producto implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.student.itson.dissof.sistemarestaurantedominio.dtos.Producto[ id=" + id + " ]";
+        return "Producto{" + "id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", tipo=" + tipo + ", habilitado=" + habilitado + ", direccionImagen=" + direccionImagen + ", ingredientes=" + ingredientes + '}';
     }
     
 }
