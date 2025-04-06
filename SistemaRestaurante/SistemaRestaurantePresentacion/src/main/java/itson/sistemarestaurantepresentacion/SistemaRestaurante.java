@@ -12,7 +12,7 @@ public class SistemaRestaurante {
         
         IUsuariosBO usuariosBO = FabricaObjetoNegocio.crearUsuariosBO();
         
-        InicioSesion formularioInicioSesion = new InicioSesion(usuariosBO);
+        InciarSesion formularioInicioSesion = new InciarSesion(usuariosBO);
         
         formularioInicioSesion.setVisible(true);
         

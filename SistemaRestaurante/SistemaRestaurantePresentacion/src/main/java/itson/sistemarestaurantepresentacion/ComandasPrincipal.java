@@ -72,7 +72,7 @@ public class ComandasPrincipal extends JFrame {
     }
     
     private void mostrarInicioSesion(){
-        InicioSesion formularioInicioSesion = new InicioSesion(usuariosBO);
+        InciarSesion formularioInicioSesion = new InciarSesion(usuariosBO);
         dispose();
         formularioInicioSesion.setVisible(true);  
     }
