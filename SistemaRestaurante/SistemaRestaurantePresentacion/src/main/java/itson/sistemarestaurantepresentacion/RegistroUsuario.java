@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package itson.sistemarestaurantepresentacion;
 
-/**
- *
- * @author Usuario
- */
 public class RegistroUsuario extends javax.swing.JFrame {
 
     /**
@@ -15,6 +7,9 @@ public class RegistroUsuario extends javax.swing.JFrame {
      */
     public RegistroUsuario() {
         initComponents();
+        this.setName("Registro de usuario");
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     /**
@@ -29,7 +24,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
         panelPrincipal = new javax.swing.JPanel();
         panelEncabezado = new javax.swing.JPanel();
         etqIcono = new javax.swing.JLabel();
-        etqNombreUsuario1 = new javax.swing.JLabel();
+        etqRestauranteSahuaro = new javax.swing.JLabel();
         etqIngresarDatos = new javax.swing.JLabel();
         panelIngresarDatos = new javax.swing.JPanel();
         etqTipoUsuario = new javax.swing.JLabel();
@@ -57,9 +52,9 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
         etqIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoAplicacion.png"))); // NOI18N
 
-        etqNombreUsuario1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        etqNombreUsuario1.setForeground(new java.awt.Color(0, 0, 0));
-        etqNombreUsuario1.setText("Restaurante el Sahuaro");
+        etqRestauranteSahuaro.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        etqRestauranteSahuaro.setForeground(new java.awt.Color(0, 0, 0));
+        etqRestauranteSahuaro.setText("Restaurante el Sahuaro");
 
         javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
         panelEncabezado.setLayout(panelEncabezadoLayout);
@@ -69,7 +64,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
                 .addGap(188, 188, 188)
                 .addComponent(etqIcono)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(etqNombreUsuario1)
+                .addComponent(etqRestauranteSahuaro)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelEncabezadoLayout.setVerticalGroup(
@@ -81,7 +76,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
                         .addComponent(etqIcono))
                     .addGroup(panelEncabezadoLayout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(etqNombreUsuario1)))
+                        .addComponent(etqRestauranteSahuaro)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -311,8 +306,8 @@ public class RegistroUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel etqCorreoElectronico1;
     private javax.swing.JLabel etqIcono;
     private javax.swing.JLabel etqIngresarDatos;
-    private javax.swing.JLabel etqNombreUsuario1;
     private javax.swing.JLabel etqNombres;
+    private javax.swing.JLabel etqRestauranteSahuaro;
     private javax.swing.JLabel etqTelefono;
     private javax.swing.JLabel etqTipoUsuario;
     private javax.swing.JPanel panelEncabezado;

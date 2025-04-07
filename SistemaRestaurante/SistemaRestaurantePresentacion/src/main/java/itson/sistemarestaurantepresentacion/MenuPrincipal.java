@@ -24,8 +24,9 @@ public class MenuPrincipal extends JFrame {
 
     public MenuPrincipal(IUsuariosBO usuariosBO, Long idUsuario) throws UsuarioInexistenteException {
         initComponents();
-        setLocationRelativeTo(null);
-        setResizable(false);
+        this.setName("Menú principal");
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.idUsuario = idUsuario;
         this.usuariosBO = usuariosBO;
         
@@ -128,17 +129,17 @@ public class MenuPrincipal extends JFrame {
         panelPrincipal = new javax.swing.JPanel();
         panelEncabezado = new javax.swing.JPanel();
         etqIcono = new javax.swing.JLabel();
-        etqNombreUsuario1 = new javax.swing.JLabel();
+        etqRestauranteSahuaro = new javax.swing.JLabel();
         etqNombreUsuario = new javax.swing.JLabel();
         etqIconoUsuario = new javax.swing.JLabel();
         btnCerrarSesion = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        panelMenúPrincipal = new javax.swing.JPanel();
         btnModuloComandas = new javax.swing.JButton();
         btnModuloProductos = new javax.swing.JButton();
         btnModuloIngredientes = new javax.swing.JButton();
         btnModuloClientesFrecuentes1 = new javax.swing.JButton();
         btnModuloClientesFrecuentes = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        etqMenúPrincipal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 0));
@@ -149,9 +150,9 @@ public class MenuPrincipal extends JFrame {
 
         etqIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoAplicacion.png"))); // NOI18N
 
-        etqNombreUsuario1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        etqNombreUsuario1.setForeground(new java.awt.Color(0, 0, 0));
-        etqNombreUsuario1.setText("Restaurante el Sahuaro");
+        etqRestauranteSahuaro.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        etqRestauranteSahuaro.setForeground(new java.awt.Color(0, 0, 0));
+        etqRestauranteSahuaro.setText("Restaurante el Sahuaro");
 
         etqNombreUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         etqNombreUsuario.setForeground(new java.awt.Color(0, 0, 0));
@@ -177,7 +178,7 @@ public class MenuPrincipal extends JFrame {
                 .addGap(17, 17, 17)
                 .addComponent(etqIcono)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(etqNombreUsuario1)
+                .addComponent(etqRestauranteSahuaro)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
@@ -193,7 +194,7 @@ public class MenuPrincipal extends JFrame {
                 .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelEncabezadoLayout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(etqNombreUsuario1))
+                        .addComponent(etqRestauranteSahuaro))
                     .addGroup(panelEncabezadoLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(etqIcono))
@@ -207,7 +208,7 @@ public class MenuPrincipal extends JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        panelMenúPrincipal.setBackground(new java.awt.Color(255, 255, 255));
 
         btnModuloComandas.setBackground(new java.awt.Color(255, 230, 188));
         btnModuloComandas.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -259,13 +260,13 @@ public class MenuPrincipal extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelMenúPrincipalLayout = new javax.swing.GroupLayout(panelMenúPrincipal);
+        panelMenúPrincipal.setLayout(panelMenúPrincipalLayout);
+        panelMenúPrincipalLayout.setHorizontalGroup(
+            panelMenúPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMenúPrincipalLayout.createSequentialGroup()
                 .addContainerGap(146, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelMenúPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnModuloClientesFrecuentes, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnModuloClientesFrecuentes1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnModuloComandas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -273,9 +274,9 @@ public class MenuPrincipal extends JFrame {
                     .addComponent(btnModuloIngredientes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(131, 131, 131))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        panelMenúPrincipalLayout.setVerticalGroup(
+            panelMenúPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelMenúPrincipalLayout.createSequentialGroup()
                 .addGap(53, 53, 53)
                 .addComponent(btnModuloComandas)
                 .addGap(18, 18, 18)
@@ -289,10 +290,10 @@ public class MenuPrincipal extends JFrame {
                 .addContainerGap(53, Short.MAX_VALUE))
         );
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Menú principal");
+        etqMenúPrincipal.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        etqMenúPrincipal.setForeground(new java.awt.Color(0, 0, 0));
+        etqMenúPrincipal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        etqMenúPrincipal.setText("Menú principal");
 
         javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
         panelPrincipal.setLayout(panelPrincipalLayout);
@@ -301,11 +302,11 @@ public class MenuPrincipal extends JFrame {
             .addComponent(panelEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipalLayout.createSequentialGroup()
                 .addContainerGap(166, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelMenúPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(166, 166, 166))
             .addGroup(panelPrincipalLayout.createSequentialGroup()
                 .addGap(257, 257, 257)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(etqMenúPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelPrincipalLayout.setVerticalGroup(
@@ -313,9 +314,9 @@ public class MenuPrincipal extends JFrame {
             .addGroup(panelPrincipalLayout.createSequentialGroup()
                 .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(etqMenúPrincipal)
                 .addGap(27, 27, 27)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelMenúPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(53, 53, 53))
         );
 
@@ -367,11 +368,11 @@ public class MenuPrincipal extends JFrame {
     private javax.swing.JButton btnModuloProductos;
     private javax.swing.JLabel etqIcono;
     private javax.swing.JLabel etqIconoUsuario;
+    private javax.swing.JLabel etqMenúPrincipal;
     private javax.swing.JLabel etqNombreUsuario;
-    private javax.swing.JLabel etqNombreUsuario1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel etqRestauranteSahuaro;
     private javax.swing.JPanel panelEncabezado;
+    private javax.swing.JPanel panelMenúPrincipal;
     private javax.swing.JPanel panelPrincipal;
     // End of variables declaration//GEN-END:variables
 }

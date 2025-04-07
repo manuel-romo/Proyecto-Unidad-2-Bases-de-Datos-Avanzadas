@@ -24,8 +24,9 @@ public class InciarSesion extends JFrame {
     
     public InciarSesion(IUsuariosBO usuariosBO) {
         initComponents();
-        setLocationRelativeTo(null);
-        setResizable(false);
+        this.setName("Inicio de sesión");
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
         
         this.usuariosBO = usuariosBO;
     }
@@ -97,8 +98,8 @@ public class InciarSesion extends JFrame {
 
         panelPrincipal = new javax.swing.JPanel();
         panelEncabezado = new javax.swing.JPanel();
-        etqNombreUsuario = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        etqRestaruranteSahuaro = new javax.swing.JLabel();
+        etqIcono = new javax.swing.JLabel();
         panelDatos = new javax.swing.JPanel();
         etqCorreoElectronico = new javax.swing.JLabel();
         campoTxtCorreoElectronico = new javax.swing.JTextField();
@@ -117,11 +118,11 @@ public class InciarSesion extends JFrame {
 
         panelEncabezado.setBackground(new java.awt.Color(250, 230, 188));
 
-        etqNombreUsuario.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        etqNombreUsuario.setForeground(new java.awt.Color(0, 0, 0));
-        etqNombreUsuario.setText("Restaurante el Sahuaro");
+        etqRestaruranteSahuaro.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        etqRestaruranteSahuaro.setForeground(new java.awt.Color(0, 0, 0));
+        etqRestaruranteSahuaro.setText("Restaurante el Sahuaro");
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoAplicacion.png"))); // NOI18N
+        etqIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoAplicacion.png"))); // NOI18N
 
         javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
         panelEncabezado.setLayout(panelEncabezadoLayout);
@@ -129,9 +130,9 @@ public class InciarSesion extends JFrame {
             panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
                 .addContainerGap(277, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(etqIcono)
                 .addGap(18, 18, 18)
-                .addComponent(etqNombreUsuario)
+                .addComponent(etqRestaruranteSahuaro)
                 .addGap(277, 277, 277))
         );
         panelEncabezadoLayout.setVerticalGroup(
@@ -140,10 +141,10 @@ public class InciarSesion extends JFrame {
                 .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelEncabezadoLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel1))
+                        .addComponent(etqIcono))
                     .addGroup(panelEncabezadoLayout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(etqNombreUsuario)))
+                        .addComponent(etqRestaruranteSahuaro)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -313,10 +314,10 @@ public class InciarSesion extends JFrame {
     private javax.swing.JTextField campoTxtCorreoElectronico;
     private javax.swing.JLabel etqContrasenia;
     private javax.swing.JLabel etqCorreoElectronico;
+    private javax.swing.JLabel etqIcono;
     private javax.swing.JLabel etqInicioSesion;
     private javax.swing.JLabel etqNoTienesCuenta;
-    private javax.swing.JLabel etqNombreUsuario;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel etqRestaruranteSahuaro;
     private javax.swing.JPanel panelDatos;
     private javax.swing.JPanel panelEncabezado;
     private javax.swing.JPanel panelPrincipal;

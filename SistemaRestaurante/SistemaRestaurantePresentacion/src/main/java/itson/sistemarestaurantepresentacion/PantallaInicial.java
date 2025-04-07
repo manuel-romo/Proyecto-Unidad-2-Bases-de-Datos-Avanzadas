@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package itson.sistemarestaurantepresentacion;
 
-/**
- *
- * @author Usuario
- */
 public class PantallaInicial extends javax.swing.JFrame {
 
     /**
@@ -15,6 +7,9 @@ public class PantallaInicial extends javax.swing.JFrame {
      */
     public PantallaInicial() {
         initComponents();
+        this.setName("Restaurante el Sahuaro");
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     /**
@@ -28,7 +23,7 @@ public class PantallaInicial extends javax.swing.JFrame {
 
         panelPrincipal = new javax.swing.JPanel();
         panelEncabezado = new javax.swing.JPanel();
-        etqNombreUsuario = new javax.swing.JLabel();
+        etqRestauranteSahuaro = new javax.swing.JLabel();
         etqIcono = new javax.swing.JLabel();
         panelDatos = new javax.swing.JPanel();
         btnIniciarSesion = new javax.swing.JButton();
@@ -36,7 +31,6 @@ public class PantallaInicial extends javax.swing.JFrame {
         etqBienvenido = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(759, 477));
 
         panelPrincipal.setBackground(new java.awt.Color(232, 232, 232));
         panelPrincipal.setForeground(new java.awt.Color(232, 232, 232));
@@ -44,9 +38,9 @@ public class PantallaInicial extends javax.swing.JFrame {
 
         panelEncabezado.setBackground(new java.awt.Color(250, 230, 188));
 
-        etqNombreUsuario.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        etqNombreUsuario.setForeground(new java.awt.Color(0, 0, 0));
-        etqNombreUsuario.setText("Restaurante el Sahuaro");
+        etqRestauranteSahuaro.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        etqRestauranteSahuaro.setForeground(new java.awt.Color(0, 0, 0));
+        etqRestauranteSahuaro.setText("Restaurante el Sahuaro");
 
         etqIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoAplicacion.png"))); // NOI18N
 
@@ -58,7 +52,7 @@ public class PantallaInicial extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(etqIcono)
                 .addGap(18, 18, 18)
-                .addComponent(etqNombreUsuario)
+                .addComponent(etqRestauranteSahuaro)
                 .addGap(191, 191, 191))
         );
         panelEncabezadoLayout.setVerticalGroup(
@@ -70,7 +64,7 @@ public class PantallaInicial extends javax.swing.JFrame {
                         .addComponent(etqIcono))
                     .addGroup(panelEncabezadoLayout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(etqNombreUsuario)))
+                        .addComponent(etqRestauranteSahuaro)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -173,7 +167,7 @@ public class PantallaInicial extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrarse;
     private javax.swing.JLabel etqBienvenido;
     private javax.swing.JLabel etqIcono;
-    private javax.swing.JLabel etqNombreUsuario;
+    private javax.swing.JLabel etqRestauranteSahuaro;
     private javax.swing.JPanel panelDatos;
     private javax.swing.JPanel panelEncabezado;
     private javax.swing.JPanel panelPrincipal;
