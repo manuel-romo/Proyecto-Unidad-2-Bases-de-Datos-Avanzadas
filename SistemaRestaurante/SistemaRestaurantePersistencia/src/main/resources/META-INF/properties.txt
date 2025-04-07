@@ -1,0 +1,11 @@
+# Configuración para itson_SistemaRestaurante_jar_1.0PU
+itson_SistemaRestaurante_jar_1.0PU.javax.persistence.jdbc.url=jdbc:mysql://localhost:3306/sistema_restaurante_bd?zeroDateTimeBehavior=CONVERT_TO_NULL
+itson_SistemaRestaurante_jar_1.0PU.javax.persistence.jdbc.user=root
+itson_SistemaRestaurante_jar_1.0PU.javax.persistence.jdbc.password=mroMSQL1147-
+itson_SistemaRestaurante_jar_1.0PU.javax.persistence.jdbc.driver=com.mysql.cj.jdbc.Driver
+
+# Configuración para itson_SistemaRestaurante_jar_1.0PU_Tests
+itson_SistemaRestaurante_jar_1.0PU_Tests.javax.persistence.jdbc.url=jdbc:mysql://localhost:3306/sistema_restaurante_bd_tests?zeroDateTimeBehavior=CONVERT_TO_NULL
+itson_SistemaRestaurante_jar_1.0PU_Tests.javax.persistence.jdbc.user=root
+itson_SistemaRestaurante_jar_1.0PU_Tests.javax.persistence.jdbc.password=mroMSQL1147-
+itson_SistemaRestaurante_jar_1.0PU_Tests.javax.persistence.jdbc.driver=com.mysql.cj.jdbc.Driver

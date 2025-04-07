@@ -9,6 +9,7 @@
     <class>itson.sistemarestaurantedominio.Producto</class>
     <class>itson.sistemarestaurantedominio.ProductoComanda</class>
     <class>itson.sistemarestaurantedominio.Usuario</class>
+    <class>itson.sistemarestaurantedominio.Mesa</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sistema_restaurante_bd?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
@@ -26,6 +27,7 @@
     <class>itson.sistemarestaurantedominio.Producto</class>
     <class>itson.sistemarestaurantedominio.ProductoComanda</class>
     <class>itson.sistemarestaurantedominio.Usuario</class>
+    <class>itson.sistemarestaurantedominio.Mesa</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sistema_restaurante_bd_tests?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

@@ -21,8 +21,6 @@ public class ComandasDAO implements IComandasDAO{
                            ORDER BY com.folio ASC
                         """;
         
-        
-        // Se expresa el tipo del resultado que devuelve, en este caso videojuegos
         TypedQuery<Comanda> query = entityManager.createQuery(jpqlQuery, Comanda.class);
         
         List<Comanda> comandas = query.getResultList();

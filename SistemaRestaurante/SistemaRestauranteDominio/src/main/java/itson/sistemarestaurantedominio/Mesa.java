@@ -25,7 +25,7 @@ public class Mesa implements Serializable {
     private Integer numeroMesa;
     
     @OneToMany(mappedBy = "mesa")
-    private List<Mesa> comandas = new ArrayList();
+    private List<Comanda> comandas = new ArrayList();
 
     public Mesa() {
     }
@@ -50,11 +50,11 @@ public class Mesa implements Serializable {
         this.id = id;
     }
 
-    public List<Mesa> getComandas() {
+    public List<Comanda> getComandas() {
         return comandas;
     }
 
-    public void setComandas(List<Mesa> comandas) {
+    public void setComandas(List<Comanda> comandas) {
         this.comandas = comandas;
     }
     
