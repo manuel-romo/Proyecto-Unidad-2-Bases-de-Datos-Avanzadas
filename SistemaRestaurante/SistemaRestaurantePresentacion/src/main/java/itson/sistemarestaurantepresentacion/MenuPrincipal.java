@@ -2,12 +2,14 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Usuario;
-import itson.sistemarestaurantenegocio.IComandasBO;
-import itson.sistemarestaurantenegocio.IIngredientesBO;
-import itson.sistemarestaurantenegocio.IProductosBO;
-import itson.sistemarestaurantenegocio.IUsuariosBO;
+import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
+import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
+import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
+import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
+import itson.sistemarestaurantepresentacion.excepciones.SesionUsuarioInvalidaException;
+import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -16,36 +18,38 @@ import javax.swing.JOptionPane;
 
 public class MenuPrincipal extends JFrame {
 
+    private IMediador control;
     private IUsuariosBO usuariosBO;
     private Long idUsuario;
     
     private static final Logger LOG = Logger.getLogger(MenuPrincipal.class.getName());
     
 
-    public MenuPrincipal(IUsuariosBO usuariosBO, Long idUsuario) throws UsuarioInexistenteException {
+    public MenuPrincipal(IMediador control, IUsuariosBO usuariosBO) {
         initComponents();
-        this.setName("Menú principal");
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        this.idUsuario = idUsuario;
+        setLocationRelativeTo(null);
+        setResizable(false);
+        try {
+            this.idUsuario = SesionUsuario.getInstance().getIdUsuario();
+        } catch (SesionUsuarioInvalidaException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(
+                    null, 
+                    "Ha ocurrido un error en su sesión.",
+                    "Error de sesión",
+                    JOptionPane.ERROR_MESSAGE);
+            
+            mostrarPantallaInicial();
+        }
+        
+        this.control = control;  
         this.usuariosBO = usuariosBO;
         
-        cargarNombreUsuarioEncabezado();
+        panelBaseEncabezado.add(new Encabezado());
     }
     
-    private void cargarNombreUsuarioEncabezado() throws UsuarioInexistenteException{
-        
-        Usuario usuario = usuariosBO.consultarUsuarioId(idUsuario);
-
-        idUsuario = usuario.getId();
-
-        String nombresUsuario = usuario.getNombres();
-        String apellidoPaternoUsuario = usuario.getApellidoPaterno();
-        String apellidoMaternoUsuario = usuario.getApellidoMaterno();
-
-        
-        etqNombreUsuario.setText(apellidoPaternoUsuario + " " + apellidoMaternoUsuario + ", " + nombresUsuario);
-              
+    private void mostrarPantallaInicial(){
+        control.mostrarPantallaInicial(this);
     }
     
     private void mostrarSeleccionComanda(){
@@ -91,34 +95,15 @@ public class MenuPrincipal extends JFrame {
     }
     
     private void mostrarIngredientesPrincipal(){
-        
-        IIngredientesBO ingredientesBO = FabricaObjetoNegocio.crearIngredientesBO();
-        try {
-            IngredientesPrincipal formularioIngredientesPrincipal = new IngredientesPrincipal(usuariosBO, ingredientesBO, idUsuario);
-            dispose();
-            formularioIngredientesPrincipal.setVisible(true);
-            
-        } catch (UsuarioInexistenteException ex) {
-            LOG.severe("ID de usuario inexistente " + ex.getMessage());
-            JOptionPane.showMessageDialog(
-                    this,
-                    """
-                        No se pudo recuperar la información del usuario. Es posible que haya sido modificada o eliminada.
-                        Por favor, intente iniciar sesión de nuevo
-                    """, 
-                    "Error de sesión",
-                    JOptionPane.ERROR_MESSAGE);
-            mostrarInicioSesion();
-        }
+        control.mostrarIngredientesPrincipal(this);
+       
     }
     
     
     
     
     private void mostrarInicioSesion(){
-        InciarSesion formularioInicioSesion = new InciarSesion(usuariosBO);
-        dispose();
-        formularioInicioSesion.setVisible(true);  
+        control.mostrarInicioSesion(this);
     }
 
     
@@ -126,103 +111,17 @@ public class MenuPrincipal extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelPrincipal = new javax.swing.JPanel();
-        panelEncabezado = new javax.swing.JPanel();
-        etqIcono = new javax.swing.JLabel();
-        etqRestauranteSahuaro = new javax.swing.JLabel();
-        etqNombreUsuario = new javax.swing.JLabel();
-        etqIconoUsuario = new javax.swing.JLabel();
-        btnCerrarSesion = new javax.swing.JButton();
-        panelMenúPrincipal = new javax.swing.JPanel();
-        btnModuloComandas = new javax.swing.JButton();
         btnModuloProductos = new javax.swing.JButton();
+        btnModuloComandas = new javax.swing.JButton();
         btnModuloIngredientes = new javax.swing.JButton();
-        btnModuloClientesFrecuentes1 = new javax.swing.JButton();
         btnModuloClientesFrecuentes = new javax.swing.JButton();
-        etqMenúPrincipal = new javax.swing.JLabel();
+        btnModuloClientesFrecuentes1 = new javax.swing.JButton();
+        panelBaseEncabezado = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 0));
 
-        panelPrincipal.setBackground(new java.awt.Color(232, 232, 232));
-
-        panelEncabezado.setBackground(new java.awt.Color(250, 230, 188));
-
-        etqIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoAplicacion.png"))); // NOI18N
-
-        etqRestauranteSahuaro.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        etqRestauranteSahuaro.setForeground(new java.awt.Color(0, 0, 0));
-        etqRestauranteSahuaro.setText("Restaurante el Sahuaro");
-
-        etqNombreUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        etqNombreUsuario.setForeground(new java.awt.Color(0, 0, 0));
-        etqNombreUsuario.setText("Nombre de usuario");
-
-        etqIconoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconoUsuario2.png"))); // NOI18N
-
-        btnCerrarSesion.setBackground(new java.awt.Color(253, 244, 167));
-        btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnCerrarSesion.setForeground(new java.awt.Color(0, 0, 0));
-        btnCerrarSesion.setText("Cerrar sesión");
-        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCerrarSesionActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
-        panelEncabezado.setLayout(panelEncabezadoLayout);
-        panelEncabezadoLayout.setHorizontalGroup(
-            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(etqIcono)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(etqRestauranteSahuaro)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
-                        .addComponent(etqNombreUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(etqIconoUsuario))
-                    .addComponent(btnCerrarSesion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18))
-        );
-        panelEncabezadoLayout.setVerticalGroup(
-            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(etqRestauranteSahuaro))
-                    .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(etqIcono))
-                    .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(etqIconoUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(etqNombreUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCerrarSesion)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        panelMenúPrincipal.setBackground(new java.awt.Color(255, 255, 255));
-
-        btnModuloComandas.setBackground(new java.awt.Color(255, 230, 188));
-        btnModuloComandas.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnModuloComandas.setForeground(new java.awt.Color(0, 0, 0));
-        btnModuloComandas.setText("Módulo de comandas");
-        btnModuloComandas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModuloComandasActionPerformed(evt);
-            }
-        });
-
-        btnModuloProductos.setBackground(new java.awt.Color(255, 230, 188));
         btnModuloProductos.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnModuloProductos.setForeground(new java.awt.Color(0, 0, 0));
         btnModuloProductos.setText("Módulo de productos");
         btnModuloProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -230,9 +129,15 @@ public class MenuPrincipal extends JFrame {
             }
         });
 
-        btnModuloIngredientes.setBackground(new java.awt.Color(255, 230, 188));
+        btnModuloComandas.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnModuloComandas.setText("Módulo de comandas");
+        btnModuloComandas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModuloComandasActionPerformed(evt);
+            }
+        });
+
         btnModuloIngredientes.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnModuloIngredientes.setForeground(new java.awt.Color(0, 0, 0));
         btnModuloIngredientes.setText("Módulo de ingredientes");
         btnModuloIngredientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -240,19 +145,7 @@ public class MenuPrincipal extends JFrame {
             }
         });
 
-        btnModuloClientesFrecuentes1.setBackground(new java.awt.Color(255, 230, 188));
-        btnModuloClientesFrecuentes1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnModuloClientesFrecuentes1.setForeground(new java.awt.Color(0, 0, 0));
-        btnModuloClientesFrecuentes1.setText("Módulo de reportes");
-        btnModuloClientesFrecuentes1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModuloClientesFrecuentes1ActionPerformed(evt);
-            }
-        });
-
-        btnModuloClientesFrecuentes.setBackground(new java.awt.Color(255, 230, 188));
         btnModuloClientesFrecuentes.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnModuloClientesFrecuentes.setForeground(new java.awt.Color(0, 0, 0));
         btnModuloClientesFrecuentes.setText("Módulo de clientes frecuentes");
         btnModuloClientesFrecuentes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -260,75 +153,48 @@ public class MenuPrincipal extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout panelMenúPrincipalLayout = new javax.swing.GroupLayout(panelMenúPrincipal);
-        panelMenúPrincipal.setLayout(panelMenúPrincipalLayout);
-        panelMenúPrincipalLayout.setHorizontalGroup(
-            panelMenúPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMenúPrincipalLayout.createSequentialGroup()
-                .addContainerGap(146, Short.MAX_VALUE)
-                .addGroup(panelMenúPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnModuloClientesFrecuentes, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnModuloClientesFrecuentes1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnModuloComandas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnModuloProductos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnModuloIngredientes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(131, 131, 131))
-        );
-        panelMenúPrincipalLayout.setVerticalGroup(
-            panelMenúPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelMenúPrincipalLayout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(btnModuloComandas)
-                .addGap(18, 18, 18)
-                .addComponent(btnModuloProductos)
-                .addGap(18, 18, 18)
-                .addComponent(btnModuloIngredientes)
-                .addGap(18, 18, 18)
-                .addComponent(btnModuloClientesFrecuentes)
-                .addGap(18, 18, 18)
-                .addComponent(btnModuloClientesFrecuentes1)
-                .addContainerGap(53, Short.MAX_VALUE))
-        );
+        btnModuloClientesFrecuentes1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnModuloClientesFrecuentes1.setText("Módulo de reportes");
+        btnModuloClientesFrecuentes1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModuloClientesFrecuentes1ActionPerformed(evt);
+            }
+        });
 
-        etqMenúPrincipal.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        etqMenúPrincipal.setForeground(new java.awt.Color(0, 0, 0));
-        etqMenúPrincipal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        etqMenúPrincipal.setText("Menú principal");
-
-        javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
-        panelPrincipal.setLayout(panelPrincipalLayout);
-        panelPrincipalLayout.setHorizontalGroup(
-            panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipalLayout.createSequentialGroup()
-                .addContainerGap(166, Short.MAX_VALUE)
-                .addComponent(panelMenúPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(166, 166, 166))
-            .addGroup(panelPrincipalLayout.createSequentialGroup()
-                .addGap(257, 257, 257)
-                .addComponent(etqMenúPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelPrincipalLayout.setVerticalGroup(
-            panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelPrincipalLayout.createSequentialGroup()
-                .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(etqMenúPrincipal)
-                .addGap(27, 27, 27)
-                .addComponent(panelMenúPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53))
-        );
+        panelBaseEncabezado.setBackground(new java.awt.Color(250, 230, 188));
+        panelBaseEncabezado.setPreferredSize(new java.awt.Dimension(870, 84));
+        panelBaseEncabezado.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(263, 263, 263)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnModuloClientesFrecuentes1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnModuloProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnModuloComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnModuloIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnModuloClientesFrecuentes))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(71, 71, 71)
+                .addComponent(btnModuloComandas)
+                .addGap(32, 32, 32)
+                .addComponent(btnModuloProductos)
+                .addGap(30, 30, 30)
+                .addComponent(btnModuloIngredientes)
+                .addGap(34, 34, 34)
+                .addComponent(btnModuloClientesFrecuentes)
+                .addGap(41, 41, 41)
+                .addComponent(btnModuloClientesFrecuentes1)
+                .addContainerGap(163, Short.MAX_VALUE))
         );
 
         pack();
@@ -354,25 +220,13 @@ public class MenuPrincipal extends JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnModuloClientesFrecuentes1ActionPerformed
 
-    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCerrarSesionActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnModuloClientesFrecuentes;
     private javax.swing.JButton btnModuloClientesFrecuentes1;
     private javax.swing.JButton btnModuloComandas;
     private javax.swing.JButton btnModuloIngredientes;
     private javax.swing.JButton btnModuloProductos;
-    private javax.swing.JLabel etqIcono;
-    private javax.swing.JLabel etqIconoUsuario;
-    private javax.swing.JLabel etqMenúPrincipal;
-    private javax.swing.JLabel etqNombreUsuario;
-    private javax.swing.JLabel etqRestauranteSahuaro;
-    private javax.swing.JPanel panelEncabezado;
-    private javax.swing.JPanel panelMenúPrincipal;
-    private javax.swing.JPanel panelPrincipal;
+    private javax.swing.JPanel panelBaseEncabezado;
     // End of variables declaration//GEN-END:variables
 }

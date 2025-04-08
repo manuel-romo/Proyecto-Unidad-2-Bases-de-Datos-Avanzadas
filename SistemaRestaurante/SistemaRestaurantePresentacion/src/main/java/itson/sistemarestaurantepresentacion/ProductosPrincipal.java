@@ -3,9 +3,9 @@ package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.Usuario;
-import itson.sistemarestaurantenegocio.IIngredientesBO;
-import itson.sistemarestaurantenegocio.IProductosBO;
-import itson.sistemarestaurantenegocio.IUsuariosBO;
+import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
+import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
+import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
 import java.awt.GridLayout;
@@ -97,9 +97,9 @@ public class ProductosPrincipal extends javax.swing.JFrame {
     }
     
     private void mostrarInicioSesion(){
-        InciarSesion formularioInicioSesion = new InciarSesion(usuariosBO);
-        dispose();
-        formularioInicioSesion.setVisible(true);  
+//        IniciarSesion formularioInicioSesion = new IniciarSesion(usuariosBO);
+//        dispose();
+//        formularioInicioSesion.setVisible(true);  
     }
 
     @SuppressWarnings("unchecked")

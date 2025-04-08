@@ -11,12 +11,12 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>SistemaRestauranteNegocio</artifactId>
+            <artifactId>SistemaRestauranteDominio</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>SistemaRestauranteDominio</artifactId>
+            <artifactId>SistemaRestauranteNegocio</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

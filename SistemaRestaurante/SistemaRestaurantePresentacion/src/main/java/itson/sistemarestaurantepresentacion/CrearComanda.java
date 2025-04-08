@@ -2,8 +2,8 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Usuario;
-import itson.sistemarestaurantenegocio.IComandasBO;
-import itson.sistemarestaurantenegocio.IUsuariosBO;
+import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
+import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import javax.swing.JFrame;
 

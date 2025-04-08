@@ -2,7 +2,7 @@
 package itson.sistemarestaurantenegocio.implementaciones;
 
 import itson.sistemarestaurantedominio.Comanda;
-import itson.sistemarestaurantenegocio.IComandasBO;
+import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
 import itson.sistemarestaurantepersistencia.IComandasDAO;
 import java.util.List;
 

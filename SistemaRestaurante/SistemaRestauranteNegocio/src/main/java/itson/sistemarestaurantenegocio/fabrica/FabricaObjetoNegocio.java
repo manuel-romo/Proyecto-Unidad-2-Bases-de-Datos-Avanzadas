@@ -1,10 +1,10 @@
 
 package itson.sistemarestaurantenegocio.fabrica;
 
-import itson.sistemarestaurantenegocio.IComandasBO;
-import itson.sistemarestaurantenegocio.IIngredientesBO;
-import itson.sistemarestaurantenegocio.IProductosBO;
-import itson.sistemarestaurantenegocio.IUsuariosBO;
+import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
+import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
+import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
+import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.implementaciones.ComandasBO;
 import itson.sistemarestaurantenegocio.implementaciones.IngredientesBO;
 import itson.sistemarestaurantenegocio.implementaciones.ProductosBO;

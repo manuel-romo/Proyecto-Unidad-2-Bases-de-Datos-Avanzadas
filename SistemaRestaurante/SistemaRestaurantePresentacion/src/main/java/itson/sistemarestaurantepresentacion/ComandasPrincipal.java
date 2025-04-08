@@ -2,8 +2,8 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Usuario;
-import itson.sistemarestaurantenegocio.IComandasBO;
-import itson.sistemarestaurantenegocio.IUsuariosBO;
+import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
+import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
 import java.util.logging.Logger;
@@ -73,9 +73,9 @@ public class ComandasPrincipal extends JFrame {
     }
     
     private void mostrarInicioSesion(){
-        InciarSesion formularioInicioSesion = new InciarSesion(usuariosBO);
-        dispose();
-        formularioInicioSesion.setVisible(true);  
+//        IniciarSesion formularioInicioSesion = new IniciarSesion(usuariosBO);
+//        dispose();
+//        formularioInicioSesion.setVisible(true);  
     }
 
     @SuppressWarnings("unchecked")

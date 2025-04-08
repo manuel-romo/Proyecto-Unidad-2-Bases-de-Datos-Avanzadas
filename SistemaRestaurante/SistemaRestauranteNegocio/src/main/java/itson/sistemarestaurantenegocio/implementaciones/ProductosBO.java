@@ -3,7 +3,7 @@ package itson.sistemarestaurantenegocio.implementaciones;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
-import itson.sistemarestaurantenegocio.IProductosBO;
+import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NombreProductoInvalidoException;
 import itson.sistemarestaurantenegocio.excepciones.PrecioProductoInvalidoException;
 import itson.sistemarestaurantenegocio.excepciones.ProductoYaExisteException;

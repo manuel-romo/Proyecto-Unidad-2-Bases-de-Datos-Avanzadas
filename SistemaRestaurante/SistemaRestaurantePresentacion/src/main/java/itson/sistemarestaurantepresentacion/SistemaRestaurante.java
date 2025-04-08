@@ -2,19 +2,17 @@
 
 package itson.sistemarestaurantepresentacion;
 
-import itson.sistemarestaurantenegocio.IUsuariosBO;
-import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
+import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 
 
 public class SistemaRestaurante {
 
     public static void main(String[] args) {
-        
-        IUsuariosBO usuariosBO = FabricaObjetoNegocio.crearUsuariosBO();
-        
-        InciarSesion formularioInicioSesion = new InciarSesion(usuariosBO);
-        
-        formularioInicioSesion.setVisible(true);
-        
+ 
+        // Creación de control (mediador)
+        IMediador control = new Control();
+
+        control.mostrarPantallaInicial();
+ 
     }
 }

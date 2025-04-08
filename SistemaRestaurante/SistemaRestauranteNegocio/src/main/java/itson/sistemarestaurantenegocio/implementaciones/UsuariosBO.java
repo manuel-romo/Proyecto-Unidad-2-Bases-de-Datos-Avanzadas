@@ -3,7 +3,7 @@ package itson.sistemarestaurantenegocio.implementaciones;
 
 import itson.sistemarestaurantedominio.Usuario;
 import itson.sistemarestaurantedominio.dtos.CorreoContraseniaInicioSesionDTO;
-import itson.sistemarestaurantenegocio.IUsuariosBO;
+import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.ContraseniaIncorrectaException;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.excepciones.FormatoContraseniaInvalidoException;

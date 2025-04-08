@@ -7,7 +7,14 @@ import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.TipoProducto;
 import itson.sistemarestaurantedominio.UnidadIngrediente;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
+import itson.sistemarestaurantepersistencia.excepciones.IngredienteMismoNombreUnidadExistenteException;
+import itson.sistemarestaurantepersistencia.excepciones.IngredienteNoExisteException;
+import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinCantidadException;
+import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinDireccionImagenException;
+import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinNombreException;
+import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinUnidadException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
@@ -135,18 +142,15 @@ public class IngredientesDAOTest {
         
         final String NOMBRE_INGREDIENTE_REGISTRAR = "Aguacate";
         final UnidadIngrediente UNIDAD_INGREDIENTE_REGISTRAR = UnidadIngrediente.PIEZA;
-        final String CANTIDAD_CADENA_INGREDIENTE = "10";
-        final Float CANTIDAD_FLOAT_INGREDIENTE = 10F;
+        final Float CANTIDAD_INGREDIENTE = 10F;
         final String DIRECCION_IMAGEN_REGISTRAR = "ejemploDireccionImagen";
         
         NuevoIngredienteDTO nuevoIngredienteDTO = 
                 new NuevoIngredienteDTO(
                         NOMBRE_INGREDIENTE_REGISTRAR, 
                         UNIDAD_INGREDIENTE_REGISTRAR,
-                        CANTIDAD_CADENA_INGREDIENTE,
+                        CANTIDAD_INGREDIENTE,
                         DIRECCION_IMAGEN_REGISTRAR);
-        
-        nuevoIngredienteDTO.setCantidadFloat(CANTIDAD_FLOAT_INGREDIENTE);
         
         
         Ingrediente ingredienteRegistrado = 
@@ -155,7 +159,7 @@ public class IngredientesDAOTest {
         assertNotNull(ingredienteRegistrado.getId());
         assertEquals(NOMBRE_INGREDIENTE_REGISTRAR, ingredienteRegistrado.getNombre());
         assertEquals(UNIDAD_INGREDIENTE_REGISTRAR, ingredienteRegistrado.getUnidad());
-        assertEquals(CANTIDAD_FLOAT_INGREDIENTE, ingredienteRegistrado.getCantidad());
+        assertEquals(CANTIDAD_INGREDIENTE, ingredienteRegistrado.getCantidad());
         assertEquals(DIRECCION_IMAGEN_REGISTRAR, ingredienteRegistrado.getDireccionImagen()); 
         
     }
@@ -167,21 +171,19 @@ public class IngredientesDAOTest {
         
         final String NOMBRE_INGREDIENTE_REGISTRAR = null;
         final UnidadIngrediente UNIDAD_INGREDIENTE_REGISTRAR = UnidadIngrediente.PIEZA;
-        final String CANTIDAD_CADENA_INGREDIENTE = "10";
-        final Float CANTIDAD_FLOAT_INGREDIENTE = 10F;
+        final Float CANTIDAD_INGREDIENTE = 10F;
         final String DIRECCION_IMAGEN_REGISTRAR = "ejemploDireccionImagen";
         
         NuevoIngredienteDTO nuevoIngredienteDTO = 
                 new NuevoIngredienteDTO(
                         NOMBRE_INGREDIENTE_REGISTRAR, 
                         UNIDAD_INGREDIENTE_REGISTRAR,
-                        CANTIDAD_CADENA_INGREDIENTE,
+                        CANTIDAD_INGREDIENTE,
                         DIRECCION_IMAGEN_REGISTRAR);
         
-        nuevoIngredienteDTO.setCantidadFloat(CANTIDAD_FLOAT_INGREDIENTE);
         
-        
-        assertThrows(Exception.class, () -> ingredientesDAO.registrarIngrediente(nuevoIngredienteDTO));
+        Exception ex = assertThrows(RegistroIngredienteSinNombreException.class, 
+                () -> ingredientesDAO.registrarIngrediente(nuevoIngredienteDTO));
 
         
     }
@@ -193,21 +195,19 @@ public class IngredientesDAOTest {
         
         final String NOMBRE_INGREDIENTE_REGISTRAR = "Aguacate";
         final UnidadIngrediente UNIDAD_INGREDIENTE_REGISTRAR = null;
-        final String CANTIDAD_CADENA_INGREDIENTE = "10";
-        final Float CANTIDAD_FLOAT_INGREDIENTE = 10F;
+        final Float CANTIDAD_INGREDIENTE = 10F;
         final String DIRECCION_IMAGEN_REGISTRAR = "ejemploDireccionImagen";
         
         NuevoIngredienteDTO nuevoIngredienteDTO = 
                 new NuevoIngredienteDTO(
                         NOMBRE_INGREDIENTE_REGISTRAR, 
                         UNIDAD_INGREDIENTE_REGISTRAR,
-                        CANTIDAD_CADENA_INGREDIENTE,
+                        CANTIDAD_INGREDIENTE,
                         DIRECCION_IMAGEN_REGISTRAR);
         
-        nuevoIngredienteDTO.setCantidadFloat(CANTIDAD_FLOAT_INGREDIENTE);
         
-        
-        assertThrows(Exception.class, () -> ingredientesDAO.registrarIngrediente(nuevoIngredienteDTO));
+        Exception ex = assertThrows(RegistroIngredienteSinUnidadException.class, 
+                () -> ingredientesDAO.registrarIngrediente(nuevoIngredienteDTO));
 
         
     }
@@ -219,21 +219,18 @@ public class IngredientesDAOTest {
         
         final String NOMBRE_INGREDIENTE_REGISTRAR = "Aguacate";
         final UnidadIngrediente UNIDAD_INGREDIENTE_REGISTRAR = UnidadIngrediente.PIEZA;
-        final String CANTIDAD_CADENA_INGREDIENTE = "10";
-        final Float CANTIDAD_FLOAT_INGREDIENTE = null;
+        final Float CANTIDAD_INGREDIENTE = null;
         final String DIRECCION_IMAGEN_REGISTRAR = "ejemploDireccionImagen";
         
         NuevoIngredienteDTO nuevoIngredienteDTO = 
                 new NuevoIngredienteDTO(
                         NOMBRE_INGREDIENTE_REGISTRAR, 
                         UNIDAD_INGREDIENTE_REGISTRAR,
-                        CANTIDAD_CADENA_INGREDIENTE,
+                        CANTIDAD_INGREDIENTE,
                         DIRECCION_IMAGEN_REGISTRAR);
         
-        nuevoIngredienteDTO.setCantidadFloat(CANTIDAD_FLOAT_INGREDIENTE);
         
-        
-        assertThrows(Exception.class, () -> ingredientesDAO.registrarIngrediente(nuevoIngredienteDTO));
+        Exception ex = assertThrows(RegistroIngredienteSinCantidadException.class, () -> ingredientesDAO.registrarIngrediente(nuevoIngredienteDTO));
   
     }
     
@@ -244,21 +241,19 @@ public class IngredientesDAOTest {
         
         final String NOMBRE_INGREDIENTE_REGISTRAR = "Aguacate";
         final UnidadIngrediente UNIDAD_INGREDIENTE_REGISTRAR = UnidadIngrediente.PIEZA;
-        final String CANTIDAD_CADENA_INGREDIENTE = "10";
-        final Float CANTIDAD_FLOAT_INGREDIENTE = 10F;
+        final Float CANTIDAD_INGREDIENTE = 10F;
         final String DIRECCION_IMAGEN_REGISTRAR = null;
         
         NuevoIngredienteDTO nuevoIngredienteDTO = 
                 new NuevoIngredienteDTO(
                         NOMBRE_INGREDIENTE_REGISTRAR, 
                         UNIDAD_INGREDIENTE_REGISTRAR,
-                        CANTIDAD_CADENA_INGREDIENTE,
+                        CANTIDAD_INGREDIENTE,
                         DIRECCION_IMAGEN_REGISTRAR);
         
-        nuevoIngredienteDTO.setCantidadFloat(CANTIDAD_FLOAT_INGREDIENTE);
         
-        
-        Exception ex = assertThrows(Exception.class, () -> ingredientesDAO.registrarIngrediente(nuevoIngredienteDTO));
+        Exception ex = assertThrows(RegistroIngredienteSinDireccionImagenException.class, 
+                () -> ingredientesDAO.registrarIngrediente(nuevoIngredienteDTO));
   
     }
     
@@ -269,21 +264,19 @@ public class IngredientesDAOTest {
         
         final String NOMBRE_INGREDIENTE_REGISTRAR = "Lechuga";
         final UnidadIngrediente UNIDAD_INGREDIENTE_REGISTRAR = UnidadIngrediente.GRAMO;
-        final String CANTIDAD_CADENA_INGREDIENTE = "2000";
-        final Float CANTIDAD_FLOAT_INGREDIENTE = 3000F;
+        final Float CANTIDAD_INGREDIENTE = 3000F;
         final String DIRECCION_IMAGEN_REGISTRAR = "/imagenLechuga2.png";
         
         NuevoIngredienteDTO nuevoIngredienteDTO = 
                 new NuevoIngredienteDTO(
                         NOMBRE_INGREDIENTE_REGISTRAR, 
                         UNIDAD_INGREDIENTE_REGISTRAR,
-                        CANTIDAD_CADENA_INGREDIENTE,
+                        CANTIDAD_INGREDIENTE,
                         DIRECCION_IMAGEN_REGISTRAR);
         
-        nuevoIngredienteDTO.setCantidadFloat(CANTIDAD_FLOAT_INGREDIENTE);
         
-        
-        Exception ex  = assertThrows(Exception.class, () -> ingredientesDAO.registrarIngrediente(nuevoIngredienteDTO));
+        Exception ex  = assertThrows(IngredienteMismoNombreUnidadExistenteException.class, 
+                () -> ingredientesDAO.registrarIngrediente(nuevoIngredienteDTO));
   
     }
     
@@ -324,6 +317,51 @@ public class IngredientesDAOTest {
         }
         
           
+    }
+    
+    @Test
+    public void testConsultarIngredientesIdOk(){
+        IngredientesDAO ingredientesDAO = new IngredientesDAO();
+
+        Ingrediente ingredienteEsperado = ingredientesRegistrados.get(0);
+        
+        final long ID_INGREDIENTE_BUSCAR = ingredienteEsperado.getId();
+        
+        Ingrediente ingredienteRecuperado = assertDoesNotThrow(() -> ingredientesDAO.consultarIngrediente(ID_INGREDIENTE_BUSCAR));
+        
+        assertNotNull(ingredienteRecuperado);
+        
+        assertEquals(ingredienteEsperado.getId(), ingredienteRecuperado.getId());
+        assertEquals(ingredienteEsperado.getNombre(), ingredienteRecuperado.getNombre());
+        assertEquals(ingredienteEsperado.getCantidad(), ingredienteRecuperado.getCantidad());
+        assertEquals(ingredienteEsperado.getUnidad(), ingredienteRecuperado.getUnidad());
+        assertEquals(ingredienteEsperado.getProductos(), ingredienteRecuperado.getProductos());
+        
+    }
+    
+    @Test
+    public void testConsultarIngredientesIdNoExiste(){
+        IngredientesDAO ingredientesDAO = new IngredientesDAO();
+        
+        List<Long> idsRegistrados = new LinkedList<>();
+        
+        for(Ingrediente ingredienteEsperado: ingredientesRegistrados){
+            idsRegistrados.add(ingredienteEsperado.getId());
+        }
+        
+        Long idMayor = 0L;
+        for(Long id: idsRegistrados){
+            
+            if(id > idMayor){
+                idMayor = id;
+            }
+        }
+        
+        final long ID_INGREDIENTE_BUSCAR = idMayor + 1;
+        
+        Exception ex = assertThrows(IngredienteNoExisteException.class, 
+                () -> ingredientesDAO.consultarIngrediente(ID_INGREDIENTE_BUSCAR));
+        
     }
     
 }

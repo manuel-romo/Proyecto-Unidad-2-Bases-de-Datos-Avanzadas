@@ -7,23 +7,14 @@ import itson.sistemarestaurantedominio.UnidadIngrediente;
 public class NuevoIngredienteDTO {
     private String nombre;
     private UnidadIngrediente unidad;
-    private String cantidadCadena;
-    private Float cantidadFloat;
+    private Float cantidad;
     private String direccionImagen;
 
-    public NuevoIngredienteDTO(String nombre, UnidadIngrediente unidad, String cantidadCadena, String direccionImagen) {
+    public NuevoIngredienteDTO(String nombre, UnidadIngrediente unidad, Float cantidad, String direccionImagen) {
         this.nombre = nombre;
         this.unidad = unidad;
-        this.cantidadCadena = cantidadCadena;
+        this.cantidad = cantidad;
         this.direccionImagen = direccionImagen;
-    }
-
-    public Float getCantidadFloat() {
-        return cantidadFloat;
-    }
-
-    public void setCantidadFloat(Float cantidadFloat) {
-        this.cantidadFloat = cantidadFloat;
     }
 
     public String getNombre() {
@@ -34,13 +25,15 @@ public class NuevoIngredienteDTO {
         return unidad;
     }
 
-    public String getCantidadCadena() {
-        return cantidadCadena;
+    public Float getCantidad() {
+        return cantidad;
     }
 
     public String getDireccionImagen() {
         return direccionImagen;
     }
+
+    
 
     
     

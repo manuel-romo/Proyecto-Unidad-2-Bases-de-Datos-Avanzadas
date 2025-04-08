@@ -4,18 +4,24 @@ package itson.sistemarestaurantepresentacion;
 import itson.sistemarestaurantedominio.UnidadIngrediente;
 import itson.sistemarestaurantedominio.Usuario;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
-import itson.sistemarestaurantenegocio.IIngredientesBO;
-import itson.sistemarestaurantenegocio.IUsuariosBO;
+import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
+import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.CantidadIngredienteInvalidaException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteSinCantidadException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteSinDireccionImagenException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteSinNombreException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteSinUnidadException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteYaExisteException;
 import itson.sistemarestaurantenegocio.excepciones.NombreIngredienteInvalidoException;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
+import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 import itson.sistemarestaurantepresentacion.utils.ImagenesUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -27,38 +33,25 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class RegistroIngrediente extends JFrame {
 
-    private IUsuariosBO usuariosBO;
+    private IMediador control;
     private IIngredientesBO ingredientesBO;
-    private Long idUsuario;
-    private String rutaImagenIngrediente;
+    private String direccionImagenIngrediente;
     
     private static final Logger LOG = Logger.getLogger(RegistroIngrediente.class.getName());
 
-    public RegistroIngrediente(IUsuariosBO usuariosBO, IIngredientesBO ingredientesBO, Long idUsuario) throws UsuarioInexistenteException {
+    public RegistroIngrediente(IMediador control, IIngredientesBO ingredientesBO) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
-        this.usuariosBO = usuariosBO;
+        
+        this.control = control;
         this.ingredientesBO = ingredientesBO;
-        this.idUsuario = idUsuario;
-        this.rutaImagenIngrediente = "/imagenIngredientePredeterminada.png";
+        this.direccionImagenIngrediente = "/imagenIngredientePredeterminada.png";
         
-        cargarNombreUsuarioEncabezado();
+        panelBaseEncabezado.add(new Encabezado());
+        
     }
 
-    private void cargarNombreUsuarioEncabezado() throws UsuarioInexistenteException{
-        
-        Usuario usuario = usuariosBO.consultarUsuarioId(idUsuario);
-
-        idUsuario = usuario.getId();
-
-        String nombresUsuario = usuario.getNombres();
-        String apellidoPaternoUsuario = usuario.getApellidoPaterno();
-        String apellidoMaternoUsuario = usuario.getApellidoMaterno();
-
-        etqNombreUsuario.setText(apellidoPaternoUsuario + " " + apellidoMaternoUsuario + ", " + nombresUsuario);
-              
-    }
     
     private void mostrarSelectorArchivos(){
 
@@ -91,7 +84,7 @@ public class RegistroIngrediente extends JFrame {
                     } catch (IOException ex) {
                         System.err.println("Error al crear la carpeta \"imagenes\". " + ex.getMessage());
                         LOG.severe("Error al crear la carpeta \"imagenes\". " + ex.getMessage());
-                        this.rutaImagenIngrediente = "/imagenIngredientePredeterminada.png";
+                        this.direccionImagenIngrediente = "/imagenIngredientePredeterminada.png";
                         return;
                     }
                 }
@@ -110,7 +103,7 @@ public class RegistroIngrediente extends JFrame {
                     } catch (IOException ex) {
                         System.err.println("Error al crear la carpeta \"imagenesIngredientes\". " + ex.getMessage());
                         LOG.severe("Error al crear la carpeta \"imagenesIngredientes\". " + ex.getMessage());
-                        this.rutaImagenIngrediente = "/imagenIngredientePredeterminada.png";
+                        this.direccionImagenIngrediente = "/imagenIngredientePredeterminada.png";
                         return;
                     }
                 }
@@ -137,7 +130,12 @@ public class RegistroIngrediente extends JFrame {
 
                         etqImagenIngrediente.setIcon(imagenRedimensionada);
                         
-                        rutaImagenIngrediente = nuevaDireccionImagen.toString();
+                        Path pathPresentacion = Paths.get(System.getProperty("user.dir"));
+                        
+                        System.out.println(pathPresentacion);
+                        System.out.println(nuevaDireccionImagen);
+                        direccionImagenIngrediente = pathPresentacion.relativize(nuevaDireccionImagen).toString();
+                        System.out.println(direccionImagenIngrediente);
                     
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(
@@ -149,7 +147,7 @@ public class RegistroIngrediente extends JFrame {
                                     JOptionPane.ERROR_MESSAGE);
 
                         LOG.severe("Error al cargar la imagen. " + ex.getMessage());
-                        this.rutaImagenIngrediente = "/imagenIngredientePredeterminada.png";
+                        this.direccionImagenIngrediente = "/imagenIngredientePredeterminada.png";
                     }
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(
@@ -159,7 +157,7 @@ public class RegistroIngrediente extends JFrame {
                             JOptionPane.ERROR_MESSAGE);
                     
                     LOG.severe("Error al guardar la imagen. " + ex.getMessage());
-                    this.rutaImagenIngrediente = "/imagenIngredientePredeterminada.png";
+                    this.direccionImagenIngrediente = "/imagenIngredientePredeterminada.png";
                 }
                 
             
@@ -172,8 +170,8 @@ public class RegistroIngrediente extends JFrame {
         
         String nombreIngrediente = campoTextoNombreIngrediente.getText();
         UnidadIngrediente unidad = (UnidadIngrediente) comboBoxUnidadIngrediente.getSelectedItem();
-        String cantidad = campoTextoCantidadProducto.getText();      
-        String direccionImagenString = rutaImagenIngrediente;
+        Float cantidad = Float.valueOf(campoTextoCantidadProducto.getText());      
+        String direccionImagenString = direccionImagenIngrediente;
         
         NuevoIngredienteDTO nuevoIngredienteDTO = new NuevoIngredienteDTO(nombreIngrediente, unidad, cantidad, direccionImagenString);
         
@@ -191,7 +189,26 @@ public class RegistroIngrediente extends JFrame {
         } catch(IngredienteYaExisteException ex){
             LOG.severe("Ingrediente existente. " + ex.getMessage());
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente existente", JOptionPane.ERROR_MESSAGE);
+        } catch(NumberFormatException ex){
+            LOG.severe("Debe ingresar una cantidad válida. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Cantidad inválida", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteSinUnidadException ex) {
+            LOG.severe("Ingrediente sin unidad. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin unidad", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteSinNombreException ex) {
+            LOG.severe("Ingrediente sin nombre. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin nombre", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteSinDireccionImagenException ex) {
+            LOG.severe("Ingrediente sin dirección de imagen. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin dirección de imagen", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteSinCantidadException ex) {
+            LOG.severe("Ingrediente sin cantidad. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin cantidad", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void mostrarIngredientesPrincipal(){
+        control.mostrarIngredientesPrincipal(this);
     }
 
 
@@ -201,8 +218,6 @@ public class RegistroIngrediente extends JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        jPanel1 = new javax.swing.JPanel();
-        etqNombreUsuario = new javax.swing.JLabel();
         panelInformacionIngrediente = new javax.swing.JPanel();
         etqDatosNuevoIngrediente = new javax.swing.JLabel();
         etqNombreIngrediente = new javax.swing.JLabel();
@@ -216,32 +231,11 @@ public class RegistroIngrediente extends JFrame {
         etqRegistrarIngrediente = new javax.swing.JLabel();
         btnRegistrar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        panelBaseEncabezado = new javax.swing.JPanel();
 
         jScrollPane1.setViewportView(jTextPane1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
-
-        etqNombreUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        etqNombreUsuario.setText("Nombre de Usuario");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(etqNombreUsuario)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(etqNombreUsuario)
-                .addContainerGap(46, Short.MAX_VALUE))
-        );
 
         panelInformacionIngrediente.setBackground(new java.awt.Color(255, 255, 204));
 
@@ -337,50 +331,69 @@ public class RegistroIngrediente extends JFrame {
             }
         });
 
+        panelBaseEncabezado.setBackground(new java.awt.Color(250, 230, 188));
+
+        javax.swing.GroupLayout panelBaseEncabezadoLayout = new javax.swing.GroupLayout(panelBaseEncabezado);
+        panelBaseEncabezado.setLayout(panelBaseEncabezadoLayout);
+        panelBaseEncabezadoLayout.setHorizontalGroup(
+            panelBaseEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panelBaseEncabezadoLayout.setVerticalGroup(
+            panelBaseEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 84, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(91, 91, 91)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(etqImagenIngrediente)
-                        .addGap(76, 76, 76)
-                        .addComponent(btnSubirFotografia))
-                    .addComponent(etqRegistrarIngrediente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                .addComponent(panelInformacionIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCancelar)
                 .addGap(44, 44, 44)
                 .addComponent(btnRegistrar)
-                .addGap(375, 375, 375))
+                .addGap(322, 322, 322))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(etqImagenIngrediente)
+                        .addGap(29, 29, 29)
+                        .addComponent(btnSubirFotografia))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(etqRegistrarIngrediente)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addComponent(panelInformacionIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
+            .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(220, 220, 220)
-                        .addComponent(btnSubirFotografia))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panelInformacionIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
+                        .addGap(45, 45, 45)
                         .addComponent(etqRegistrarIngrediente)
-                        .addGap(18, 18, 18)
-                        .addComponent(etqImagenIngrediente))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(panelInformacionIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(etqImagenIngrediente)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnSubirFotografia)
+                                .addGap(184, 184, 184)))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegistrar)
                     .addComponent(btnCancelar))
-                .addGap(21, 21, 21))
+                .addGap(15, 15, 15))
         );
 
         pack();
@@ -399,7 +412,7 @@ public class RegistroIngrediente extends JFrame {
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        mostrarIngredientesPrincipal();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     
@@ -415,12 +428,11 @@ public class RegistroIngrediente extends JFrame {
     private javax.swing.JLabel etqDatosNuevoIngrediente;
     private javax.swing.JLabel etqImagenIngrediente;
     private javax.swing.JLabel etqNombreIngrediente;
-    private javax.swing.JLabel etqNombreUsuario;
     private javax.swing.JLabel etqRegistrarIngrediente;
     private javax.swing.JLabel etqUnidadIngrediente;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JPanel panelBaseEncabezado;
     private javax.swing.JPanel panelInformacionIngrediente;
     // End of variables declaration//GEN-END:variables
 }
