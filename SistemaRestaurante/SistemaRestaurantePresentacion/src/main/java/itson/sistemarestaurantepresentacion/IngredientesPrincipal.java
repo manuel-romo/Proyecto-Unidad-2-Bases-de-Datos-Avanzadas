@@ -81,12 +81,11 @@ public class IngredientesPrincipal extends JFrame implements IVistaReceptoraIdIn
      * @param ingredientesBO Objeto que implementa la interfaz IIngredientesBO, permite ejecutar
      * operaciones de negocio relacionados con los Ingredientes.
      */
-    public IngredientesPrincipal(IMediador control, IUsuariosBO usuariosBO, IIngredientesBO ingredientesBO) {
+    public IngredientesPrincipal(IMediador control, IIngredientesBO ingredientesBO) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
         
-        this.usuariosBO = usuariosBO;
         this.ingredientesBO = ingredientesBO;
         this.control = control;
         

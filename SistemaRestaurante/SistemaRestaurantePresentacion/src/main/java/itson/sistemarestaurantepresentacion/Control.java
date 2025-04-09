@@ -70,9 +70,8 @@ public class Control implements IMediador{
     @Override
     public void mostrarIngredientesPrincipal(JFrame frameActual) {
         frameActual.dispose();
-        IUsuariosBO usuariosBO = FabricaObjetoNegocio.crearUsuariosBO();
         IIngredientesBO ingredientesBO = FabricaObjetoNegocio.crearIngredientesBO();
-        formIngredientesPrincipal = new IngredientesPrincipal(this, usuariosBO, ingredientesBO);
+        formIngredientesPrincipal = new IngredientesPrincipal(this, ingredientesBO);
         formIngredientesPrincipal.setVisible(true);
     }
 
