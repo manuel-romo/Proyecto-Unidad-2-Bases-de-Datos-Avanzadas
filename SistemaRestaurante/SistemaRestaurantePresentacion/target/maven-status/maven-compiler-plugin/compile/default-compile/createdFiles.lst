@@ -1,4 +1,3 @@
-itson\sistemarestaurantepresentacion\BusquedaProductosComanda.class
 itson\sistemarestaurantepresentacion\BusquedaClientesComanda.class
 itson\sistemarestaurantepresentacion\RegistroIngrediente$1.class
 itson\sistemarestaurantepresentacion\ComandasPrincipal.class
@@ -13,13 +12,16 @@ itson\sistemarestaurantepresentacion\ProductoPrincipal$2.class
 itson\sistemarestaurantepresentacion\RegistroUsuario$3.class
 itson\sistemarestaurantepresentacion\RegistroProducto$6.class
 itson\sistemarestaurantepresentacion\ProductoPrincipal.class
+itson\sistemarestaurantepresentacion\IngredientesPrincipal$3.class
 itson\sistemarestaurantepresentacion\RegistrarProducto$2.class
 itson\sistemarestaurantepresentacion\EditarIngrediente$3.class
 itson\sistemarestaurantepresentacion\EditarIngrediente.class
+itson\sistemarestaurantepresentacion\BuscadorIngredientes.class
 itson\sistemarestaurantepresentacion\MenuPrincipal$5.class
 itson\sistemarestaurantepresentacion\Control.class
 itson\sistemarestaurantepresentacion\RegistroIngrediente$2.class
 itson\sistemarestaurantepresentacion\BusquedaClientesComanda$1.class
+itson\sistemarestaurantepresentacion\BuscadorIngredientes$3.class
 itson\sistemarestaurantepresentacion\IniciarSesion$2.class
 itson\sistemarestaurantepresentacion\InformacionComanda$2.class
 itson\sistemarestaurantepresentacion\IngredientesPrincipal$2.class
@@ -34,7 +36,6 @@ itson\sistemarestaurantepresentacion\InformacionProductosComanda.class
 itson\sistemarestaurantepresentacion\RegistroProducto$2.class
 itson\sistemarestaurantepresentacion\DatosEncabezado.class
 itson\sistemarestaurantepresentacion\BuscadorProductos.class
-itson\sistemarestaurantepresentacion\BusquedaProductosComanda$1.class
 itson\sistemarestaurantepresentacion\Encabezado$1.class
 itson\sistemarestaurantepresentacion\MenuPrincipal.class
 itson\sistemarestaurantepresentacion\InformacionProductosComanda$1.class
@@ -45,10 +46,13 @@ itson\sistemarestaurantepresentacion\RegistroIngrediente$3.class
 itson\sistemarestaurantepresentacion\RegistroProducto$4.class
 itson\sistemarestaurantepresentacion\IngredientesPrincipal.class
 itson\sistemarestaurantepresentacion\IniciarSesion$1.class
+itson\sistemarestaurantepresentacion\BuscadorIngredientes$2.class
 itson\sistemarestaurantepresentacion\MenuPrincipal$3.class
 itson\sistemarestaurantepresentacion\RegistrarProducto$3.class
 itson\sistemarestaurantepresentacion\SeleccionarMesaComanda$1.class
 itson\sistemarestaurantepresentacion\PantallaInicial$2.class
+itson\sistemarestaurantepresentacion\interfaces\IVistaReceptoraIdIngrediente.class
+itson\sistemarestaurantepresentacion\BuscadorIngredientes$5.class
 itson\sistemarestaurantepresentacion\PantallaInicial$1.class
 itson\sistemarestaurantepresentacion\ProductoPrincipal$1.class
 itson\sistemarestaurantepresentacion\InformacionComanda$1.class
@@ -62,6 +66,7 @@ itson\sistemarestaurantepresentacion\ComandasPrincipal$2.class
 itson\sistemarestaurantepresentacion\InformacionComanda$4.class
 itson\sistemarestaurantepresentacion\MenuPrincipal$1.class
 itson\sistemarestaurantepresentacion\RegistroProducto$3.class
+itson\sistemarestaurantepresentacion\BuscadorIngredientes$1.class
 itson\sistemarestaurantepresentacion\EditarIngrediente$1.class
 itson\sistemarestaurantepresentacion\excepciones\SesionUsuarioInvalidaException.class
 itson\sistemarestaurantepresentacion\PantallaInicial.class
@@ -76,4 +81,6 @@ itson\sistemarestaurantepresentacion\CrearComanda.class
 itson\sistemarestaurantepresentacion\RegistroIngrediente$4.class
 itson\sistemarestaurantepresentacion\MenuPrincipal$4.class
 itson\sistemarestaurantepresentacion\ProductosPrincipal$2.class
+itson\sistemarestaurantepresentacion\BuscadorIngredientes$4.class
+itson\sistemarestaurantepresentacion\IngredientesPrincipal$4.class
 itson\sistemarestaurantepresentacion\SeleccionarMesaComanda$2.class

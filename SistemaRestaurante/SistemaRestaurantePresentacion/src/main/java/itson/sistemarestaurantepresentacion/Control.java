@@ -7,6 +7,7 @@ import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
 import itson.sistemarestaurantepresentacion.excepciones.SesionUsuarioInvalidaException;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
+import itson.sistemarestaurantepresentacion.interfaces.IVistaReceptoraIdIngrediente;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -14,14 +15,17 @@ import javax.swing.JFrame;
 
 public class Control implements IMediador{
 
-    PantallaInicial pantallaInicial;
-    IniciarSesion formIniciarSesion;
-    MenuPrincipal formMenuPrincipal;
+    private PantallaInicial pantallaInicial;
+    private IniciarSesion formIniciarSesion;
+    private MenuPrincipal formMenuPrincipal;
     
-    IngredientesPrincipal formIngredientesPrincipal;
-    RegistroIngrediente formRegistroIngrediente;
-    EditarIngrediente formEditarIngrediente;
-    BuscadorIngredientes formBuscadorIngredientes;
+    private IVistaReceptoraIdIngrediente formReceptorRespuestaBusquedaIngrediente;
+    
+    
+    private IngredientesPrincipal formIngredientesPrincipal;
+    private RegistroIngrediente formRegistroIngrediente;
+    private EditarIngrediente formEditarIngrediente;
+    private BuscadorIngredientes formBuscadorIngredientes;
      
     /**
      * Método que permite mostrar la pantalla inicial del sistema.
@@ -89,11 +93,28 @@ public class Control implements IMediador{
     }
 
     @Override
-    public void mostrarBuscadorIngredientes(JFrame framePadre) {
+    public void mostrarBuscadorIngredientes(IVistaReceptoraIdIngrediente vistaReceptoraIdIngrediente) {
+        vistaReceptoraIdIngrediente.habilitar(false);
+        formReceptorRespuestaBusquedaIngrediente = (IVistaReceptoraIdIngrediente)vistaReceptoraIdIngrediente;
         IIngredientesBO ingredientesBO = FabricaObjetoNegocio.crearIngredientesBO();
-        formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO);
+        formBuscadorIngredientes = new BuscadorIngredientes(this, ingredientesBO);
         formBuscadorIngredientes.setVisible(true);
     }
+    
+    @Override
+    public void actualizarVentanaResultadoBusquedaIngrediente(JFrame buscadorIngredientes, Long idIngrediente){
+        
+        formReceptorRespuestaBusquedaIngrediente.setIdIngrediente(idIngrediente);
+        formReceptorRespuestaBusquedaIngrediente.habilitar(true);
+        buscadorIngredientes.dispose();
+    }
+    
+    @Override
+    public void cerrarBuscador(JFrame buscadorCerrar){   
+        formReceptorRespuestaBusquedaIngrediente.habilitar(true);
+        buscadorCerrar.dispose();
+    }
+
     
     
     

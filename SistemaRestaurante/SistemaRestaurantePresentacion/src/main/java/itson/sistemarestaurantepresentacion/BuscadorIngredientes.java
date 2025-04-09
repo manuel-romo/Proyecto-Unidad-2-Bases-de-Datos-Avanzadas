@@ -3,18 +3,20 @@ package itson.sistemarestaurantepresentacion;
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.UnidadIngrediente;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
+import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class BuscadorIngredientes extends JDialog {
+public class BuscadorIngredientes extends JFrame {
 
     private int MARGEN_HORIZONTAL_PANELES_INGREDIENTES = 5;
     private int MARGEN_VERTICAL_PANELES_INGREDIENTES = 5;
@@ -27,21 +29,22 @@ public class BuscadorIngredientes extends JDialog {
     private Color COLOR_BOTON_EDITAR_INGREDIENTE = new Color(210, 250, 176);
     private Color COLOR_BOTON_ELIMINAR_INGREDIENTE = new Color(255, 224, 206);
     
+    private IMediador control;
     private IIngredientesBO ingredientesBO;
-    private JFrame framePadre;
     private Long idIngredienteSeleccionado;
     private List<Long> listaIdsIngredientesCoincidentes;
     
-    public BuscadorIngredientes(JFrame framePadre, IIngredientesBO ingredientesBO) {
+    public BuscadorIngredientes(IMediador control,IIngredientesBO ingredientesBO) {
         initComponents();
         this.setName("Búsqueda de clientes");
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        
-        this.framePadre = framePadre;
+        this.control = control;
         this.ingredientesBO = ingredientesBO;
         
+        configurarCampoBusquedaIngredientes();
         configurarListaIngredientes();
+        cargarIngredientesLista(campoTextoBuscarIngrediente.getText());
     }
     
     public void configurarCampoBusquedaIngredientes(){
@@ -62,51 +65,63 @@ public class BuscadorIngredientes extends JDialog {
             }
 
             private void actualizarListaIngredientes() {
+                
                 String textoBusqueda = campoTextoBuscarIngrediente.getText();
-                
-                listaIdsIngredientesCoincidentes = new LinkedList<>();
-                List<Ingrediente> listaIngredientesNombreCoincidente = new LinkedList<>();
-                
-                if(comboBoxTipoBusqueda.getSelectedItem().toString().equals("Nombre")){
-                    
-                    listaIngredientesNombreCoincidente = ingredientesBO.consultarIngredientesNombre(textoBusqueda);
-                    
-                } else if(comboBoxTipoBusqueda.getSelectedItem().toString().equals("Nombre")){
-                    listaIngredientesNombreCoincidente = ingredientesBO.consultarIngredientesUnidad(textoBusqueda);
 
-                }
+                cargarIngredientesLista(textoBusqueda);
+
                 
-                for(Ingrediente ingredienteCoincidente: listaIngredientesNombreCoincidente){
-                    
-                    String nombreProducto = ingredienteCoincidente.getNombre();
-                    Float stock = ingredienteCoincidente.getCantidad();
-                    UnidadIngrediente unidad = ingredienteCoincidente.getUnidad();
-                    String direccionImagen = ingredienteCoincidente.getDireccionImagen();
-                    
-                    
-                    String unidadMostrar = "";
-                    if(unidad.toString().equals(UnidadIngrediente.GRAMO)){
-                        unidadMostrar = "gramos";
-                    } else if(unidad.toString().equals(UnidadIngrediente.MILILITRO)){
-                        unidadMostrar = "mililitros";
-                    } else if(unidad.toString().equals(UnidadIngrediente.PIEZA)){
-                        unidadMostrar = "piezas";
-                    }
-                    
-                    DefaultListModel<String> modelo = (DefaultListModel<String>) listaIngredientes.getModel();
-                    
-                    modelo.addElement(nombreProducto + " - " + stock + " " + unidadMostrar);
-                    listaIdsIngredientesCoincidentes.add(ingredienteCoincidente.getId());
-                    
-                }
+                
             }
         });
     }
     
+    private void cargarIngredientesLista(String textoBusqueda){
+
+        listaIdsIngredientesCoincidentes = new LinkedList<>();
+        List<Ingrediente> listaIngredientesCoincidente = new LinkedList<>();
+
+        if(textoBusqueda.isBlank()){
+            listaIngredientesCoincidente = ingredientesBO.consultarIngredientes();
+        
+        } else if(comboBoxTipoBusqueda.getSelectedItem().toString().equals("Nombre")){
+
+            listaIngredientesCoincidente = ingredientesBO.consultarIngredientesNombre(textoBusqueda);
+
+        } else if(comboBoxTipoBusqueda.getSelectedItem().toString().equals("Unidad")){
+            listaIngredientesCoincidente = ingredientesBO.consultarIngredientesUnidad(textoBusqueda);
+
+        }
+
+        DefaultListModel modelo = (DefaultListModel) listaIngredientes.getModel();
+
+        modelo.clear();
+
+        for(Ingrediente ingredienteCoincidente: listaIngredientesCoincidente){
+
+            String nombreProducto = ingredienteCoincidente.getNombre();
+            Float stock = ingredienteCoincidente.getCantidad();
+            UnidadIngrediente unidad = ingredienteCoincidente.getUnidad();
+
+
+            String unidadMostrar = "";
+            if(unidad.toString().equals(UnidadIngrediente.GRAMO.toString())){
+                unidadMostrar = "gramos";
+            } else if(unidad.toString().equals(UnidadIngrediente.MILILITRO.toString())){
+                unidadMostrar = "mililitros";
+            } else if(unidad.toString().equals(UnidadIngrediente.PIEZA.toString())){
+                unidadMostrar = "piezas";
+            }
+
+            modelo.addElement(nombreProducto + ":  " + stock + " " + unidadMostrar);
+            listaIdsIngredientesCoincidentes.add(ingredienteCoincidente.getId());
+        }
+    }
+    
     private void configurarListaIngredientes(){
-        listaIngredientes.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        listaIngredientes.addListSelectionListener(new ListSelectionListener() {
             @Override
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+            public void valueChanged(ListSelectionEvent evt) {
 
                 // Se determina si aún se está realizando la selección sobre la lista
                 if (!evt.getValueIsAdjusting()) {
@@ -126,11 +141,11 @@ public class BuscadorIngredientes extends JDialog {
     }
     
     private void seleccionarIngrediente(){
-        dispose();
+        control.actualizarVentanaResultadoBusquedaIngrediente(this, idIngredienteSeleccionado);
     }
     
     private void cerrar(){
-        dispose();
+        control.cerrarBuscador(this);
     }
     
 
@@ -143,12 +158,11 @@ public class BuscadorIngredientes extends JDialog {
         etqBuscarIngrediente = new javax.swing.JLabel();
         campoTextoBuscarIngrediente = new javax.swing.JTextField();
         btnCerrar = new javax.swing.JButton();
-        scrollPaneIngredientes = new javax.swing.JScrollPane();
-        panelScrollListIngredientes = new javax.swing.JScrollPane();
-        listaIngredientes = new javax.swing.JList<>();
         btnSeleccionarIngrediente = new javax.swing.JButton();
         comboBoxTipoBusqueda = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
+        panelScrollListIngredientes = new javax.swing.JScrollPane();
+        listaIngredientes = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -169,19 +183,10 @@ public class BuscadorIngredientes extends JDialog {
             }
         });
 
-        listaIngredientes.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        listaIngredientes.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        panelScrollListIngredientes.setViewportView(listaIngredientes);
-
-        scrollPaneIngredientes.setViewportView(panelScrollListIngredientes);
-
         btnSeleccionarIngrediente.setBackground(new java.awt.Color(205, 255, 197));
         btnSeleccionarIngrediente.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnSeleccionarIngrediente.setText("Seleccionar ingrediente");
+        btnSeleccionarIngrediente.setEnabled(false);
         btnSeleccionarIngrediente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSeleccionarIngredienteActionPerformed(evt);
@@ -190,7 +195,7 @@ public class BuscadorIngredientes extends JDialog {
 
         comboBoxTipoBusqueda.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         DefaultComboBoxModel<String> modeloComboBox = new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Unidad"});
-        comboBoxTipoBusqueda.setModel(null);
+        comboBoxTipoBusqueda.setModel(modeloComboBox);
         comboBoxTipoBusqueda.setSelectedItem(modeloComboBox.getElementAt(0));
         comboBoxTipoBusqueda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,6 +206,11 @@ public class BuscadorIngredientes extends JDialog {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setText("Buscar por:");
 
+        listaIngredientes.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DefaultListModel<String> modeloLista = new DefaultListModel<>();
+        listaIngredientes.setModel(modeloLista);
+        panelScrollListIngredientes.setViewportView(listaIngredientes);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -210,11 +220,13 @@ public class BuscadorIngredientes extends JDialog {
                 .addComponent(btnCerrar)
                 .addGap(18, 18, 18)
                 .addComponent(btnSeleccionarIngrediente)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(scrollPaneIngredientes)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(panelScrollListIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(campoTextoBuscarIngrediente)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(etqBuscarIngrediente)
@@ -234,20 +246,20 @@ public class BuscadorIngredientes extends JDialog {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campoTextoBuscarIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(scrollPaneIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelScrollListIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSeleccionarIngrediente)
                     .addComponent(btnCerrar))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,6 +291,5 @@ public class BuscadorIngredientes extends JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JList<String> listaIngredientes;
     private javax.swing.JScrollPane panelScrollListIngredientes;
-    private javax.swing.JScrollPane scrollPaneIngredientes;
     // End of variables declaration//GEN-END:variables
 }

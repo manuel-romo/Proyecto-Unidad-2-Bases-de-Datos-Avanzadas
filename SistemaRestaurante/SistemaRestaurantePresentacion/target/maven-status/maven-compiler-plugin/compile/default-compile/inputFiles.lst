@@ -1,6 +1,6 @@
+C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\BuscadorIngredientes.java
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\BuscadorProductos.java
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\BusquedaClientesComanda.java
-C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\BusquedaProductosComanda.java
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\ComandasPrincipal.java
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\Control.java
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\CrearComanda.java
@@ -14,6 +14,7 @@ C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanz
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\IngredientesPrincipal.java
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\IniciarSesion.java
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\interfaces\IMediador.java
+C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\interfaces\IVistaReceptoraIdIngrediente.java
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\MenuPrincipal.java
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\PantallaInicial.java
 C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePresentacion\src\main\java\itson\sistemarestaurantepresentacion\ProductoPrincipal.java

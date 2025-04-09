@@ -7,13 +7,16 @@ import static itson.sistemarestaurantedominio.UnidadIngrediente.GRAMO;
 import static itson.sistemarestaurantedominio.UnidadIngrediente.MILILITRO;
 import static itson.sistemarestaurantedominio.UnidadIngrediente.PIEZA;
 import itson.sistemarestaurantedominio.Usuario;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteBuscadoNoExisteException;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantepresentacion.RegistroIngrediente;
 import itson.sistemarestaurantepresentacion.excepciones.ImagenNoEncontradaException;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
+import itson.sistemarestaurantepresentacion.interfaces.IVistaReceptoraIdIngrediente;
 import itson.sistemarestaurantepresentacion.utils.ImagenesUtils;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -30,24 +33,40 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-//
-public class IngredientesPrincipal extends JFrame{
+/**
+ * Clase que representa la ventana principal del módulo de ingredientes,
+ * permite editar ingredientes, eliminarlos o registrar uno nuevo, además de
+ * su búsuqeda. Muestra la información de su nombre, cantidad en stock, unidad
+ * de medida e imagen representativa.
+ * 
+ * @author Manuel Romo López
+ * ID: 00000253080
+ */
+public class IngredientesPrincipal extends JFrame implements IVistaReceptoraIdIngrediente{
 
+    /**
+     * Objeto que implementa la interfaz IMediador, es el control que coordina
+     * el flujo entre pantallas.
+     */
     private IMediador control;
-    private IUsuariosBO usuariosBO;
+    /**
+     * Objeto que implementa la interfaz IIngredientesBO, es la clase que permite
+     * realizar operaciones de negocio sobre objetos de tipo Ingrediente.
+     */
     private IIngredientesBO ingredientesBO;
-    private Long idUsuario;
     
     private int MARGEN_HORIZONTAL_PANELES_INGREDIENTES = 5;
     private int MARGEN_VERTICAL_PANELES_INGREDIENTES = 5;
     private int ALTURA_PANEL_INGREDIENTE = 120;
-    private int CANTIDAD_PANELES_FILA = 6;
+    private int CANTIDAD_PANELES_FILA = 5;
+    private int MARGEN_LATERAL_IMAGEN_INGREDIENTE = 20;
     
     private Font FUENTE_NOMBRE_INGREDIENTE = new Font("Segoe UI", Font.BOLD, 20);
     
     private Color COLOR_PANEL_INGREDIENTE = new Color(249, 239, 211);
     private Color COLOR_BOTON_EDITAR_INGREDIENTE = new Color(210, 250, 176);
     private Color COLOR_BOTON_ELIMINAR_INGREDIENTE = new Color(255, 224, 206);
+    private Color COLOR_BOTON_VOLVER_PRINCIPAL_INGREDIENTES = new Color(202, 232, 255);
     
     private static final Logger LOG = Logger.getLogger(IngredientesPrincipal.class.getName());
     
@@ -74,8 +93,7 @@ public class IngredientesPrincipal extends JFrame{
         panelBaseEncabezado.add(new Encabezado());
         
         cargarIngredientes();
-        
-        
+
     }
     
     /**
@@ -86,7 +104,7 @@ public class IngredientesPrincipal extends JFrame{
         
         List<Ingrediente> listaIngredientesConsultados = ingredientesBO.consultarIngredientes();
         
-        configurarLayoutPanelIngredientes(listaIngredientesConsultados.size());
+        configurarLayoutPanelTodosIngredientes(listaIngredientesConsultados.size());
   
         for(Ingrediente ingrediente: listaIngredientesConsultados){
             
@@ -97,11 +115,38 @@ public class IngredientesPrincipal extends JFrame{
     }
     
     /**
+     * Método que permite cargar un ingrediente disponible en inventario, a partir 
+     * de su Id.
+     */
+    private void cargarIngrediente(Long idIngrediente){
+        
+        Ingrediente ingrediente = null;
+        try {
+            ingrediente = ingredientesBO.consultarIngrediente(idIngrediente);
+            
+            configurarPanelIngredienteSolo();
+            
+            JPanel panelIngrediente = crearPanelIngrediente(ingrediente);
+
+            panelIngredientes.add(panelIngrediente, BorderLayout.CENTER);
+            
+            panelIngrediente.add(crearPanelBtnVolverProductosTodos());
+
+        } catch (IngredienteBuscadoNoExisteException ex) {
+            LOG.log(Level.SEVERE, "Error al mostrar el ingrdiente buscado. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al mostrar el ingrediente buscado", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
+    
+    /**
      * Método que permite configurar el layout del panel que contiene los ingredientes.
      * @param cantidadIngredientes Dato int que representa el número de ingredientes
      * distintos que se deben mostrar.
      */
-    private void configurarLayoutPanelIngredientes(int cantidadIngredientes){
+    private void configurarLayoutPanelTodosIngredientes(int cantidadIngredientes){
+        
+        panelIngredientes.removeAll();
         
         int numeroFilasLlenar = (int)Math.ceil((double)cantidadIngredientes/CANTIDAD_PANELES_FILA);
                 
@@ -117,7 +162,21 @@ public class IngredientesPrincipal extends JFrame{
                 new Dimension(0,
                 2 * (numeroFilasLlenar * ALTURA_PANEL_INGREDIENTE) + ALTURA_PANEL_INGREDIENTE));
         
-        System.out.println(gridLayout.getColumns());
+    }
+    
+    /**
+     * Permite configurar el layout del panel que contiene a un solo ingrediente,
+     * necesario cuando se realiza una búsqueda.
+     */
+    private void configurarPanelIngredienteSolo(){
+        
+        panelIngredientes.removeAll();
+        panelIngredientes.setPreferredSize(new Dimension(0,0));
+        
+        BorderLayout borderLayout = new BorderLayout();
+        
+        panelIngredientes.setLayout(borderLayout);
+        
     }
     
     /**
@@ -138,7 +197,7 @@ public class IngredientesPrincipal extends JFrame{
         panelIngrediente.setLayout(new BoxLayout(panelIngrediente, BoxLayout.Y_AXIS));
         
         // Se crea y agrega el panel con la imagen del ingrediente.
-        panelIngrediente.add(crearPanelIngrediente(ingrediente));
+        panelIngrediente.add(crearPanelImagenIngrediente(ingrediente));
         
         // Se crea y agrega el panel con el nombre del ingrediente.
         panelIngrediente.add(crearPanelNombreIngrediente(ingrediente));
@@ -146,14 +205,8 @@ public class IngredientesPrincipal extends JFrame{
         // Se crea y agrega el panel para la unidad y el stock del ingrediente.
         panelIngrediente.add(crearPanelStockUnidadIngrediente(ingrediente));
    
-        // Se crea un panel para agregar los botones de editar y eliminar ingrediente
-        JPanel panelBotonesEditarEliminarIngrediente = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        
-        // Se crean ambos botones
-        panelBotonesEditarEliminarIngrediente.add(crearBotonEditarIngrediente(ingrediente.getId()));
-        panelBotonesEditarEliminarIngrediente.add(crearBotonEliminarIngrediente(ingrediente.getId()));
-        
-        panelIngrediente.add(panelBotonesEditarEliminarIngrediente);
+        // Se crea y agrega un panel para agregar los botones de editar y eliminar ingrediente
+        panelIngrediente.add(crearPanelBtnEditarEliminarIngrediente(ingrediente));
         
         return panelIngrediente;
     }
@@ -180,7 +233,9 @@ public class IngredientesPrincipal extends JFrame{
         }
 
         // Se determina el nuevo tamaño de la imagen para ajustarla al panel.
-        int nuevoAnchoImagen = panelIngredientes.getWidth()/CANTIDAD_PANELES_FILA - (MARGEN_HORIZONTAL_PANELES_INGREDIENTES * (CANTIDAD_PANELES_FILA + 1));      
+        int nuevoAnchoImagen = (panelIngredientes.getWidth() - (MARGEN_HORIZONTAL_PANELES_INGREDIENTES * (CANTIDAD_PANELES_FILA + 1)))
+                /CANTIDAD_PANELES_FILA - MARGEN_LATERAL_IMAGEN_INGREDIENTE * 2;     
+        
         int nuevoAltoImagen = ALTURA_PANEL_INGREDIENTE;
 
         // Se redimensiona la imagen
@@ -192,6 +247,8 @@ public class IngredientesPrincipal extends JFrame{
 
         // Se agrega la etiqueta con la imagen al panel.
         panelImagenIngrediente.add(etqImagenIngrediente);
+        
+        panelImagenIngrediente.setOpaque(false);
         
         return panelImagenIngrediente;
     }
@@ -209,6 +266,8 @@ public class IngredientesPrincipal extends JFrame{
         nombreIngrediente.setFont(FUENTE_NOMBRE_INGREDIENTE);
         
         panelNombreIngrediente.add(nombreIngrediente);
+        
+        panelNombreIngrediente.setOpaque(false);
         
         return panelNombreIngrediente;
         
@@ -245,7 +304,29 @@ public class IngredientesPrincipal extends JFrame{
         
         panelStockUnidadIngrediente.add(labelStockIngrediente);
         
+        panelStockUnidadIngrediente.setOpaque(false);
+        
         return panelStockUnidadIngrediente;
+    }
+    
+    /**
+     * Método que permite crear un panel que contiene dos botones, el primero que permite
+     * editar el ingrediente, y el segundo que permite eliminarlo.
+     * @param ingrediente Objeto Ingrediente que representa el ingrediente que será
+     * editado o elimnado.
+     * @return Objeto JPanel, panel que contiene los botones para editar o eliminar
+     * el ingrediente especificado.
+     */
+    private JPanel crearPanelBtnEditarEliminarIngrediente(Ingrediente ingrediente){
+        JPanel panelBotonesEditarEliminarIngrediente = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        
+        // Se crean ambos botones
+        panelBotonesEditarEliminarIngrediente.add(crearBtnEditarIngrediente(ingrediente.getId()));
+        panelBotonesEditarEliminarIngrediente.add(crearBtnEliminarIngrediente(ingrediente.getId()));
+
+        panelBotonesEditarEliminarIngrediente.setOpaque(false);
+        
+        return panelBotonesEditarEliminarIngrediente;
     }
     
     /**
@@ -255,17 +336,17 @@ public class IngredientesPrincipal extends JFrame{
      * @return Objeto JButton, el botón que permite editar el ingrediente cuando
      * es presionado.
      */
-    private JButton crearBotonEditarIngrediente(Long idIngrediente){
+    private JButton crearBtnEditarIngrediente(Long idIngrediente){
         
-        JButton botonEditarIngrediente = new JButton("Editar");
+        JButton btnEditarIngrediente = new JButton("Editar");
         
-        botonEditarIngrediente.setBackground(COLOR_BOTON_EDITAR_INGREDIENTE);
+        btnEditarIngrediente.setBackground(COLOR_BOTON_EDITAR_INGREDIENTE);
         
         // Se define un Action Listener para el JButton, se ejecutará el método
         // mostrarEditarIngrediente() cada vez que se presione.
-        botonEditarIngrediente.addActionListener(e -> mostrarEditarIngrediente(idIngrediente));
+        btnEditarIngrediente.addActionListener(e -> mostrarEditarIngrediente(idIngrediente));
         
-        return botonEditarIngrediente;
+        return btnEditarIngrediente;
     }
     
     /**
@@ -275,17 +356,55 @@ public class IngredientesPrincipal extends JFrame{
      * @return Objeto JButton, el botón que permite eliminar el ingrediente cuando
      * es presionado.
      */
-    private JButton crearBotonEliminarIngrediente(Long idIngrediente){
+    private JButton crearBtnEliminarIngrediente(Long idIngrediente){
         
-        JButton botonEliminarIngrediente = new JButton("Eliminar");
+        JButton btnEliminarIngrediente = new JButton("Eliminar");
         
-        botonEliminarIngrediente.setBackground(COLOR_BOTON_ELIMINAR_INGREDIENTE);
+        btnEliminarIngrediente.setBackground(COLOR_BOTON_ELIMINAR_INGREDIENTE);
         
         // Se define un Action Listener para el JButton, se ejecutará el método
         // eliminarIngrediente() cuando se presione.
-        botonEliminarIngrediente.addActionListener(e -> eliminarIngrediente(idIngrediente));
+        btnEliminarIngrediente.addActionListener(e -> eliminarIngrediente(idIngrediente));
         
-        return botonEliminarIngrediente;
+        return btnEliminarIngrediente;
+    }
+    
+    /**
+     * Método que permite crear un panel que contiene al botón que al presionar
+     * muestra la pantalla principal del módulo de ingredientes.
+     * @return Objeto JPanel, panel que contiene el botón que permite mostrar la
+     * pantalla principal del módulo de ingredientes.
+     */
+    private JPanel crearPanelBtnVolverProductosTodos(){
+        JPanel panelBtnVolverProductosTodos = new JPanel();
+        
+        panelBtnVolverProductosTodos.setLayout(new FlowLayout(FlowLayout.CENTER));
+        
+        panelBtnVolverProductosTodos.add(crearBtnVolverProductosTodos());
+        
+        panelBtnVolverProductosTodos.setOpaque(false);
+        
+        return panelBtnVolverProductosTodos;
+    }
+    
+    
+    /**
+     * Método que permite crear un botón para volver a la pantalla principal
+     * del módulo de productos.
+     * @return Objeto JButton, el botón que permite eliminar el ingrediente cuando
+     * es presionado.
+     */
+    private JButton crearBtnVolverProductosTodos(){
+        
+        JButton btnVolverProductosTodos = new JButton();
+        
+        btnVolverProductosTodos.addActionListener(e -> control.mostrarIngredientesPrincipal(this));
+        
+        btnVolverProductosTodos.setText("Volver");
+        
+        btnVolverProductosTodos.setBackground(COLOR_BOTON_VOLVER_PRINCIPAL_INGREDIENTES);
+        
+        return btnVolverProductosTodos;
     }
     
     private void mostrarEditarIngrediente(Long idIngrediente){
@@ -297,18 +416,53 @@ public class IngredientesPrincipal extends JFrame{
         // TODO Pendiente para que avise si hay productos relacionados con este ingrediente.
     }
     
-    
+    /**
+     * Método que permite mostrar la pantalla de registro de un nuevo ingrediente.
+     */
     private void mostrarRegistrarIngrediente(){
         control.mostrarRegistroIngrediente(this);
     
     }
     
-    private void mostrarInicioSesion(){
-        control.mostrarInicioSesion(this);
+    /**
+     * Método que permite mostrar la ventana del buscador de ingredientes.
+     */
+    private void mostrarBuscadorIngredientes(){
+        control.mostrarBuscadorIngredientes(this);
     }
     
-    private void mostrarBuscadorIngredientes(){
-        control.mostrarBuscadorIngredientes();
+    /**
+     * Método que permite mostrar el menú principal del sistema.
+     */
+    private void mostrarMenuPrincipal(){
+        control.mostrarMenuPrincipal(this);
+    }
+    
+    /**
+     * Implementación del método setIdIngrediente, de la interfaz {@link IVistaReceptoraIdIngrediente},
+     * permite establecer el Id del ingrediente que fue seleccionado al ejecutar la
+     * ventana que permite la búsqueda y selección de ingredientes.
+     * @param idIngrediente Objeto Integer que representa el Id del ingrediente
+     * que fue seleccionado por el usuario en la venta de búsqueda de ingredientes.
+     */
+    @Override
+    public void setIdIngrediente(Long idIngrediente) {
+        cargarIngrediente(idIngrediente);
+        getContentPane().revalidate();
+        repaint();
+    }
+    
+    /**
+     * Implementación del método habilitar(), de la interfaz {@link IVistaReceptoraIdIngrediente},
+     * permite colocar el valor de atributo enabled de este JFrame como true o false, 
+     * para permitir su edición o no.
+     * @param habilitado Valor booleano que define el valor del atributo enabled de 
+     * este JFrame, si es true, se permitirá su edición, si es false, no se permitirá
+     * editarlo.
+     */
+    @Override
+    public void habilitar(boolean habilitado) {
+        setEnabled(habilitado);
     }
 
     @SuppressWarnings("unchecked")
@@ -339,6 +493,11 @@ public class IngredientesPrincipal extends JFrame{
 
         btnVolver.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
 
         panelBaseEncabezado.setBackground(new java.awt.Color(250, 230, 188));
 
@@ -399,13 +558,35 @@ public class IngredientesPrincipal extends JFrame{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que establece que debe ejecutarse cuando se presione el JButton
+     * btnRegistrarIngrediente.
+     * @param evt Objeto ActionEvent que representa el evento de dar click sobre
+     * el JButton btnRegistrarIngrediente.
+     */
     private void btnRegistrarIngredienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarIngredienteActionPerformed
         mostrarRegistrarIngrediente();
     }//GEN-LAST:event_btnRegistrarIngredienteActionPerformed
 
+    /**
+     * Método que establece que debe ejecutarse cuando se presione el JButton
+     * btnBuscar.
+     * @param evt Objeto ActionEvent que representa el evento de dar click sobre
+     * el JButton btnBuscar.
+     */
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        mostrarBuscadorIngredientes();
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    /**
+     * Método que establece que debe ejecutarse cuando se presione el JButton
+     * btnVolver.
+     * @param evt Objeto ActionEvent que representa el evento de dar click sobre
+     * el JButton btnVolver.
+     */
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        mostrarMenuPrincipal();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -416,4 +597,7 @@ public class IngredientesPrincipal extends JFrame{
     private javax.swing.JPanel panelIngredientes;
     private javax.swing.JScrollPane panelScrollIngredientes;
     // End of variables declaration//GEN-END:variables
+
+
+    
 }
