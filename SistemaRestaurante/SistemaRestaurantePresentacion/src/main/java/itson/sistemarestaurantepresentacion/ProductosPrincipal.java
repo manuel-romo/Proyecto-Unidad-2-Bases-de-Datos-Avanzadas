@@ -212,7 +212,7 @@ public class ProductosPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarProductoActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        mostrarMenuPrincipal();
     }//GEN-LAST:event_btnVolverActionPerformed
 
 

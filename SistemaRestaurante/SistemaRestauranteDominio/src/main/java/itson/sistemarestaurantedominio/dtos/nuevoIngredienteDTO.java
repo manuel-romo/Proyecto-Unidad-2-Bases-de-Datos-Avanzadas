@@ -32,11 +32,4 @@ public class NuevoIngredienteDTO {
     public String getDireccionImagen() {
         return direccionImagen;
     }
-
-    
-
-    
-    
-    
-    
 }

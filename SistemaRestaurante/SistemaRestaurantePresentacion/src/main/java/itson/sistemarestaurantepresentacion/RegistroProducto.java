@@ -8,9 +8,15 @@ import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.NombreProductoInvalidoException;
 import itson.sistemarestaurantenegocio.excepciones.PrecioProductoInvalidoException;
+import itson.sistemarestaurantenegocio.excepciones.ProductoSinDireccionImagenException;
+import itson.sistemarestaurantenegocio.excepciones.ProductoSinNombreException;
+import itson.sistemarestaurantenegocio.excepciones.ProductoSinPrecioException;
+import itson.sistemarestaurantenegocio.excepciones.ProductoSinTipoException;
 import itson.sistemarestaurantenegocio.excepciones.ProductoYaExisteException;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
+import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 import itson.sistemarestaurantepresentacion.utils.ImagenesUtils;
+import static java.awt.SystemColor.control;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,38 +32,24 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 public class RegistroProducto extends JFrame {
-
-    private IUsuariosBO usuariosBO;
+    private IMediador control;
     private IProductosBO productosBO;
-    private Long idUsuario;
-    private String rutaImagenProducto;
+    private Long idProducto;
+    private String direccionImagenProducto;
+    private DatosEncabezado datosEncabezado;
     
     private static final Logger LOG = Logger.getLogger(RegistroProducto.class.getName());
     
-    public RegistroProducto(IUsuariosBO usuariosBO, IProductosBO productosBO, Long idUsuario) throws UsuarioInexistenteException {
+    public RegistroProducto(IMediador control, IProductosBO productosBO) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
-        this.usuariosBO = usuariosBO;
+        
+        this.control = control;
         this.productosBO = productosBO;
-        this.idUsuario = idUsuario;
-        this.rutaImagenProducto = "/imagenPlatilloPredeterminada.png";
+        this.direccionImagenProducto = "/imagenIngredientePredeterminada.png";
         
-        cargarNombreUsuarioEncabezado();
-    }
-    
-    private void cargarNombreUsuarioEncabezado() throws UsuarioInexistenteException {
-        
-        Usuario usuario = usuariosBO.consultarUsuarioId(idUsuario);
-
-        idUsuario = usuario.getId();
-
-        String nombresUsuario = usuario.getNombres();
-        String apellidoPaternoUsuario = usuario.getApellidoPaterno();
-        String apellidoMaternoUsuario = usuario.getApellidoMaterno();
-
-        etqNombreUsuario.setText(apellidoPaternoUsuario + " " + apellidoMaternoUsuario + ", " + nombresUsuario);
-              
+        panelBaseEncabezado.add(new Encabezado());
     }
     
     private void mostrarSelectorArchivos() {
@@ -89,7 +81,7 @@ public class RegistroProducto extends JFrame {
                 } catch (IOException ex) {
                     System.err.println("Error al crear la carpeta \"imagenes\". " + ex.getMessage());
                     LOG.severe("Error al crear la carpeta \"imagenes\". " + ex.getMessage());
-                    this.rutaImagenProducto = "/imagenPlatilloPredeterminada.png";
+                    this.direccionImagenProducto = "/imagenPlatilloPredeterminada.png";
                     return;
                 }
             }
@@ -108,7 +100,7 @@ public class RegistroProducto extends JFrame {
                 } catch (IOException ex) {
                     System.err.println("Error al crear la carpeta \"imagenesProductos\". " + ex.getMessage());
                     LOG.severe("Error al crear la carpeta \"imagenesProductos\". " + ex.getMessage());
-                    this.rutaImagenProducto = "/imagenPlatilloPredeterminada.png";
+                    this.direccionImagenProducto = "/imagenPlatilloPredeterminada.png";
                     return;
                 }
             }
@@ -132,7 +124,7 @@ public class RegistroProducto extends JFrame {
 
                     etqImagenProducto.setIcon(imagenRedimensionada);
                     
-                    rutaImagenProducto = nuevaDireccionImagen.toString();
+                    direccionImagenProducto = nuevaDireccionImagen.toString();
                 
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(
@@ -144,7 +136,7 @@ public class RegistroProducto extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
 
                     LOG.severe("Error al cargar la imagen. " + ex.getMessage());
-                    this.rutaImagenProducto = "/imagenPlatilloPredeterminada.png";
+                    this.direccionImagenProducto = "/imagenPlatilloPredeterminada.png";
                 }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(
@@ -154,7 +146,7 @@ public class RegistroProducto extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
                 
                 LOG.severe("Error al guardar la imagen. " + ex.getMessage());
-                this.rutaImagenProducto = "/imagenPlatilloPredeterminada.png";
+                this.direccionImagenProducto = "/imagenPlatilloPredeterminada.png";
             }
         }
     }
@@ -162,28 +154,43 @@ public class RegistroProducto extends JFrame {
     private void registrarProducto(){
         
         String nombreProducto = campoTextoNombreProducto.getText();
-        String precioProductoCadena = campoTextoPrecioProducto.getText();      
-        String direccionImagenString = rutaImagenProducto;
+        Float precio = Float.valueOf(campoTextoPrecioProducto.getText());      
+        String direccionImagenString = direccionImagenProducto;
         TipoProducto tipoProducto = (TipoProducto) comboBoxTipoProducto.getSelectedItem();
         
-        NuevoProductoDTO nuevoProductoDTO = new NuevoProductoDTO(nombreProducto, precioProductoCadena, tipoProducto, true, direccionImagenString);
-        
+        NuevoProductoDTO nuevoProductoDTO = new NuevoProductoDTO(nombreProducto, precio, tipoProducto, true, direccionImagenString);
+
         try {
             productosBO.registrarProducto(nuevoProductoDTO);
             JOptionPane.showMessageDialog(this, "El producto se ha registrado exitosamente", 
                     "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
             dispose();
-            
         } catch (NombreProductoInvalidoException ex) {
-            LOG.severe("Nombre de producto inváldio. " + ex.getMessage());
+            LOG.severe("Nombre de producto inválido. " + ex.getMessage());
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Nombre de producto inválido", JOptionPane.ERROR_MESSAGE);
-        } catch (PrecioProductoInvalidoException ex){
+        } catch (PrecioProductoInvalidoException ex) {
             LOG.severe("Precio del producto inválido. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Precio del producto inválido", JOptionPane.ERROR_MESSAGE);  
-        } catch (ProductoYaExisteException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Precio del producto inválido", JOptionPane.ERROR_MESSAGE);
+        } catch (ProductoYaExisteException ex) {
             LOG.severe("Producto existente. " + ex.getMessage());
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Producto existente", JOptionPane.ERROR_MESSAGE);
+        } catch (ProductoSinNombreException ex) {
+            LOG.severe("Producto sin nombre. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Producto sin nombre", JOptionPane.ERROR_MESSAGE);
+        } catch (ProductoSinPrecioException ex) {
+            LOG.severe("Producto sin precio. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Producto sin precio", JOptionPane.ERROR_MESSAGE);
+        } catch (ProductoSinTipoException ex) {
+            LOG.severe("Producto sin tipo. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Producto sin tipo", JOptionPane.ERROR_MESSAGE);
+        } catch (ProductoSinDireccionImagenException ex) {
+            LOG.severe("Producto sin dirección de imagen. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Producto sin dirección de imagen", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void mostrarProductosPrincipal(){
+        control.mostrarProductosPrincipal(this);
     }
  
     @SuppressWarnings("unchecked")
@@ -191,8 +198,6 @@ public class RegistroProducto extends JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        etqNombreUsuario = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         etqSeleccionarIngrediente = new javax.swing.JLabel();
         etqBuscarIngrediente = new javax.swing.JLabel();
@@ -210,32 +215,11 @@ public class RegistroProducto extends JFrame {
         etqImagenProducto = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
+        panelBaseEncabezado = new javax.swing.JPanel();
 
         jLabel2.setText("jLabel2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
-
-        etqNombreUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        etqNombreUsuario.setText("Nombre de Usuario");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(etqNombreUsuario)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(etqNombreUsuario)
-                .addContainerGap(48, Short.MAX_VALUE))
-        );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 204));
 
@@ -382,6 +366,19 @@ public class RegistroProducto extends JFrame {
             }
         });
 
+        panelBaseEncabezado.setBackground(new java.awt.Color(250, 230, 188));
+
+        javax.swing.GroupLayout panelBaseEncabezadoLayout = new javax.swing.GroupLayout(panelBaseEncabezado);
+        panelBaseEncabezado.setLayout(panelBaseEncabezadoLayout);
+        panelBaseEncabezadoLayout.setHorizontalGroup(
+            panelBaseEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panelBaseEncabezadoLayout.setVerticalGroup(
+            panelBaseEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 84, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -404,20 +401,18 @@ public class RegistroProducto extends JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(448, 448, 448)
                 .addComponent(btnCancelar)
                 .addGap(18, 18, 18)
                 .addComponent(btnRegistrar)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(etqRegistrarProducto)
@@ -428,7 +423,7 @@ public class RegistroProducto extends JFrame {
                         .addGap(30, 30, 30)
                         .addComponent(etqPanelPrecioTipoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnRegistrar))
@@ -443,7 +438,7 @@ public class RegistroProducto extends JFrame {
     }//GEN-LAST:event_btnSubirFotografiaActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        dispose();
+        mostrarProductosPrincipal();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -474,7 +469,6 @@ public class RegistroProducto extends JFrame {
     private javax.swing.JComboBox<TipoProducto> comboBoxTipoProducto;
     private javax.swing.JLabel etqBuscarIngrediente;
     private javax.swing.JLabel etqImagenProducto;
-    private javax.swing.JLabel etqNombreUsuario;
     private javax.swing.JPanel etqPanelPrecioTipoProducto;
     private javax.swing.JLabel etqPrecioNombre;
     private javax.swing.JLabel etqPrecioProducto;
@@ -483,7 +477,7 @@ public class RegistroProducto extends JFrame {
     private javax.swing.JLabel etqSignoPesos;
     private javax.swing.JLabel etqTipoProducto;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel panelBaseEncabezado;
     // End of variables declaration//GEN-END:variables
 }

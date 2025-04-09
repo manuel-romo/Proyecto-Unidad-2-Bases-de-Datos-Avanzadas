@@ -13,10 +13,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 
 @Entity
-@Table(name = "productos")
+@Table(
+        name = "productos", 
+        uniqueConstraints = @UniqueConstraint(columnNames = {"nombre", "tipo"})
+)
 public class Producto implements Serializable {
 
     public Producto(String nombre, Float precio, TipoProducto tipo, Boolean habilitado, String direccionImagen) {

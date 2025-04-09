@@ -4,8 +4,7 @@ import itson.sistemarestaurantedominio.TipoProducto;
 
 public class NuevoProductoDTO {
     private String nombre;
-    private Float precioFloat;
-    private String precioCadena;
+    private Float precio;
     private TipoProducto tipo;
     private Boolean habilitado;
     private String direccionImagen;
@@ -13,9 +12,9 @@ public class NuevoProductoDTO {
     public NuevoProductoDTO(){
     }
 
-    public NuevoProductoDTO(String nombre, String precioCadena, TipoProducto tipo, Boolean habilitado, String direccionImagen) {
+    public NuevoProductoDTO(String nombre, Float precio, TipoProducto tipo, Boolean habilitado, String direccionImagen) {
         this.nombre = nombre;
-        this.precioCadena = precioCadena;
+        this.precio = precio;
         this.tipo = tipo;
         this.habilitado = habilitado;
         this.direccionImagen = direccionImagen;
@@ -29,20 +28,12 @@ public class NuevoProductoDTO {
         this.nombre = nombre;
     }
 
-    public Float getPrecioFloat() {
-        return precioFloat;
+    public Float getPrecio() {
+        return precio;
     }
 
-    public void setPrecioFloat(Float precioFloat) {
-        this.precioFloat = precioFloat;
-    }
-
-    public String getPrecioCadena() {
-        return precioCadena;
-    }
-
-    public void setPrecioCadena(String precioCadena) {
-        this.precioCadena = precioCadena;
+    public void setPrecio(Float precio) {
+        this.precio = precio;
     }
 
     public TipoProducto getTipo() {

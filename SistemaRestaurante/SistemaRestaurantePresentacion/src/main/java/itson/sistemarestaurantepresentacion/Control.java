@@ -5,9 +5,11 @@ import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
+import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
 import itson.sistemarestaurantepresentacion.excepciones.SesionUsuarioInvalidaException;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 import itson.sistemarestaurantepresentacion.interfaces.IVistaReceptoraIdIngrediente;
+import itson.sistemarestaurantepresentacion.interfaces.IVistaReceptoraIdProducto;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -20,12 +22,18 @@ public class Control implements IMediador{
     private MenuPrincipal formMenuPrincipal;
     
     private IVistaReceptoraIdIngrediente formReceptorRespuestaBusquedaIngrediente;
+    private IVistaReceptoraIdProducto formReceptorRespuestaBusquedaProducto;
     
     
     private IngredientesPrincipal formIngredientesPrincipal;
     private RegistroIngrediente formRegistroIngrediente;
     private EditarIngrediente formEditarIngrediente;
     private BuscadorIngredientes formBuscadorIngredientes;
+    
+    private ProductoPrincipal formProductosPrincipal;
+    private RegistroProducto formRegistroProducto;
+    private EditarProducto formEditarProducto;
+    private BuscadorProductos formBuscadorProductos;
      
     /**
      * Método que permite mostrar la pantalla inicial del sistema.
@@ -112,6 +120,47 @@ public class Control implements IMediador{
     public void cerrarBuscador(JFrame buscadorCerrar){   
         formReceptorRespuestaBusquedaIngrediente.habilitar(true);
         buscadorCerrar.dispose();
+    }
+
+    @Override
+    public void mostrarProductosPrincipal(JFrame frameActual) {
+        frameActual.dispose();
+        IProductosBO productosBO = FabricaObjetoNegocio.crearProductosBO();
+        formProductosPrincipal = new ProductoPrincipal(this, productosBO);
+        formProductosPrincipal.setVisible(true);
+    }
+
+    @Override
+    public void mostrarRegistroProducto(JFrame frameActual) {
+        frameActual.dispose();
+        IProductosBO productosBO = FabricaObjetoNegocio.crearProductosBO();
+        formRegistroProducto = new RegistroProducto(this, productosBO);
+        formRegistroProducto.setVisible(true);
+    }
+
+    @Override
+    public void mostrarEditarProductos(JFrame frameActual, Long idProducto) {
+        frameActual.dispose();
+        IProductosBO productosBO = FabricaObjetoNegocio.crearProductosBO();
+        formEditarProducto = new EditarProducto(this, productosBO, idProducto);
+        formEditarProducto.setVisible(true);
+    }
+
+    @Override
+    public void mostrarBuscadorProductos(IVistaReceptoraIdProducto vistaReceptoraIdProducto) {
+        vistaReceptoraIdProducto.habilitar(false);
+        formReceptorRespuestaBusquedaProducto = (IVistaReceptoraIdProducto)vistaReceptoraIdProducto;
+        IProductosBO productosBO = FabricaObjetoNegocio.crearProductosBO();
+        formBuscadorProductos = new BuscadorProductos(this, productosBO);
+        formBuscadorProductos.setVisible(true);
+    }
+
+    @Override
+    public void actualizarVentanaResultadoBusquedaProductos(JFrame buscadorProductos, Long idProducto) {
+        formReceptorRespuestaBusquedaProducto.setIdProducto(idProducto);
+        formReceptorRespuestaBusquedaProducto.habilitar(true);
+        buscadorProductos.dispose();
+    
     }
 
     

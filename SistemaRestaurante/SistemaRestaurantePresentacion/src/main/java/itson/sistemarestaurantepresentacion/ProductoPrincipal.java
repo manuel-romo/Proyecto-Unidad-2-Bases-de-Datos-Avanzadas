@@ -1,5 +1,27 @@
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantenegocio.excepciones.ProductoBuscadoNoExisteException;
+import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
+import itson.sistemarestaurantepresentacion.excepciones.ImagenNoEncontradaException;
+import itson.sistemarestaurantepresentacion.interfaces.IMediador;
+import itson.sistemarestaurantepresentacion.utils.ImagenesUtils;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 public class ProductoPrincipal extends javax.swing.JFrame {
 
     /**
@@ -11,7 +33,333 @@ public class ProductoPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
+    
+    private IMediador control;
+    
+    private IProductosBO productosBO;
+    
+    private int MARGEN_HORIZONTAL_PANELES_INGREDIENTES = 5;
+    private int MARGEN_VERTICAL_PANELES_INGREDIENTES = 5;
+    private int ALTURA_PANEL_INGREDIENTE = 120;
+    private int CANTIDAD_PANELES_FILA = 5;
+    private int MARGEN_LATERAL_IMAGEN_INGREDIENTE = 20;
+    
+    private Font FUENTE_NOMBRE_INGREDIENTE = new Font("Segoe UI", Font.BOLD, 20);
+    
+    private Color COLOR_PANEL_INGREDIENTE = new Color(249, 239, 211);
+    private Color COLOR_BOTON_EDITAR_INGREDIENTE = new Color(210, 250, 176);
+    private Color COLOR_BOTON_ELIMINAR_INGREDIENTE = new Color(255, 224, 206);
+    private Color COLOR_BOTON_VOLVER_PRINCIPAL_INGREDIENTES = new Color(202, 232, 255);
 
+    private static final Logger LOG = Logger.getLogger(ProductoPrincipal.class.getName());
+    
+    public ProductoPrincipal(IMediador control, IProductosBO productosBO){
+        initComponents();
+        setLocationRelativeTo(null);
+        setResizable(false);
+        
+        this.productosBO = productosBO;
+        this.control = control;
+        
+        panelBaseEncabezado2.add(new Encabezado());
+        
+        cargarProductos();
+    }
+    
+    private void cargarProductos(){
+        
+        List<Producto> listaProductosConsultados = productosBO.consultarProductos();
+        
+        configurarLayoutPanelTodosProductos(listaProductosConsultados.size());
+  
+        for(Producto producto: listaProductosConsultados){
+            
+            panelProductos.add(crearPanelProducto(producto));
+            
+        }    
+    }
+    
+    private void cargarProducto(Long idProducto){
+        
+        Producto producto = null;
+        try {
+            producto = productosBO.consultarProductoPorId(idProducto);
+            
+            configurarPanelProductoSolo();
+            
+            JPanel panelProducto = crearPanelProducto(producto);
+
+            panelProductos.add(panelProducto, BorderLayout.CENTER);
+            
+            panelProducto.add(crearPanelBtnVolverProductosTodos());
+
+        } catch (ProductoBuscadoNoExisteException ex) {
+            LOG.log(Level.SEVERE, "Error al mostrar el producto buscado. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al mostrar el producto buscado", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void configurarLayoutPanelTodosIngredientes(int cantidadIngredientes){
+        
+        panelProductos.removeAll();
+        
+        int numeroFilasLlenar = (int)Math.ceil((double)cantidadIngredientes/CANTIDAD_PANELES_FILA);
+                
+                
+        GridLayout gridLayout = new GridLayout(numeroFilasLlenar, CANTIDAD_PANELES_FILA);
+        
+        gridLayout.setHgap(MARGEN_HORIZONTAL_PANELES_INGREDIENTES);
+        gridLayout.setVgap(MARGEN_VERTICAL_PANELES_INGREDIENTES);
+        
+        panelProductos.setLayout(gridLayout);
+        
+        panelProductos.setPreferredSize(
+                new Dimension(0,
+                2 * (numeroFilasLlenar * ALTURA_PANEL_INGREDIENTE) + ALTURA_PANEL_INGREDIENTE));
+        
+    }
+    
+    private JPanel crearPanelBtnVolverProductosTodos(){
+        JPanel panelBtnVolverProductosTodos = new JPanel();
+        
+        panelBtnVolverProductosTodos.setLayout(new FlowLayout(FlowLayout.CENTER));
+        
+        panelBtnVolverProductosTodos.add(crearBtnVolverProductosTodos());
+        
+        panelBtnVolverProductosTodos.setOpaque(false);
+        
+        return panelBtnVolverProductosTodos;
+    }
+    
+    private JButton crearBtnVolverProductosTodos(){
+        
+        JButton btnVolverProductosTodos = new JButton();
+        
+        btnVolverProductosTodos.addActionListener(e -> control.mostrarProductosPrincipal(this));
+        
+        btnVolverProductosTodos.setText("Volver");
+        
+        btnVolverProductosTodos.setBackground(COLOR_BOTON_VOLVER_PRINCIPAL_INGREDIENTES);
+        
+        return btnVolverProductosTodos;
+    }
+    
+    private void configurarPanelProductoSolo(){
+        
+        panelProductos.removeAll();
+        panelProductos.setPreferredSize(new Dimension(0,0));
+        
+        BorderLayout borderLayout = new BorderLayout();
+        
+        panelProductos.setLayout(borderLayout);
+        
+    }
+    
+    private JPanel crearPanelProducto(Producto producto){
+        
+        // Se crea y configura el panel del ingrediente
+        JPanel panelProducto = new JPanel();
+        
+        panelProducto.setBackground(COLOR_PANEL_INGREDIENTE);
+            
+        panelProducto.setLayout(new BoxLayout(panelProducto, BoxLayout.Y_AXIS));
+        
+        // Se crea y agrega el panel con la imagen del ingrediente.
+        panelProducto.add(crearPanelImagenProducto(producto));
+        
+        // Se crea y agrega el panel con el nombre del ingrediente.
+        panelProducto.add(crearPanelNombreProducto(producto));
+        
+        panelProducto.add(crearPanelTipoProducto(producto));
+   
+        // Se crea y agrega un panel para agregar los botones de editar y eliminar ingrediente
+        panelProducto.add(crearPanelBtnEditarEliminarProducto(producto));
+        
+        return panelProducto;
+    }
+    
+    private JPanel crearPanelImagenProducto(Producto producto){
+        
+        // Se crea el panel de la imangen del ingrediente
+        JPanel panelImagenProducto = new JPanel(new FlowLayout());
+            
+        // Se crea una etiqueta para añadir su imagen asociada
+        JLabel etqImagenProducto = new JLabel();
+
+        // Se obtiene la imagen
+        ImageIcon imagenProducto;
+        try {
+            imagenProducto = ImagenesUtils.obtenerImagen(producto.getDireccionImagen());
+        } catch (ImagenNoEncontradaException ex) {
+            imagenProducto = new ImageIcon(getClass().getResource("/imagenIngredientePredeterminada.png"));
+        }
+
+        // Se determina el nuevo tamaño de la imagen para ajustarla al panel.
+        int nuevoAnchoImagen = (panelProductos.getWidth() - (MARGEN_HORIZONTAL_PANELES_INGREDIENTES * (CANTIDAD_PANELES_FILA + 1)))
+                /CANTIDAD_PANELES_FILA - MARGEN_LATERAL_IMAGEN_INGREDIENTE * 2;     
+        
+        int nuevoAltoImagen = ALTURA_PANEL_INGREDIENTE;
+
+        // Se redimensiona la imagen
+        ImageIcon imagenProductoRedimensionada = ImagenesUtils.redimensionarImagen(
+                imagenProducto, nuevoAnchoImagen, nuevoAltoImagen);
+
+        // Se agrega a la etiqueta la imagen redimensionada
+        etqImagenProducto.setIcon(imagenProductoRedimensionada);
+
+        // Se agrega la etiqueta con la imagen al panel.
+        panelImagenProducto.add(etqImagenProducto);
+        
+        panelImagenProducto.setOpaque(false);
+        
+        return panelImagenProducto;
+    }
+    
+    private JPanel crearPanelNombreProducto(Producto producto){
+        JPanel panelNombreProducto = new JPanel(new FlowLayout());
+        
+        JLabel nombreProducto = new JLabel(producto.getNombre());
+        
+        nombreProducto.setFont(FUENTE_NOMBRE_INGREDIENTE);
+        
+        panelNombreProducto.add(nombreProducto);
+        
+        panelNombreProducto.setOpaque(false);
+        
+        return panelNombreProducto;   
+    }
+    
+    private JPanel crearPanelTipoProducto(Producto producto){
+        
+        JPanel panelTipoProducto = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        
+        String tipoProducto = "";
+        if(null != producto.getTipo()) switch (producto.getTipo()) {
+            case ENTRADA:
+                tipoProducto = "Entrada";
+                break;
+            case PLATILLO:
+                tipoProducto = "Platillo";
+                break;
+            case BEBIDA:
+                tipoProducto = "Bebida";
+                break;
+            case POSTRE:
+                tipoProducto = "Postre";
+                break;
+            default:
+                break;
+        }
+        
+        JLabel labelTipoProducto = new JLabel("Tipo: " + producto.getTipo());
+        
+        panelTipoProducto.add(labelTipoProducto);
+        
+        panelTipoProducto.setOpaque(false);
+        
+        return panelTipoProducto;
+    }
+    
+    private JPanel crearPanelBtnEditarEliminarProducto(Producto producto){
+        JPanel panelBotonesEditarEliminarProducto = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        
+        // Se crean ambos botones
+        panelBotonesEditarEliminarProducto.add(crearBtnEditarProducto(producto.getId()));
+        panelBotonesEditarEliminarProducto.add(crearBtnEliminarProducto(producto.getId()));
+
+        panelBotonesEditarEliminarProducto.setOpaque(false);
+        
+        return panelBotonesEditarEliminarProducto;
+    }
+    
+    private void configurarLayoutPanelTodosProductos(int cantidadIngredientes){
+        
+        panelProductos.removeAll();
+        
+        int numeroFilasLlenar = (int)Math.ceil((double)cantidadIngredientes/CANTIDAD_PANELES_FILA);
+                
+                
+        GridLayout gridLayout = new GridLayout(numeroFilasLlenar, CANTIDAD_PANELES_FILA);
+        
+        gridLayout.setHgap(MARGEN_HORIZONTAL_PANELES_INGREDIENTES);
+        gridLayout.setVgap(MARGEN_VERTICAL_PANELES_INGREDIENTES);
+        
+        panelProductos.setLayout(gridLayout);
+        
+        panelProductos.setPreferredSize(
+                new Dimension(0,
+                2 * (numeroFilasLlenar * ALTURA_PANEL_INGREDIENTE) + ALTURA_PANEL_INGREDIENTE));
+        
+    }
+    
+    private JButton crearBtnEditarProducto(Long idProducto){
+        
+        JButton btnEditarProducto = new JButton("Editar");
+        
+        btnEditarProducto.setBackground(COLOR_BOTON_EDITAR_INGREDIENTE);
+        
+        // Se define un Action Listener para el JButton, se ejecutará el método
+        // mostrarEditarIngrediente() cada vez que se presione.
+        btnEditarProducto.addActionListener(e -> mostrarEditarProducto(idProducto));
+        
+        return btnEditarProducto;
+    }
+    
+    private JButton crearBtnEliminarProducto(Long idProducto){
+        
+        JButton btnEliminarProducto = new JButton("Eliminar");
+        
+        btnEliminarProducto.setBackground(COLOR_BOTON_ELIMINAR_INGREDIENTE);
+        
+        btnEliminarProducto.addActionListener(e -> eliminarProducto(idProducto));
+        
+        return btnEliminarProducto;
+    }
+    
+    
+    private void mostrarEditarProducto(Long idProducto){
+        
+        control.mostrarEditarProductos(this, idProducto);
+    }
+    
+    private void eliminarProducto(Long idProducto){
+        // TODO Pendiente para que avise si hay productos relacionados con este ingrediente.
+    }
+    
+    /**
+     * Método que permite mostrar la pantalla de registro de un nuevo ingrediente.
+     */
+    private void mostrarRegistrarProdcto(){
+        control.mostrarRegistroProducto(this);
+    
+    }
+    
+    /**
+     * Método que permite mostrar la ventana del buscador de ingredientes.
+     */
+    private void mostrarBuscadorProducto(){
+        control.mostrarBuscadorProductos();
+    }
+    
+    /**
+     * Método que permite mostrar el menú principal del sistema.
+     */
+    private void mostrarMenuPrincipal(){
+        control.mostrarMenuPrincipal(this);
+    }
+    
+    @Override
+    public void setIdProducto(Long idProducto) {
+        cargarProducto(idProducto);
+        getContentPane().revalidate();
+        repaint();
+    }
+    
+    @Override
+    public void habilitar(boolean habilitado) {
+        setEnabled(habilitado);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -22,113 +370,58 @@ public class ProductoPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         panelPrincipal = new javax.swing.JPanel();
-        panelEncabezado = new javax.swing.JPanel();
-        etqIcono = new javax.swing.JLabel();
-        etqRestauranteSahuaro = new javax.swing.JLabel();
-        etqNombreUsuario = new javax.swing.JLabel();
-        etqIconoUsuario = new javax.swing.JLabel();
-        btnCerrarSesion = new javax.swing.JButton();
-        etqProductosOfrecidos = new javax.swing.JLabel();
-        etqBuscarProductos = new javax.swing.JLabel();
-        campoTxtBuscarProducto = new javax.swing.JTextField();
+        panelBaseEncabezado2 = new javax.swing.JPanel();
         btnRegistrarProducto = new javax.swing.JButton();
-        btnAniadirProducto1 = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
+        panelProductos = new javax.swing.JPanel();
+        btnBuscarProducto = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         panelPrincipal.setBackground(new java.awt.Color(232, 232, 232));
 
-        panelEncabezado.setBackground(new java.awt.Color(250, 230, 188));
+        panelBaseEncabezado2.setBackground(new java.awt.Color(250, 230, 188));
 
-        etqIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoAplicacion.png"))); // NOI18N
-
-        etqRestauranteSahuaro.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        etqRestauranteSahuaro.setForeground(new java.awt.Color(0, 0, 0));
-        etqRestauranteSahuaro.setText("Restaurante el Sahuaro");
-
-        etqNombreUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        etqNombreUsuario.setForeground(new java.awt.Color(0, 0, 0));
-        etqNombreUsuario.setText("Nombre de usuario");
-
-        etqIconoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconoUsuario2.png"))); // NOI18N
-
-        btnCerrarSesion.setBackground(new java.awt.Color(253, 244, 167));
-        btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnCerrarSesion.setForeground(new java.awt.Color(0, 0, 0));
-        btnCerrarSesion.setText("Cerrar sesión");
-        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCerrarSesionActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
-        panelEncabezado.setLayout(panelEncabezadoLayout);
-        panelEncabezadoLayout.setHorizontalGroup(
-            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(etqIcono)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(etqRestauranteSahuaro)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 370, Short.MAX_VALUE)
-                .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
-                        .addComponent(etqNombreUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(etqIconoUsuario))
-                    .addComponent(btnCerrarSesion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18))
+        javax.swing.GroupLayout panelBaseEncabezado2Layout = new javax.swing.GroupLayout(panelBaseEncabezado2);
+        panelBaseEncabezado2.setLayout(panelBaseEncabezado2Layout);
+        panelBaseEncabezado2Layout.setHorizontalGroup(
+            panelBaseEncabezado2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-        panelEncabezadoLayout.setVerticalGroup(
-            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(etqRestauranteSahuaro))
-                    .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(etqIcono))
-                    .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(etqIconoUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(etqNombreUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCerrarSesion)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        panelBaseEncabezado2Layout.setVerticalGroup(
+            panelBaseEncabezado2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 84, Short.MAX_VALUE)
         );
 
-        etqProductosOfrecidos.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        etqProductosOfrecidos.setForeground(new java.awt.Color(0, 0, 0));
-        etqProductosOfrecidos.setText("Productos ofrecidos:");
-
-        etqBuscarProductos.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        etqBuscarProductos.setForeground(new java.awt.Color(0, 0, 0));
-        etqBuscarProductos.setText("Buscar producto por nombre o categoría");
-
-        campoTxtBuscarProducto.setBackground(new java.awt.Color(255, 255, 255));
-        campoTxtBuscarProducto.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        campoTxtBuscarProducto.setForeground(new java.awt.Color(0, 0, 0));
-
-        btnRegistrarProducto.setBackground(new java.awt.Color(255, 255, 255));
         btnRegistrarProducto.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnRegistrarProducto.setForeground(new java.awt.Color(0, 0, 0));
-        btnRegistrarProducto.setText("Registrar nuevo producto");
+        btnRegistrarProducto.setText("Registrar Producto");
+        btnRegistrarProducto.setPreferredSize(new java.awt.Dimension(210, 32));
         btnRegistrarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarProductoActionPerformed(evt);
             }
         });
 
-        btnAniadirProducto1.setBackground(new java.awt.Color(205, 255, 197));
-        btnAniadirProducto1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnAniadirProducto1.setForeground(new java.awt.Color(0, 0, 0));
-        btnAniadirProducto1.setText("Volver");
-        btnAniadirProducto1.addActionListener(new java.awt.event.ActionListener() {
+        btnVolver.setBackground(new java.awt.Color(205, 255, 197));
+        btnVolver.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnVolver.setText("Volver");
+        btnVolver.setPreferredSize(new java.awt.Dimension(85, 32));
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAniadirProducto1ActionPerformed(evt);
+                btnVolverActionPerformed(evt);
+            }
+        });
+
+        panelProductos.setBackground(new java.awt.Color(153, 153, 153));
+        panelProductos.setEnabled(false);
+        panelProductos.setLayout(new java.awt.GridLayout(1, 0));
+
+        btnBuscarProducto.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnBuscarProducto.setText("Buscar Producto");
+        btnBuscarProducto.setPreferredSize(new java.awt.Dimension(210, 32));
+        btnBuscarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarProductoActionPerformed(evt);
             }
         });
 
@@ -136,36 +429,31 @@ public class ProductoPrincipal extends javax.swing.JFrame {
         panelPrincipal.setLayout(panelPrincipalLayout);
         panelPrincipalLayout.setHorizontalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(panelPrincipalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(etqProductosOfrecidos)
-                .addGap(59, 59, 59)
-                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(etqBuscarProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoTxtBuscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRegistrarProducto)
-                .addContainerGap())
             .addGroup(panelPrincipalLayout.createSequentialGroup()
                 .addGap(413, 413, 413)
-                .addComponent(btnAniadirProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(384, Short.MAX_VALUE))
+            .addComponent(panelProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelBaseEncabezado2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipalLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnBuscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(btnRegistrarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelPrincipalLayout.setVerticalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelPrincipalLayout.createSequentialGroup()
-                .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelBaseEncabezado2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
+                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegistrarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(etqProductosOfrecidos)
-                    .addComponent(btnRegistrarProducto)
-                    .addGroup(panelPrincipalLayout.createSequentialGroup()
-                        .addComponent(etqBuscarProductos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(campoTxtBuscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 448, Short.MAX_VALUE)
-                .addComponent(btnAniadirProducto1)
+                .addComponent(panelProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -183,30 +471,24 @@ public class ProductoPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCerrarSesionActionPerformed
-
     private void btnRegistrarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarProductoActionPerformed
-
+        mostrarRegistrarProdcto();
     }//GEN-LAST:event_btnRegistrarProductoActionPerformed
 
-    private void btnAniadirProducto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAniadirProducto1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAniadirProducto1ActionPerformed
+    private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
+        mostrarBuscadorProducto();
+    }//GEN-LAST:event_btnBuscarProductoActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        mostrarMenuPrincipal();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAniadirProducto1;
-    private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JButton btnRegistrarProducto;
-    private javax.swing.JTextField campoTxtBuscarProducto;
-    private javax.swing.JLabel etqBuscarProductos;
-    private javax.swing.JLabel etqIcono;
-    private javax.swing.JLabel etqIconoUsuario;
-    private javax.swing.JLabel etqNombreUsuario;
-    private javax.swing.JLabel etqProductosOfrecidos;
-    private javax.swing.JLabel etqRestauranteSahuaro;
-    private javax.swing.JPanel panelEncabezado;
+    private javax.swing.JButton btnVolver;
+    private javax.swing.JPanel panelBaseEncabezado2;
     private javax.swing.JPanel panelPrincipal;
+    private javax.swing.JPanel panelProductos;
     // End of variables declaration//GEN-END:variables
 }

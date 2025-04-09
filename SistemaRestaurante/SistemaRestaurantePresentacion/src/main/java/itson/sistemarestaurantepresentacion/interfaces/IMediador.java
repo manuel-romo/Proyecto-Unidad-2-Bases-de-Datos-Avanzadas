@@ -14,6 +14,11 @@ public interface IMediador {
     public abstract void mostrarEditarIngrediente(JFrame frameActual, Long idIngrediente);
     public abstract void mostrarBuscadorIngredientes(IVistaReceptoraIdIngrediente vistaReceptoraIdIngrediente);
     public abstract void actualizarVentanaResultadoBusquedaIngrediente(JFrame buscadorIngredientes, Long idIngrediente);
+    public abstract void mostrarProductosPrincipal(JFrame frameActual);
+    public abstract void mostrarRegistroProducto(JFrame frameActual);
+    public abstract void mostrarEditarProductos(JFrame frameActual, Long idProducto);
+    public abstract void mostrarBuscadorProductos(IVistaReceptoraIdProducto vistaReceptoraIdProducto);
+    public abstract void actualizarVentanaResultadoBusquedaProductos(JFrame buscadorProductos, Long idProducto);
     public abstract void cerrarBuscador(JFrame buscadorCerrar);
     
 }
