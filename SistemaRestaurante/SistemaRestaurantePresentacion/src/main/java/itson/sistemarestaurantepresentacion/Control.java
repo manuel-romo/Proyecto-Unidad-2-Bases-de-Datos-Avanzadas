@@ -162,9 +162,10 @@ public class Control implements IMediador{
         buscadorProductos.dispose();
     
     }
-
     
-    
-    
-    
+    @Override
+    public void cerrarBuscadorProductos(JFrame buscadorCerrar){   
+        formReceptorRespuestaBusquedaProducto.habilitar(true);
+        buscadorCerrar.dispose();
+    }
 }

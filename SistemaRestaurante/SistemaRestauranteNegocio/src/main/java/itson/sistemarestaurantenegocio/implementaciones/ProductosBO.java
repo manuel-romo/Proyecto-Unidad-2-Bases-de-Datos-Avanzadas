@@ -1,36 +1,48 @@
-
 package itson.sistemarestaurantenegocio.implementaciones;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantedominio.dtos.ProductoActualizadoDTO;
+import itson.sistemarestaurantenegocio.excepciones.*;
 import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
-import itson.sistemarestaurantenegocio.excepciones.NombreProductoInvalidoException;
-import itson.sistemarestaurantenegocio.excepciones.PrecioProductoInvalidoException;
-import itson.sistemarestaurantenegocio.excepciones.ProductoBuscadoNoExisteException;
-import itson.sistemarestaurantepersistencia.excepciones.ProductoNoExisteException;
-import itson.sistemarestaurantenegocio.excepciones.ProductoSinDireccionImagenException;
-import itson.sistemarestaurantenegocio.excepciones.ProductoSinIdException;
-import itson.sistemarestaurantenegocio.excepciones.ProductoSinNombreException;
-import itson.sistemarestaurantenegocio.excepciones.ProductoSinPrecioException;
-import itson.sistemarestaurantenegocio.excepciones.ProductoSinTipoException;
-import itson.sistemarestaurantenegocio.excepciones.ProductoYaExisteException;
 import itson.sistemarestaurantepersistencia.IProductosDAO;
-import itson.sistemarestaurantepersistencia.excepciones.ActualizacionProductoSinIdException;
-import itson.sistemarestaurantepersistencia.excepciones.ProductoMismoNombreTipoExistenteException;
-import itson.sistemarestaurantepersistencia.excepciones.RegistroProductoSinDireccionImagenException;
-import itson.sistemarestaurantepersistencia.excepciones.RegistroProductoSinNombreException;
-import itson.sistemarestaurantepersistencia.excepciones.RegistroProductoSinPrecioException;
-import itson.sistemarestaurantepersistencia.excepciones.RegistroProductoSinTipoException;
+import itson.sistemarestaurantepersistencia.excepciones.*;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProductosBO implements IProductosBO {
 
+    private static final Logger LOG = Logger.getLogger(ProductosBO.class.getName());
     private final IProductosDAO productosDAO;
 
     public ProductosBO(IProductosDAO productosDAO) {
         this.productosDAO = productosDAO;
+    }
+
+    @Override
+    public List<Producto> consultarProductos() {
+        return productosDAO.consultarProductos();
+    }
+
+    @Override
+    public List<Producto> consultarProductosNombre(String nombreProducto) {
+        return productosDAO.consultarProductosNombre(nombreProducto);
+    }
+
+    @Override
+    public List<Producto> consultarProductosTipo(String tipoProducto) {
+        return productosDAO.consultarProductosTipo(tipoProducto);
+    }
+
+    @Override
+    public Producto consultarProductoPorId(Long idProducto) throws ProductoBuscadoNoExisteException {
+        try {
+            return productosDAO.consultarProducto(idProducto);
+        } catch (ProductoNoExisteException ex) {
+            LOG.log(Level.WARNING, "No se encontró el producto con ID: {0}", idProducto);
+            throw new ProductoBuscadoNoExisteException("No existe un producto con el ID especificado.");
+        }
     }
 
     @Override
@@ -43,6 +55,7 @@ public class ProductosBO implements IProductosBO {
                    ProductoSinTipoException, 
                    ProductoSinDireccionImagenException {
 
+        // Validaciones
         if (nuevoProductoDTO.getNombre() == null || nuevoProductoDTO.getNombre().isEmpty()) {
             throw new NombreProductoInvalidoException("Debe ingresar un nombre de producto.");
         }
@@ -75,51 +88,18 @@ public class ProductosBO implements IProductosBO {
     }
 
     @Override
-    public List<Producto> consultarProductos() {
-        List<Producto> listaProductosConsultados = productosDAO.consultarProductos();
-        
-        return listaProductosConsultados;
-    }
-
-    @Override
-    public List<Producto> consultarProductosNombre(String nombreProducto) {
-        List<Producto> listaProductosConsultados = productosDAO.consultarProductosNombre(nombreProducto);
-        
-        return listaProductosConsultados;
-    }
-
-    public List<Producto> consultarProductosTipo(String tipoProducto) {
-        List<Producto> listaProductosConsultados = productosDAO.consultarProductosTipo(tipoProducto);
-        
-        return listaProductosConsultados;
-
-    }
-
-    public Producto consultarProductoPorId(Long idProducto) throws ProductoBuscadoNoExisteException {
-        
-        Producto productoConsultado;
-        try {
-            productoConsultado = productosDAO.consultarProducto(idProducto);
-        } catch (ProductoNoExisteException ex) {
-            throw new ProductoBuscadoNoExisteException("No existe el Id del producto buscado.");
-        }
-        
-        return productoConsultado;
-    }
-
-    @Override
-    public void actualizarProducto(ProductoActualizadoDTO productoActualizadoDTO) 
+    public void actualizarProducto(ProductoActualizadoDTO productoActualizadoDTO)
             throws NombreProductoInvalidoException, 
                    PrecioProductoInvalidoException, 
                    ProductoYaExisteException, 
                    ProductoSinIdException, 
                    ProductoSinNombreException, 
                    ProductoSinPrecioException, 
-                   ProductoBuscadoNoExisteException,
                    ProductoSinTipoException, 
-                   ProductoSinDireccionImagenException, 
-                   ProductoNoExisteException {
+                   ProductoNoExisteException,
+                   ProductoSinDireccionImagenException {
 
+        // Validaciones
         if (productoActualizadoDTO.getId() == null) {
             throw new ProductoSinIdException("El producto no tiene un ID especificado.");
         }
@@ -154,8 +134,8 @@ public class ProductosBO implements IProductosBO {
             throw new ProductoSinTipoException("El producto no tiene tipo.");
         } catch (RegistroProductoSinDireccionImagenException ex) {
             throw new ProductoSinDireccionImagenException("El producto no tiene dirección de imagen.");
-        } catch (ActualizacionProductoSinIdException ex){
-            throw new ProductoSinIdException("El ingrediente no tiene id");
+        } catch (ActualizacionProductoSinIdException ex) {
+            throw new ProductoSinIdException("El producto no tiene un ID especificado.");
         }
     }
 }

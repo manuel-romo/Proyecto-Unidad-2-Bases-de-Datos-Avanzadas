@@ -6,6 +6,7 @@ import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
 import itson.sistemarestaurantepresentacion.excepciones.ImagenNoEncontradaException;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 import itson.sistemarestaurantepresentacion.utils.ImagenesUtils;
+import itson.sistemarestaurantepresentacion.interfaces.IVistaReceptoraIdProducto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,11 +19,12 @@ import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class ProductoPrincipal extends javax.swing.JFrame {
+public class ProductoPrincipal extends JFrame implements IVistaReceptoraIdProducto{
 
     /**
      * Creates new form ProductoPrincipal
@@ -326,36 +328,25 @@ public class ProductoPrincipal extends javax.swing.JFrame {
         // TODO Pendiente para que avise si hay productos relacionados con este ingrediente.
     }
     
-    /**
-     * Método que permite mostrar la pantalla de registro de un nuevo ingrediente.
-     */
     private void mostrarRegistrarProdcto(){
         control.mostrarRegistroProducto(this);
     
     }
     
-    /**
-     * Método que permite mostrar la ventana del buscador de ingredientes.
-     */
     private void mostrarBuscadorProducto(){
-        control.mostrarBuscadorProductos();
+        control.mostrarBuscadorProductos(this);
     }
     
-    /**
-     * Método que permite mostrar el menú principal del sistema.
-     */
     private void mostrarMenuPrincipal(){
         control.mostrarMenuPrincipal(this);
     }
     
-    @Override
     public void setIdProducto(Long idProducto) {
         cargarProducto(idProducto);
         getContentPane().revalidate();
         repaint();
     }
     
-    @Override
     public void habilitar(boolean habilitado) {
         setEnabled(habilitado);
     }

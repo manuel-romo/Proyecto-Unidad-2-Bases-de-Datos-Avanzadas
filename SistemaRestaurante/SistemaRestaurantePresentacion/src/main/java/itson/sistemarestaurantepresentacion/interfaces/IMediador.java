@@ -20,5 +20,5 @@ public interface IMediador {
     public abstract void mostrarBuscadorProductos(IVistaReceptoraIdProducto vistaReceptoraIdProducto);
     public abstract void actualizarVentanaResultadoBusquedaProductos(JFrame buscadorProductos, Long idProducto);
     public abstract void cerrarBuscador(JFrame buscadorCerrar);
-    
+    public abstract void cerrarBuscadorProductos(JFrame buscadorCerrar);
 }
