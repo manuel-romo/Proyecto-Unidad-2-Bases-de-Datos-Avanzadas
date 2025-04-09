@@ -3,20 +3,18 @@ package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.UnidadIngrediente;
-import itson.sistemarestaurantedominio.Usuario;
-import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
+import itson.sistemarestaurantedominio.dtos.IngredienteActualizadoDTO;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
-import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.CantidadIngredienteInvalidaException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteBuscadoNoExisteException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinCantidadException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinDireccionImagenException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteSinIdException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinNombreException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinUnidadException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteYaExisteException;
 import itson.sistemarestaurantenegocio.excepciones.NombreIngredienteInvalidoException;
-import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
-import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinDireccionImagenException;
+import itson.sistemarestaurantepersistencia.excepciones.IngredienteNoExisteException;
 import itson.sistemarestaurantepresentacion.excepciones.ImagenNoEncontradaException;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 import itson.sistemarestaurantepresentacion.utils.ImagenesUtils;
@@ -25,7 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -220,35 +217,42 @@ public class EditarIngrediente extends JFrame {
         Float cantidad = Float.valueOf(campoTextoCantidadProducto.getText());      
         String direccionImagenString = direccionImagenIngrediente;
         
-        NuevoIngredienteDTO nuevoIngredienteDTO = new NuevoIngredienteDTO(nombreIngrediente, unidad, cantidad, direccionImagenString);
+        IngredienteActualizadoDTO ingredienteActualizadoDTO = 
+                new IngredienteActualizadoDTO(idIngrediente, nombreIngrediente, unidad, cantidad, direccionImagenString);
         
-//        try {
-//            ingredientesBO.registrarIngrediente(nuevoIngredienteDTO);
-//            JOptionPane.showMessageDialog(this, "El ingrediente se ha actualizado exitosamente", 
-//                    "Actualización exitosa", JOptionPane.INFORMATION_MESSAGE);
-//            
-//        } catch (NombreIngredienteInvalidoException ex) {
-//            LOG.severe("Nombre de ingrediente inváldio. " + ex.getMessage());
-//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Nombre de ingrediente inválido", JOptionPane.ERROR_MESSAGE);
-//        } catch (CantidadIngredienteInvalidaException ex){
-//            LOG.severe("Cantidad del ingrediente inválida. " + ex.getMessage());
-//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Cantidad del ingrediente inválida", JOptionPane.ERROR_MESSAGE);  
-//        } catch(IngredienteYaExisteException ex){
-//            LOG.severe("Ingrediente existente. " + ex.getMessage());
-//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente existente", JOptionPane.ERROR_MESSAGE);
-//        } catch (IngredienteSinUnidadException ex) {
-//            LOG.severe("Ingrediente sin unidad. " + ex.getMessage());
-//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin unidad", JOptionPane.ERROR_MESSAGE);
-//        } catch (IngredienteSinNombreException ex) {
-//            LOG.severe("Ingrediente sin nombre. " + ex.getMessage());
-//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin nombre", JOptionPane.ERROR_MESSAGE);
-//        } catch (IngredienteSinDireccionImagenException ex) {
-//            LOG.severe("Ingrediente sin dirección de imagen. " + ex.getMessage());
-//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin dirección de imagen", JOptionPane.ERROR_MESSAGE);
-//        } catch (IngredienteSinCantidadException ex) {
-//            LOG.severe("Ingrediente sin cantidad. " + ex.getMessage());
-//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin cantidad", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            ingredientesBO.actualizarIngrediente(ingredienteActualizadoDTO);
+            JOptionPane.showMessageDialog(this, "El ingrediente se ha actualizado exitosamente", 
+                    "Actualización exitosa", JOptionPane.INFORMATION_MESSAGE);
+            
+        } catch (NombreIngredienteInvalidoException ex) {
+            LOG.severe("Nombre de ingrediente inváldio. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Nombre de ingrediente inválido", JOptionPane.ERROR_MESSAGE);
+        } catch (CantidadIngredienteInvalidaException ex){
+            LOG.severe("Cantidad del ingrediente inválida. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Cantidad del ingrediente inválida", JOptionPane.ERROR_MESSAGE);  
+        } catch(IngredienteYaExisteException ex){
+            LOG.severe("Ingrediente existente. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente existente", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteSinUnidadException ex) {
+            LOG.severe("Ingrediente sin unidad. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin unidad", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteSinNombreException ex) {
+            LOG.severe("Ingrediente sin nombre. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin nombre", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteSinDireccionImagenException ex) {
+            LOG.severe("Ingrediente sin dirección de imagen. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin dirección de imagen", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteSinCantidadException ex) {
+            LOG.severe("Ingrediente sin cantidad. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin cantidad", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteNoExisteException ex) {
+            LOG.severe("Ingrediente no existe. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente no existe", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteSinIdException ex) {
+            LOG.severe("Ingrediente no tiene Id. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente no tiene Id", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void mostrarIngredientesPrincipal(){

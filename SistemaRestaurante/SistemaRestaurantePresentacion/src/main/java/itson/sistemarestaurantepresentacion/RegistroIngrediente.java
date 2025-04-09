@@ -324,7 +324,7 @@ public class RegistroIngrediente extends JFrame {
         });
 
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setText("Volver");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);

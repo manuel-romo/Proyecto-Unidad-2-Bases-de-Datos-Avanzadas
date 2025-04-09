@@ -33,16 +33,12 @@ public class BusquedaClientesComanda extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(605, 491));
 
         etqBuscarProducto.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        etqBuscarProducto.setForeground(new java.awt.Color(0, 0, 0));
         etqBuscarProducto.setText("Buscar cliente por nombre, teléfono o correo electrónico");
 
-        campoTxtBuscarProducto.setBackground(new java.awt.Color(255, 255, 255));
         campoTxtBuscarProducto.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        campoTxtBuscarProducto.setForeground(new java.awt.Color(0, 0, 0));
 
         btnAniadirProducto1.setBackground(new java.awt.Color(205, 255, 197));
         btnAniadirProducto1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnAniadirProducto1.setForeground(new java.awt.Color(0, 0, 0));
         btnAniadirProducto1.setText("Volver");
         btnAniadirProducto1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

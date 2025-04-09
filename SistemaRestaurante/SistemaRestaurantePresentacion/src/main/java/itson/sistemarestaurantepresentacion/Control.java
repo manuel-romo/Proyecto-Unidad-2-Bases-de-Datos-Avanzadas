@@ -21,6 +21,7 @@ public class Control implements IMediador{
     IngredientesPrincipal formIngredientesPrincipal;
     RegistroIngrediente formRegistroIngrediente;
     EditarIngrediente formEditarIngrediente;
+    BuscadorIngredientes formBuscadorIngredientes;
      
     /**
      * Método que permite mostrar la pantalla inicial del sistema.
@@ -86,6 +87,14 @@ public class Control implements IMediador{
         formEditarIngrediente = new EditarIngrediente(this, ingredientesBO, idIngrediente);
         formEditarIngrediente.setVisible(true);
     }
+
+    @Override
+    public void mostrarBuscadorIngredientes(JFrame framePadre) {
+        IIngredientesBO ingredientesBO = FabricaObjetoNegocio.crearIngredientesBO();
+        formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO);
+        formBuscadorIngredientes.setVisible(true);
+    }
+    
     
     
     

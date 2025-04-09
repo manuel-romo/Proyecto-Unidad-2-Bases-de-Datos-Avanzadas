@@ -9,6 +9,7 @@ itson\sistemarestaurantedominio\dtos\CorreoContraseniaInicioSesionDTO.class
 itson\sistemarestaurantedominio\Comanda_.class
 itson\sistemarestaurantedominio\Producto_.class
 itson\sistemarestaurantedominio\Comanda.class
+itson\sistemarestaurantedominio\dtos\IngredienteActualizadoDTO.class
 itson\sistemarestaurantedominio\Cliente.class
 itson\sistemarestaurantedominio\Mesa_.class
 itson\sistemarestaurantedominio\IngredienteProducto_.class

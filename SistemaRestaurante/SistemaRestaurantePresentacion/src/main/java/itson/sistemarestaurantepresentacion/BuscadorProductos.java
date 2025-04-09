@@ -35,20 +35,14 @@ public class BuscadorProductos extends javax.swing.JPanel {
         panelPrincipalBuscador.setBackground(new java.awt.Color(232, 232, 232));
 
         etqBuscarProducto.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        etqBuscarProducto.setForeground(new java.awt.Color(0, 0, 0));
         etqBuscarProducto.setText("Buscar producto por nombre o categoría");
 
-        campoTxtBuscarProducto.setBackground(new java.awt.Color(255, 255, 255));
         campoTxtBuscarProducto.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        campoTxtBuscarProducto.setForeground(new java.awt.Color(0, 0, 0));
 
         etqCantidad.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        etqCantidad.setForeground(new java.awt.Color(0, 0, 0));
         etqCantidad.setText("Cantidad");
 
-        campoTxtCantidad.setBackground(new java.awt.Color(255, 255, 255));
         campoTxtCantidad.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        campoTxtCantidad.setForeground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout panelPrincipalBuscadorLayout = new javax.swing.GroupLayout(panelPrincipalBuscador);
         panelPrincipalBuscador.setLayout(panelPrincipalBuscadorLayout);
