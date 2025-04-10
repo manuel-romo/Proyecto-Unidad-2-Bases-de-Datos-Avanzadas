@@ -68,17 +68,18 @@ public class ProductoPrincipal extends JFrame implements IVistaReceptoraIdProduc
         cargarProductos();
     }
     
-    private void cargarProductos(){
-        
-        List<Producto> listaProductosConsultados = productosBO.consultarProductos();
-        
+    public void cargarProductos() {
+        panelProductos.removeAll(); // Limpia los productos existentes.
+        List<Producto> listaProductosConsultados = productosBO.consultarProductos(); // Consulta los productos.
+
         configurarLayoutPanelTodosProductos(listaProductosConsultados.size());
-  
-        for(Producto producto: listaProductosConsultados){
-            
-            panelProductos.add(crearPanelProducto(producto));
-            
-        }    
+
+        for (Producto producto : listaProductosConsultados) {
+            panelProductos.add(crearPanelProducto(producto)); // Agrega cada producto al panel.
+        }
+
+        getContentPane().revalidate(); // Asegura que los cambios se reflejen.
+        repaint();
     }
     
     private void cargarProducto(Long idProducto){
@@ -335,6 +336,9 @@ public class ProductoPrincipal extends JFrame implements IVistaReceptoraIdProduc
     
     private void mostrarBuscadorProducto(){
         control.mostrarBuscadorProductos(this);
+        cargarProductos();
+        getContentPane().revalidate();
+        repaint();
     }
     
     private void mostrarMenuPrincipal(){
@@ -343,6 +347,7 @@ public class ProductoPrincipal extends JFrame implements IVistaReceptoraIdProduc
     
     public void setIdProducto(Long idProducto) {
         cargarProducto(idProducto);
+        cargarProductos();
         getContentPane().revalidate();
         repaint();
     }

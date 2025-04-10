@@ -159,13 +159,20 @@ public class Control implements IMediador{
     public void actualizarVentanaResultadoBusquedaProductos(JFrame buscadorProductos, Long idProducto) {
         formReceptorRespuestaBusquedaProducto.setIdProducto(idProducto);
         formReceptorRespuestaBusquedaProducto.habilitar(true);
+        if (formProductosPrincipal != null) {
+            // Recarga la lista completa de productos
+            formProductosPrincipal.cargarProductos();
+        }
         buscadorProductos.dispose();
-    
     }
     
     @Override
-    public void cerrarBuscadorProductos(JFrame buscadorCerrar){   
+    public void cerrarBuscadorProductos(JFrame buscadorCerrar) {
         formReceptorRespuestaBusquedaProducto.habilitar(true);
+        if (formProductosPrincipal != null) {
+            // Llama al método para recargar la lista de productos
+            formProductosPrincipal.cargarProductos();
+        }
         buscadorCerrar.dispose();
     }
 }
