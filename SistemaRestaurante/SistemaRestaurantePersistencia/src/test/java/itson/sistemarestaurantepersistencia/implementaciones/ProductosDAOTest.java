@@ -5,6 +5,7 @@ import itson.sistemarestaurantedominio.TipoProducto;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantedominio.dtos.ProductoActualizadoDTO;
 import itson.sistemarestaurantepersistencia.excepciones.ProductoMismoNombreTipoExistenteException;
+import itson.sistemarestaurantepersistencia.excepciones.ProductoNoExisteException;
 import itson.sistemarestaurantepersistencia.excepciones.RegistroProductoNoExisteException;
 import itson.sistemarestaurantepersistencia.excepciones.RegistroProductoSinDireccionImagenException;
 import itson.sistemarestaurantepersistencia.excepciones.RegistroProductoSinNombreException;
@@ -45,9 +46,13 @@ public class ProductosDAOTest {
         Producto hamburguesa = new Producto("Hamburguesa", 100F, TipoProducto.PLATILLO, true, "imagenHamburguesa.png");
         Producto pastel = new Producto("Pastel", 200F, TipoProducto.POSTRE, true, "imagenPastel.png");
 
-        productosRegistrados.add(pizza);
+        // Se persisten en oren alfabético según el nombre del producto para poder comparar
+        // los resultados con los obtenidos, pues el método de consulta devuelve
+        // los resutados obtenidos en ese orden.
         productosRegistrados.add(hamburguesa);
         productosRegistrados.add(pastel);
+        productosRegistrados.add(pizza);
+        
 
         entityManager.persist(pizza);
         entityManager.persist(hamburguesa);
@@ -196,6 +201,6 @@ public class ProductosDAOTest {
                 .max()
                 .orElse(0L) + 1;
 
-        assertThrows(RegistroProductoNoExisteException.class, () -> productosDAO.consultarProducto(idInexistente));
+        assertThrows(ProductoNoExisteException.class, () -> productosDAO.consultarProducto(idInexistente));
     }
 }
