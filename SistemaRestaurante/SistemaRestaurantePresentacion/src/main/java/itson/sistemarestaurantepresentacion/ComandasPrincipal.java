@@ -54,7 +54,7 @@ public class ComandasPrincipal extends JFrame {
     private void crearComanda(){
 
         try {
-            CrearComanda formularioCrearComanda = new CrearComanda(usuariosBO, comandasBO, idUsuario);
+            CreacionComanda formularioCrearComanda = new CreacionComanda(usuariosBO, comandasBO, idUsuario);
             dispose();
             formularioCrearComanda.setVisible(true);
             

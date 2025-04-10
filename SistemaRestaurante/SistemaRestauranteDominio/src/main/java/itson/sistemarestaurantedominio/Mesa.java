@@ -21,7 +21,7 @@ public class Mesa implements Serializable {
     @Column(name = "id_mesa")
     private Long id;
     
-    @Column(name = "numero_mesa")
+    @Column(name = "numero")
     private Integer numeroMesa;
     
     @OneToMany(mappedBy = "mesa")

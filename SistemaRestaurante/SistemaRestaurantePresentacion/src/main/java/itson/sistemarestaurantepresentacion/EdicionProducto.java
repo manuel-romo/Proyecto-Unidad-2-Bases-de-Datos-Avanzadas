@@ -11,7 +11,7 @@ import itson.sistemarestaurantepresentacion.interfaces.IMediador;
  *
  * @author ramuk
  */
-public class EditarProducto extends javax.swing.JFrame {
+public class EdicionProducto extends javax.swing.JFrame {
     
     private IMediador control;
     private IProductosBO productosBO;
@@ -21,7 +21,7 @@ public class EditarProducto extends javax.swing.JFrame {
     /**
      * Creates new form EditarProducto
      */
-    public EditarProducto(IMediador control, IProductosBO productosBO, Long idProducto) {
+    public EdicionProducto(IMediador control, IProductosBO productosBO, Long idProducto) {
         datosEncabezado = DatosEncabezado.getInstance();
         initComponents();
         setLocationRelativeTo(null);

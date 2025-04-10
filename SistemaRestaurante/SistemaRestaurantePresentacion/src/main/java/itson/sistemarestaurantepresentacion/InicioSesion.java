@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
-public class IniciarSesion extends JFrame {
+public class InicioSesion extends JFrame {
 
     private IMediador control;
     private IUsuariosBO usuariosBO;
@@ -22,9 +22,9 @@ public class IniciarSesion extends JFrame {
     private DatosEncabezado datosEncabezado;
     
     
-    private static final Logger LOG = Logger.getLogger(IniciarSesion.class.getName());
+    private static final Logger LOG = Logger.getLogger(InicioSesion.class.getName());
     
-    public IniciarSesion(IMediador control, IUsuariosBO usuariosBO) {
+    public InicioSesion(IMediador control, IUsuariosBO usuariosBO) {
         datosEncabezado = DatosEncabezado.getInstance();
         initComponents();
         this.setName("Inicio de sesión");

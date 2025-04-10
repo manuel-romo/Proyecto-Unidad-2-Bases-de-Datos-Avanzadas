@@ -34,7 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
-public class EditarIngrediente extends JFrame {
+public class EdicionIngrediente extends JFrame {
 
     private IMediador control;
     private IIngredientesBO ingredientesBO;
@@ -42,9 +42,9 @@ public class EditarIngrediente extends JFrame {
     private String direccionImagenIngrediente;
     private DatosEncabezado datosEncabezado;
     
-    private static final Logger LOG = Logger.getLogger(EditarIngrediente.class.getName());
+    private static final Logger LOG = Logger.getLogger(EdicionIngrediente.class.getName());
 
-    public EditarIngrediente(IMediador control, IIngredientesBO ingredientesBO, Long idIngrediente) {
+    public EdicionIngrediente(IMediador control, IIngredientesBO ingredientesBO, Long idIngrediente) {
         datosEncabezado = DatosEncabezado.getInstance();
         initComponents();
         setLocationRelativeTo(null);

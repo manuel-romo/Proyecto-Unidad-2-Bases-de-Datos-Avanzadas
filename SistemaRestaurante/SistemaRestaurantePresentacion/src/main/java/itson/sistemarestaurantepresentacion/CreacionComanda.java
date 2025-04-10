@@ -8,13 +8,13 @@ import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import javax.swing.JFrame;
 
 
-public class CrearComanda extends JFrame {
+public class CreacionComanda extends JFrame {
 
     private IUsuariosBO usuariosBO;
     private IComandasBO comandasBO;
     private Long idUsuario;
     
-    public CrearComanda(IUsuariosBO usuariosBO, IComandasBO comandasBO, Long idUsuario) throws UsuarioInexistenteException {
+    public CreacionComanda(IUsuariosBO usuariosBO, IComandasBO comandasBO, Long idUsuario) throws UsuarioInexistenteException {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);

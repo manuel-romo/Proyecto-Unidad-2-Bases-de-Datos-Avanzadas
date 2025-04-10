@@ -5,6 +5,7 @@ import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
+import itson.sistemarestaurantenegocio.interfaces.IMesasBO;
 import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
 import itson.sistemarestaurantepresentacion.excepciones.SesionUsuarioInvalidaException;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
@@ -12,13 +13,14 @@ import itson.sistemarestaurantepresentacion.interfaces.IVistaReceptoraIdIngredie
 import itson.sistemarestaurantepresentacion.interfaces.IVistaReceptoraIdProducto;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.SealedObject;
 import javax.swing.JFrame;
 
 
 public class Control implements IMediador{
 
     private PantallaInicial pantallaInicial;
-    private IniciarSesion formIniciarSesion;
+    private InicioSesion formInicioSesion;
     private MenuPrincipal formMenuPrincipal;
     
     private IVistaReceptoraIdIngrediente formReceptorRespuestaBusquedaIngrediente;
@@ -27,13 +29,16 @@ public class Control implements IMediador{
     
     private IngredientesPrincipal formIngredientesPrincipal;
     private RegistroIngrediente formRegistroIngrediente;
-    private EditarIngrediente formEditarIngrediente;
+    private EdicionIngrediente formEdicionIngrediente;
     private BuscadorIngredientes formBuscadorIngredientes;
     
     private ProductoPrincipal formProductosPrincipal;
     private RegistroProducto formRegistroProducto;
-    private EditarProducto formEditarProducto;
+    private EdicionProducto formEdicionProducto;
     private BuscadorProductos formBuscadorProductos;
+    
+    
+    private SeleccionMesaComanda seleccionMesaComanda;
      
     /**
      * Método que permite mostrar la pantalla inicial del sistema.
@@ -61,8 +66,8 @@ public class Control implements IMediador{
     public void mostrarInicioSesion(JFrame frameActual) {
         frameActual.dispose();
         IUsuariosBO usuariosBO = FabricaObjetoNegocio.crearUsuariosBO();
-        formIniciarSesion = new IniciarSesion(this, usuariosBO);
-        formIniciarSesion.setVisible(true);
+        formInicioSesion = new InicioSesion(this, usuariosBO);
+        formInicioSesion.setVisible(true);
     }
     
     @Override
@@ -95,8 +100,8 @@ public class Control implements IMediador{
     public void mostrarEditarIngrediente(JFrame frameActual, Long idIngrediente) {
         frameActual.dispose();
         IIngredientesBO ingredientesBO = FabricaObjetoNegocio.crearIngredientesBO();
-        formEditarIngrediente = new EditarIngrediente(this, ingredientesBO, idIngrediente);
-        formEditarIngrediente.setVisible(true);
+        formEdicionIngrediente = new EdicionIngrediente(this, ingredientesBO, idIngrediente);
+        formEdicionIngrediente.setVisible(true);
     }
 
     @Override
@@ -142,8 +147,8 @@ public class Control implements IMediador{
     public void mostrarEditarProductos(JFrame frameActual, Long idProducto) {
         frameActual.dispose();
         IProductosBO productosBO = FabricaObjetoNegocio.crearProductosBO();
-        formEditarProducto = new EditarProducto(this, productosBO, idProducto);
-        formEditarProducto.setVisible(true);
+        formEdicionProducto = new EdicionProducto(this, productosBO, idProducto);
+        formEdicionProducto.setVisible(true);
     }
 
     @Override
@@ -175,4 +180,18 @@ public class Control implements IMediador{
         }
         buscadorCerrar.dispose();
     }
+
+    @Override
+    public void mostrarSeleccionMesaComanda(JFrame frameActual) {
+        IMesasBO mesasBO = FabricaObjetoNegocio.crearMesasBO();
+        seleccionMesaComanda = new SeleccionMesaComanda(this, mesasBO);
+        frameActual.dispose();
+    }
+
+    @Override
+    public void mostrarCreacionComanda(JFrame frameActual) {
+        
+    }
+    
+    
 }
