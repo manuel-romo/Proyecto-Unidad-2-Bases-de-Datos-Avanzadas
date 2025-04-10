@@ -2,15 +2,20 @@ package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.UnidadIngrediente;
+import itson.sistemarestaurantenegocio.excepciones.NombreIngredienteNuloException;
+import itson.sistemarestaurantenegocio.excepciones.UnidadIngredienteNulaException;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -33,6 +38,9 @@ public class BuscadorIngredientes extends JFrame {
     private IIngredientesBO ingredientesBO;
     private Long idIngredienteSeleccionado;
     private List<Long> listaIdsIngredientesCoincidentes;
+    
+    private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
+    
     
     public BuscadorIngredientes(IMediador control,IIngredientesBO ingredientesBO) {
         initComponents();
@@ -86,10 +94,28 @@ public class BuscadorIngredientes extends JFrame {
         
         } else if(comboBoxTipoBusqueda.getSelectedItem().toString().equals("Nombre")){
 
-            listaIngredientesCoincidente = ingredientesBO.consultarIngredientesNombre(textoBusqueda);
+            try {
+                listaIngredientesCoincidente = ingredientesBO.consultarIngredientesNombre(textoBusqueda);
+            } catch (NombreIngredienteNuloException ex) {
+                LOG.severe("Error al buscar los productos por nombre. " + ex.getMessage());
+                JOptionPane.showMessageDialog(
+                        this, 
+                        ex.getMessage(), 
+                        "Error al buscar los productos por nombre", 
+                        JOptionPane.ERROR_MESSAGE);
+            }
 
         } else if(comboBoxTipoBusqueda.getSelectedItem().toString().equals("Unidad")){
-            listaIngredientesCoincidente = ingredientesBO.consultarIngredientesUnidad(textoBusqueda);
+            try {
+                listaIngredientesCoincidente = ingredientesBO.consultarIngredientesUnidad(textoBusqueda);
+            } catch (UnidadIngredienteNulaException ex) {
+                LOG.severe("Error al buscar los productos por unidad. " + ex.getMessage());
+                JOptionPane.showMessageDialog(
+                        this, 
+                        ex.getMessage(), 
+                        "Error al buscar los productos por unidad", 
+                        JOptionPane.ERROR_MESSAGE);
+            }
 
         }
 

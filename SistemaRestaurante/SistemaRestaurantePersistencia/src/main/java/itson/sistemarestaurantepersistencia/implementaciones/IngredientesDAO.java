@@ -6,6 +6,9 @@ import itson.sistemarestaurantedominio.dtos.IngredienteActualizadoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantepersistencia.IIngredientesDAO;
 import itson.sistemarestaurantepersistencia.excepciones.ActualizacionIngredienteSinIdException;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultaIngredienteSinIdException;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultaIngredienteSinNombreException;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultaIngredienteSinUnidadException;
 import itson.sistemarestaurantepersistencia.excepciones.IngredienteMismoNombreUnidadExistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.IngredienteNoExisteException;
 import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinCantidadException;
@@ -108,9 +111,42 @@ public class IngredientesDAO implements IIngredientesDAO{
         
     }
     
+    @Override
+    public Ingrediente consultarIngrediente(Long idIngrediente) 
+            throws IngredienteNoExisteException,
+            ConsultaIngredienteSinIdException{
+        
+        if(idIngrediente == null){
+            throw new ConsultaIngredienteSinIdException("El Id utilizado para la consulta de ingrediente tiene valor nulo.");
+        }
+        
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+
+        CriteriaBuilder criteraBuilder = entityManager.getCriteriaBuilder();
+        
+        CriteriaQuery<Ingrediente> criteriaQuery = criteraBuilder.createQuery(Ingrediente.class);
+
+        Root<Ingrediente> entidadIngrediente = criteriaQuery.from(Ingrediente.class);
+
+        criteriaQuery.select(entidadIngrediente).where(criteraBuilder.equal(entidadIngrediente.get("id"), idIngrediente));
+
+        TypedQuery<Ingrediente> query = entityManager.createQuery(criteriaQuery);
+        try{
+            return query.getSingleResult();
+            
+        } catch(NoResultException ex){
+            throw new IngredienteNoExisteException("No existe un ingrediente con Id especificado.");
+        }
+        
+    }
     
     @Override
-    public List<Ingrediente> consultarIngredientesNombre(String nombreIngrediente) {
+    public List<Ingrediente> consultarIngredientesNombre(String nombreIngrediente) 
+            throws ConsultaIngredienteSinNombreException{
+        
+        if(nombreIngrediente == null){
+            throw new ConsultaIngredienteSinNombreException("El nombre utilizado para la consulta de ingrediente tiene valor nulo.");
+        }
         
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         
@@ -135,7 +171,12 @@ public class IngredientesDAO implements IIngredientesDAO{
     }
     
     @Override
-    public List<Ingrediente> consultarIngredientesUnidad(String unidadIngrediente) {
+    public List<Ingrediente> consultarIngredientesUnidad(String unidadIngrediente) 
+            throws ConsultaIngredienteSinUnidadException {
+        
+        if(unidadIngrediente == null){
+            throw new ConsultaIngredienteSinUnidadException("La unidad utilizada para la consulta de ingrediente tiene valor nulo");
+        }
         
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         
@@ -149,36 +190,13 @@ public class IngredientesDAO implements IIngredientesDAO{
                 .select(entidadIngrediente)
                 .where(criteriaBuilder.like(
                         criteriaBuilder.lower(entidadIngrediente.get("unidad")), "%" + unidadIngrediente.toLowerCase() + "%"))
-                .orderBy(criteriaBuilder.asc(entidadIngrediente.get("unidad")));
+                .orderBy(criteriaBuilder.asc(entidadIngrediente.get("nombre")));
         
         TypedQuery<Ingrediente> query = entityManager.createQuery(criteriaQuery);
         
         List<Ingrediente> ingredientes = query.getResultList();
         
         return ingredientes;
-        
-    }
-
-    @Override
-    public Ingrediente consultarIngrediente(Long idIngrediente) throws IngredienteNoExisteException{
-        
-        EntityManager entityManager = ManejadorConexiones.getEntityManager();
-
-        CriteriaBuilder criteraBuilder = entityManager.getCriteriaBuilder();
-        
-        CriteriaQuery<Ingrediente> criteriaQuery = criteraBuilder.createQuery(Ingrediente.class);
-
-        Root<Ingrediente> entidadIngrediente = criteriaQuery.from(Ingrediente.class);
-
-        criteriaQuery.select(entidadIngrediente).where(criteraBuilder.equal(entidadIngrediente.get("id"), idIngrediente));
-
-        TypedQuery<Ingrediente> query = entityManager.createQuery(criteriaQuery);
-        try{
-            return query.getSingleResult();
-            
-        } catch(NoResultException ex){
-            throw new IngredienteNoExisteException("No existe un ingrediente con Id especificado.");
-        }
         
     }
     
@@ -276,12 +294,5 @@ public class IngredientesDAO implements IIngredientesDAO{
         entityManager.getTransaction().commit();
         
     }
-    
-    
-    
-    
-    
-    
-    
     
 }

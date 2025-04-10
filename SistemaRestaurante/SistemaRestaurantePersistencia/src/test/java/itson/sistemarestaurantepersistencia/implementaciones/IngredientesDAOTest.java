@@ -7,6 +7,9 @@ import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.TipoProducto;
 import itson.sistemarestaurantedominio.UnidadIngrediente;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultaIngredienteSinIdException;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultaIngredienteSinNombreException;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultaIngredienteSinUnidadException;
 import itson.sistemarestaurantepersistencia.excepciones.IngredienteMismoNombreUnidadExistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.IngredienteNoExisteException;
 import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinCantidadException;
@@ -14,6 +17,7 @@ import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinDi
 import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinNombreException;
 import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinUnidadException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -53,8 +57,12 @@ public class IngredientesDAOTest {
         Ingrediente rabano = new Ingrediente("Rábano", 4000F,  UnidadIngrediente.GRAMO, "/imagenRabano.png");
         Ingrediente leche = new Ingrediente("Leche", 5040F,  UnidadIngrediente.MILILITRO, "/imagenLeche.png");
         Ingrediente huevo = new Ingrediente("Huevo", 100F,  UnidadIngrediente.PIEZA, "/imagenHuevo.png");
+        Ingrediente brocoli = new Ingrediente("Brócoli", 5000F,  UnidadIngrediente.GRAMO, "/imagenBrocoli.png");
+        Ingrediente coliflor = new Ingrediente("Coliflor", 3500F,  UnidadIngrediente.GRAMO, "/imagenColiflor.png");
         
         // Se guardan en este orden para garantizar el orden alfabético por nombre al realizar las pruebas.
+        ingredientesRegistrados.add(brocoli);
+        ingredientesRegistrados.add(coliflor);
         ingredientesRegistrados.add(huevo);
         ingredientesRegistrados.add(leche);
         ingredientesRegistrados.add(lechuga);
@@ -94,6 +102,8 @@ public class IngredientesDAOTest {
         pastel.agregarIngrediente(cantidadLechePastel);
         pastel.agregarIngrediente(cantidadHuevoPastel);
         
+        entityManager.persist(brocoli);
+        entityManager.persist(coliflor);
         entityManager.persist(huevo);
         entityManager.persist(leche);
         entityManager.persist(lechuga);
@@ -300,18 +310,7 @@ public class IngredientesDAOTest {
             assertEquals(ingredienteEsperado.getNombre(), ingredienteConsultado.getNombre());
             assertEquals(ingredienteEsperado.getCantidad(), ingredienteConsultado.getCantidad());
             assertEquals(ingredienteEsperado.getDireccionImagen(), ingredienteConsultado.getDireccionImagen());
-            
-            for(int j = 0; j < ingredienteConsultado.getProductos().size(); j++){
-                
-                IngredienteProducto ingredienteProductoConsultado = ingredienteConsultado.getProductos().get(j);
-                IngredienteProducto ingredienteProductoEsperado = ingredienteEsperado.getProductos().get(j);
-                
-                assertEquals(ingredienteProductoEsperado.getId(), ingredienteProductoConsultado.getId());
-                assertEquals(ingredienteProductoEsperado.getIngrediente().getId(), ingredienteProductoConsultado.getIngrediente().getId());
-                assertEquals(ingredienteProductoEsperado.getProducto().getId(), ingredienteProductoConsultado.getProducto().getId());
-                assertEquals(ingredienteProductoEsperado.getCantidad(), ingredienteProductoConsultado.getCantidad());
-                
-            }
+            assertEquals(ingredienteEsperado.getProductos(), ingredienteConsultado.getProductos());
             
             
         }
@@ -325,22 +324,23 @@ public class IngredientesDAOTest {
 
         Ingrediente ingredienteEsperado = ingredientesRegistrados.get(0);
         
-        final long ID_INGREDIENTE_BUSCAR = ingredienteEsperado.getId();
+        final Long ID_INGREDIENTE_CONSULTAR = ingredienteEsperado.getId();
         
-        Ingrediente ingredienteRecuperado = assertDoesNotThrow(() -> ingredientesDAO.consultarIngrediente(ID_INGREDIENTE_BUSCAR));
+        Ingrediente ingredienteConsultado = assertDoesNotThrow(() -> ingredientesDAO.consultarIngrediente(ID_INGREDIENTE_CONSULTAR));
         
-        assertNotNull(ingredienteRecuperado);
+        assertNotNull(ingredienteConsultado);
         
-        assertEquals(ingredienteEsperado.getId(), ingredienteRecuperado.getId());
-        assertEquals(ingredienteEsperado.getNombre(), ingredienteRecuperado.getNombre());
-        assertEquals(ingredienteEsperado.getCantidad(), ingredienteRecuperado.getCantidad());
-        assertEquals(ingredienteEsperado.getUnidad(), ingredienteRecuperado.getUnidad());
-        assertEquals(ingredienteEsperado.getProductos(), ingredienteRecuperado.getProductos());
+        assertEquals(ingredienteEsperado.getId(), ingredienteConsultado.getId());
+        assertEquals(ingredienteEsperado.getNombre(), ingredienteConsultado.getNombre());
+        assertEquals(ingredienteEsperado.getCantidad(), ingredienteConsultado.getCantidad());
+        assertEquals(ingredienteEsperado.getUnidad(), ingredienteConsultado.getUnidad());
+        assertEquals(ingredienteEsperado.getProductos(), ingredienteConsultado.getProductos());
         
     }
     
     @Test
     public void testConsultarIngredientesIdNoExiste(){
+        
         IngredientesDAO ingredientesDAO = new IngredientesDAO();
         
         List<Long> idsRegistrados = new LinkedList<>();
@@ -357,11 +357,164 @@ public class IngredientesDAOTest {
             }
         }
         
-        final long ID_INGREDIENTE_BUSCAR = idMayor + 1;
+        final Long ID_INGREDIENTE_CONSULTAR = idMayor + 1;
         
         Exception ex = assertThrows(IngredienteNoExisteException.class, 
-                () -> ingredientesDAO.consultarIngrediente(ID_INGREDIENTE_BUSCAR));
+                () -> ingredientesDAO.consultarIngrediente(ID_INGREDIENTE_CONSULTAR));
         
     }
+    
+    @Test
+    public void testConsultarIngredientesIdNulo(){
+        
+        IngredientesDAO ingredientesDAO = new IngredientesDAO();
+        
+        final Long ID_INGREDIENTE_CONSULTAR = null;
+        
+        assertThrows(ConsultaIngredienteSinIdException.class, 
+                () -> ingredientesDAO.consultarIngrediente(ID_INGREDIENTE_CONSULTAR));
+        
+    }
+    
+    @Test 
+    public void testConsultarIngredientesNombreOk(){
+        
+        IngredientesDAO ingredientesDAO = new IngredientesDAO();
+        
+        
+        List<Ingrediente> ingredientesEsperados = Arrays.asList(
+                ingredientesRegistrados.get(0),
+                ingredientesRegistrados.get(1));
+                
+        final int TAMANIO_LISTA_INGREDIENTES_REGISTRADOS = ingredientesEsperados.size();
+        
+        String NOMBRE_INGREDIENTES_CONSULTAR = "Coli";
+        
+        List<Ingrediente> ingredientesConsultados = 
+                assertDoesNotThrow(() -> ingredientesDAO.consultarIngredientesNombre(NOMBRE_INGREDIENTES_CONSULTAR));
+        
+        assertNotNull(ingredientesConsultados);
+        
+        assertEquals(TAMANIO_LISTA_INGREDIENTES_REGISTRADOS, ingredientesConsultados.size());
+        
+        for(int i = 0; i < ingredientesConsultados.size(); i++){
+            
+            Ingrediente ingredienteConsultado = ingredientesConsultados.get(i);
+            Ingrediente ingredienteEsperado = ingredientesEsperados.get(i);
+            
+            assertEquals(ingredienteEsperado.getId(), ingredienteConsultado.getId());
+            assertEquals(ingredienteEsperado.getNombre(), ingredienteConsultado.getNombre());
+            assertEquals(ingredienteEsperado.getCantidad(), ingredienteConsultado.getCantidad());
+            assertEquals(ingredienteEsperado.getUnidad(), ingredienteConsultado.getUnidad());
+            assertEquals(ingredienteEsperado.getProductos(), ingredienteConsultado.getProductos());
+              
+        }
+    }
+    
+    @Test
+    public void consultarIngredientesNombreSinCoincidencias(){
+        IngredientesDAO ingredientesDAO = new IngredientesDAO();
+        
+        List<Ingrediente> ingredientesEsperados = new LinkedList<>();
+                
+        final int TAMANIO_LISTA_INGREDIENTES_REGISTRADOS = ingredientesEsperados.size();
+        
+        String NOMBRE_INGREDIENTES_CONSULTAR = "Cerezas";
+        
+        List<Ingrediente> ingredientesConsultados = 
+                assertDoesNotThrow(() -> ingredientesDAO.consultarIngredientesNombre(NOMBRE_INGREDIENTES_CONSULTAR));
+        
+        assertNotNull(ingredientesConsultados);
+        assertEquals(TAMANIO_LISTA_INGREDIENTES_REGISTRADOS, ingredientesConsultados.size());
+        
+        
+    }
+    
+    @Test
+    public void consultarIngredientesNombreNulo(){
+        
+        IngredientesDAO ingredientesDAO = new IngredientesDAO();
+        
+        List<Ingrediente> ingredientesEsperados = new LinkedList<>();
+        
+        String NOMBRE_INGREDIENTES_CONSULTAR = null;
+        
+        assertThrows(ConsultaIngredienteSinNombreException.class, 
+                () -> ingredientesDAO.consultarIngredientesNombre(NOMBRE_INGREDIENTES_CONSULTAR));
+        
+        
+    }
+    
+    @Test 
+    public void testConsultarIngredientesUnidadOk(){
+        
+        IngredientesDAO ingredientesDAO = new IngredientesDAO();
+        
+        List<Ingrediente> ingredientesEsperados = Arrays.asList(
+                ingredientesRegistrados.get(0),
+                ingredientesRegistrados.get(1),
+                ingredientesRegistrados.get(4),
+                ingredientesRegistrados.get(5));
+                
+        final int TAMANIO_LISTA_INGREDIENTES_REGISTRADOS = ingredientesEsperados.size();
+        
+        String UNIDAD_INGREDIENTES_CONSULTAR = "Gramo";
+        
+        List<Ingrediente> ingredientesConsultados = 
+                assertDoesNotThrow(() -> ingredientesDAO.consultarIngredientesUnidad(UNIDAD_INGREDIENTES_CONSULTAR));
+        
+        assertNotNull(ingredientesConsultados);
+        
+        assertEquals(TAMANIO_LISTA_INGREDIENTES_REGISTRADOS, ingredientesConsultados.size());
+        
+        for(int i = 0; i < ingredientesConsultados.size(); i++){
+            
+            Ingrediente ingredienteConsultado = ingredientesConsultados.get(i);
+            Ingrediente ingredienteEsperado = ingredientesEsperados.get(i);
+            
+            assertEquals(ingredienteEsperado.getId(), ingredienteConsultado.getId());
+            assertEquals(ingredienteEsperado.getNombre(), ingredienteConsultado.getNombre());
+            assertEquals(ingredienteEsperado.getCantidad(), ingredienteConsultado.getCantidad());
+            assertEquals(ingredienteEsperado.getUnidad(), ingredienteConsultado.getUnidad());
+            assertEquals(ingredienteEsperado.getProductos(), ingredienteConsultado.getProductos());
+              
+        }
+    }
+    
+    @Test
+    public void consultarIngredientesUnidadSinCoincidencias(){
+        
+        IngredientesDAO ingredientesDAO = new IngredientesDAO();
+        
+        List<Ingrediente> ingredientesEsperados = new LinkedList<>();
+                
+        final int TAMANIO_LISTA_INGREDIENTES_REGISTRADOS = ingredientesEsperados.size();
+        
+        String UNIDAD_INGREDIENTES_CONSULTAR = "Kilogramo";
+        
+        List<Ingrediente> ingredientesConsultados = 
+                assertDoesNotThrow(() -> ingredientesDAO.consultarIngredientesUnidad(UNIDAD_INGREDIENTES_CONSULTAR));
+        
+        assertNotNull(ingredientesConsultados);
+        assertEquals(TAMANIO_LISTA_INGREDIENTES_REGISTRADOS, ingredientesConsultados.size());
+        
+    }
+    
+    @Test
+    public void consultarIngredientesUnidadNula(){
+        
+        IngredientesDAO ingredientesDAO = new IngredientesDAO();
+        
+        String NOMBRE_INGREDIENTES_CONSULTAR = null;
+        
+        assertThrows(ConsultaIngredienteSinUnidadException.class, 
+                () -> ingredientesDAO.consultarIngredientesUnidad(NOMBRE_INGREDIENTES_CONSULTAR));
+        
+        
+    }
+    
+    
+    
+    
     
 }

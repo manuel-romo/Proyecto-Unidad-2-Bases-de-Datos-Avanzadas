@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="itson.sistemarestaurantepersistencia.implementaciones.ComandasDAOTest" time="1.566" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="itson.sistemarestaurantepersistencia.implementaciones.ComandasDAOTest" time="1.257" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="user.country" value="MX"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-21\bin"/>
-    <property name="sun.java.command" value="C:\Users\romom\AppData\Local\Temp\surefire2319394396236668525\surefirebooter-20250409175819835_3.jar C:\Users\romom\AppData\Local\Temp\surefire2319394396236668525 2025-04-09T17-58-17_877-jvmRun1 surefire-20250409175819835_1tmp surefire_0-20250409175819835_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\romom\AppData\Local\Temp\surefire7113665199423965379\surefirebooter-20250409201319155_3.jar C:\Users\romom\AppData\Local\Temp\surefire7113665199423965379 2025-04-09T20-13-17_470-jvmRun1 surefire-20250409201319155_1tmp surefire_0-20250409201319155_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePersistencia\target\test-classes;C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePersistencia\target\classes;C:\Users\romom\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.core\2.7.12\org.eclipse.persistence.core-2.7.12.jar;C:\Users\romom\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.asm\9.4.0\org.eclipse.persistence.asm-9.4.0.jar;C:\Users\romom\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.antlr\2.7.12\org.eclipse.persistence.antlr-2.7.12.jar;C:\Users\romom\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa\2.7.12\org.eclipse.persistence.jpa-2.7.12.jar;C:\Users\romom\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.jpql\2.7.12\org.eclipse.persistence.jpa.jpql-2.7.12.jar;C:\Users\romom\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.moxy\2.7.12\org.eclipse.persistence.moxy-2.7.12.jar;C:\Users\romom\.m2\repository\org\eclipse\persistence\jakarta.persistence\2.2.3\jakarta.persistence-2.2.3.jar;C:\Users\romom\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.modelgen.processor\2.7.12\org.eclipse.persistence.jpa.modelgen.processor-2.7.12.jar;C:\Users\romom\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\romom\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\romom\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\romom\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\romom\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.3\junit-jupiter-params-5.10.3.jar;C:\Users\romom\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\romom\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\romom\OneDrive\Documentos\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestauranteDominio\target\SistemaRestauranteDominio-1.0.jar;C:\Users\romom\.m2\repository\com\mysql\mysql-connector-j\9.2.0\mysql-connector-j-9.2.0.jar;C:\Users\romom\.m2\repository\com\google\protobuf\protobuf-java\4.29.0\protobuf-java-4.29.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\romom\AppData\Local\Temp\surefire2319394396236668525\surefirebooter-20250409175819835_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\romom\AppData\Local\Temp\surefire7113665199423965379\surefirebooter-20250409201319155_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.2+13-LTS-58"/>
@@ -59,8 +59,8 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testConsultarComandas" classname="itson.sistemarestaurantepersistencia.implementaciones.ComandasDAOTest" time="0.188">
-    <system-out><![CDATA[[EL Info]: 2025-04-09 17:58:20.925--ServerSession(1844334363)--EclipseLink, version: Eclipse Persistence Services - 2.7.12.v20230209-e5c4074ef3
+  <testcase name="testConsultarComandas" classname="itson.sistemarestaurantepersistencia.implementaciones.ComandasDAOTest" time="0.14">
+    <system-out><![CDATA[[EL Info]: 2025-04-09 20:13:20.106--ServerSession(1763260873)--EclipseLink, version: Eclipse Persistence Services - 2.7.12.v20230209-e5c4074ef3
 []
 ]]></system-out>
   </testcase>

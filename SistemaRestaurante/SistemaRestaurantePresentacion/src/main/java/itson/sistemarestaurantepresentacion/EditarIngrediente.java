@@ -6,6 +6,7 @@ import itson.sistemarestaurantedominio.UnidadIngrediente;
 import itson.sistemarestaurantedominio.dtos.IngredienteActualizadoDTO;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.CantidadIngredienteInvalidaException;
+import itson.sistemarestaurantenegocio.excepciones.IdIngredienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteBuscadoNoExisteException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinCantidadException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinDireccionImagenException;
@@ -23,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -73,12 +75,12 @@ public class EditarIngrediente extends JFrame {
             try {
                 imagenIngrediente = ImagenesUtils.obtenerImagen(ingredienteRecuperado.getDireccionImagen());
             } catch (ImagenNoEncontradaException ex) {
-                imagenIngrediente = new ImageIcon(getClass().getResource("imagenIngredientePredeterminada.png"));
+                imagenIngrediente = new ImageIcon(getClass().getResource("/imagenIngredientePredeterminada.png"));
                 LOG.severe("Error al cargar la imagen del ingrediente. " + ex.getMessage());
             }
 
             etqImagenIngrediente.setIcon(imagenIngrediente);
-        } catch (IngredienteBuscadoNoExisteException ex) {
+        } catch (IngredienteBuscadoNoExisteException | IdIngredienteNuloException ex) {
             LOG.severe("Error al mostrar el ingrediente " + ex.getMessage());
             
             JOptionPane.showMessageDialog(

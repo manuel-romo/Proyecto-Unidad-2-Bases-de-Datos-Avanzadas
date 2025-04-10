@@ -7,6 +7,7 @@ import itson.sistemarestaurantedominio.dtos.IngredienteActualizadoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.CantidadIngredienteInvalidaException;
+import itson.sistemarestaurantenegocio.excepciones.IdIngredienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteBuscadoNoExisteException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinCantidadException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinDireccionImagenException;
@@ -15,8 +16,13 @@ import itson.sistemarestaurantenegocio.excepciones.IngredienteSinNombreException
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinUnidadException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteYaExisteException;
 import itson.sistemarestaurantenegocio.excepciones.NombreIngredienteInvalidoException;
+import itson.sistemarestaurantenegocio.excepciones.NombreIngredienteNuloException;
+import itson.sistemarestaurantenegocio.excepciones.UnidadIngredienteNulaException;
 import itson.sistemarestaurantepersistencia.IIngredientesDAO;
 import itson.sistemarestaurantepersistencia.excepciones.ActualizacionIngredienteSinIdException;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultaIngredienteSinIdException;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultaIngredienteSinNombreException;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultaIngredienteSinUnidadException;
 import itson.sistemarestaurantepersistencia.excepciones.IngredienteMismoNombreUnidadExistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.IngredienteNoExisteException;
 import itson.sistemarestaurantepersistencia.excepciones.RegistroIngredienteSinCantidadException;
@@ -94,29 +100,44 @@ public class IngredientesBO implements IIngredientesBO{
     }
     
     @Override
-    public List<Ingrediente> consultarIngredientesNombre(String nombreIngrediente){
+    public List<Ingrediente> consultarIngredientesNombre(String nombreIngrediente) 
+            throws NombreIngredienteNuloException{
         
-        List<Ingrediente> listaIngredientesConsultados = ingredientesDAO.consultarIngredientesNombre(nombreIngrediente);
-        
-        return listaIngredientesConsultados;
+        try {
+            List<Ingrediente> listaIngredientesConsultados = ingredientesDAO.consultarIngredientesNombre(nombreIngrediente);
+            
+            return listaIngredientesConsultados;
+        } catch (ConsultaIngredienteSinNombreException ex) {
+            throw new NombreIngredienteNuloException("El nombre de ingrediente tiene valor nulo.");
+        }
     }
     
     @Override
-    public List<Ingrediente> consultarIngredientesUnidad(String unidadIngrediente){
+    public List<Ingrediente> consultarIngredientesUnidad(String unidadIngrediente) 
+            throws UnidadIngredienteNulaException {
         
-        List<Ingrediente> listaIngredientesConsultados = ingredientesDAO.consultarIngredientesUnidad(unidadIngrediente);
-        
-        return listaIngredientesConsultados;
+        try {
+            List<Ingrediente> listaIngredientesConsultados = ingredientesDAO.consultarIngredientesUnidad(unidadIngrediente);
+            
+            return listaIngredientesConsultados;
+        } catch (ConsultaIngredienteSinUnidadException ex) {
+            throw new UnidadIngredienteNulaException("La unidad del ingrediente tiene valor nulo.");
+        }
     }
     
     @Override
-    public Ingrediente consultarIngrediente(Long idIngrediente) throws IngredienteBuscadoNoExisteException{
+    public Ingrediente consultarIngrediente(Long idIngrediente) 
+            throws IngredienteBuscadoNoExisteException,
+            IdIngredienteNuloException{
         
         Ingrediente ingredienteConsultado;
         try {
             ingredienteConsultado = ingredientesDAO.consultarIngrediente(idIngrediente);
+
         } catch (IngredienteNoExisteException ex) {
             throw new IngredienteBuscadoNoExisteException("No existe el Id del ingrediente buscado.");
+        } catch (ConsultaIngredienteSinIdException ex) {
+            throw new IdIngredienteNuloException("El Id del ingrediente tiene valor nulo.");
         }
         
         return ingredienteConsultado;

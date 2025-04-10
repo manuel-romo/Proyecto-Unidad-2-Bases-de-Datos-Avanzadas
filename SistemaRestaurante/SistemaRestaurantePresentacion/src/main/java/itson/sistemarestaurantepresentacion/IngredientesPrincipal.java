@@ -7,6 +7,7 @@ import static itson.sistemarestaurantedominio.UnidadIngrediente.GRAMO;
 import static itson.sistemarestaurantedominio.UnidadIngrediente.MILILITRO;
 import static itson.sistemarestaurantedominio.UnidadIngrediente.PIEZA;
 import itson.sistemarestaurantedominio.Usuario;
+import itson.sistemarestaurantenegocio.excepciones.IdIngredienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteBuscadoNoExisteException;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
@@ -131,9 +132,13 @@ public class IngredientesPrincipal extends JFrame implements IVistaReceptoraIdIn
             
             panelIngrediente.add(crearPanelBtnVolverProductosTodos());
 
-        } catch (IngredienteBuscadoNoExisteException ex) {
-            LOG.log(Level.SEVERE, "Error al mostrar el ingrdiente buscado. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al mostrar el ingrediente buscado", JOptionPane.ERROR_MESSAGE);
+        } catch (IngredienteBuscadoNoExisteException | IdIngredienteNuloException ex) {
+            LOG.log(Level.SEVERE, "Error al mostrar el ingrediente buscado. " + ex.getMessage());
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Error al mostrar el ingrediente buscado", 
+                    JOptionPane.ERROR_MESSAGE);
         }
         
     }
