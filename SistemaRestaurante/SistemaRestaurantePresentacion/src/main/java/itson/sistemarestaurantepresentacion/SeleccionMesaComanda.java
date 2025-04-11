@@ -1,13 +1,29 @@
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantedominio.Mesa;
 import itson.sistemarestaurantenegocio.interfaces.IMesasBO;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.util.List;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-public class SeleccionMesaComanda extends javax.swing.JFrame {
+public class SeleccionMesaComanda extends JFrame {
 
     private IMediador control;
     private IMesasBO mesasBO;
     
+    private Color COLOR_PANEL_MESA_DISPONIBLE = new Color(245, 236, 237);
+    private Color COLOR_BOTON_SELECCIONAR_MESA = new Color(255, 227, 86);
+    private Font FUENTE_TEXTO_PANEL_MESA_DISPONIBLE = new Font("Segoe UI", Font.BOLD, 20);
     
     public SeleccionMesaComanda(IMediador control, IMesasBO mesasBO) {
         initComponents();
@@ -17,8 +33,92 @@ public class SeleccionMesaComanda extends javax.swing.JFrame {
         
         this.control = control;
         this.mesasBO = mesasBO;
+        
+        cargarMesasDisponibles();
     }
-
+    
+    private void cargarMesasDisponibles(){
+        
+        List<Mesa> mesasDisponibles = mesasBO.consultarMesasDisponibles();
+        
+        configurarPanelMesas();
+        
+        for(Mesa mesaDisponible: mesasDisponibles){
+            
+            panelMesas.add(crearPanelMesaDisponible(mesaDisponible));
+            
+            
+            
+        }
+        
+    }
+    
+    private void configurarPanelMesas(){
+        
+        panelMesas.removeAll();
+        panelMesas.setLayout(new BoxLayout(panelMesas, BoxLayout.Y_AXIS));
+        
+    }
+    
+    private JPanel crearPanelMesaDisponible(Mesa mesaDisponible){
+        
+        JPanel panelMesaDisponible = new JPanel();
+           
+        panelMesaDisponible.setLayout(new GridLayout(1,2));
+        
+        panelMesaDisponible.add(crearPanelImagenMesa());
+        
+        panelMesaDisponible.add(crearPanelNumeroBtnSeleccionarMesa(mesaDisponible));
+        
+        return panelMesaDisponible;
+        
+    }
+    
+    private JPanel crearPanelImagenMesa(){
+        
+        JPanel panelImagenMesa = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        
+        JLabel etqImagenMesa = new JLabel();
+        
+        etqImagenMesa.setIcon(new ImageIcon(getClass().getResource("imagenMesa.png")));
+       
+        panelImagenMesa.add(etqImagenMesa);
+        
+        return panelImagenMesa;
+    }
+    
+    private JPanel crearPanelNumeroBtnSeleccionarMesa(Mesa mesaDisponible){
+        
+        JPanel panelNumeroMesa = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+        
+        JLabel etqNumeroMesa = new JLabel(String.valueOf(mesaDisponible.getNumeroMesa()));
+        
+        etqNumeroMesa.setFont(FUENTE_TEXTO_PANEL_MESA_DISPONIBLE);
+       
+        panelNumeroMesa.add(etqNumeroMesa);
+        
+        panelNumeroMesa.add(crearBtnSeleccionarMesa(mesaDisponible.getId()));
+        
+        return panelNumeroMesa; 
+    }
+    
+    private JButton crearBtnSeleccionarMesa(Long idMesaDisponible){
+        
+        JButton btnSeleccionarMesa = new JButton("Seleccionar");
+        
+        btnSeleccionarMesa.setBackground(COLOR_BOTON_SELECCIONAR_MESA);
+        
+        btnSeleccionarMesa.setFont(FUENTE_TEXTO_PANEL_MESA_DISPONIBLE);
+        
+        btnSeleccionarMesa.addActionListener(e -> seleccionarMesa(idMesaDisponible));
+        
+        return btnSeleccionarMesa;
+    }
+    
+    private void seleccionarMesa(Long idMesa){
+        control.mostrarCreacionComanda(this, idMesa);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

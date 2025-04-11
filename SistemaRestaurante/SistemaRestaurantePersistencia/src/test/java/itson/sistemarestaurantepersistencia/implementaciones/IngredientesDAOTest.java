@@ -80,27 +80,27 @@ public class IngredientesDAOTest {
         IngredienteProducto cantidadHuevoPastel = new IngredienteProducto(3F, pastel, huevo);
         
         // Agregar relaciones IngredienteProducto a ingredientes
-        lechuga.agregarProducto(cantidadLechugaEnsalada);
+        lechuga.addProducto(cantidadLechugaEnsalada);
         
-        rabano.agregarProducto(cantidadRabanoEnsalada);
+        rabano.addProducto(cantidadRabanoEnsalada);
         
-        leche.agregarProducto(cantidadLecheHotCakes);
-        leche.agregarProducto(cantidadLechePastel);
+        leche.addProducto(cantidadLecheHotCakes);
+        leche.addProducto(cantidadLechePastel);
         
-        huevo.agregarProducto(cantidadHuevoHotCakes);
-        huevo.agregarProducto(cantidadHuevoPastel);
+        huevo.addProducto(cantidadHuevoHotCakes);
+        huevo.addProducto(cantidadHuevoPastel);
         
         
         // Agregar relaciones IngredienteProducto a productos
         
-        ensalada.agregarIngrediente(cantidadLechugaEnsalada);
-        ensalada.agregarIngrediente(cantidadRabanoEnsalada);
+        ensalada.addIngrediente(cantidadLechugaEnsalada);
+        ensalada.addIngrediente(cantidadRabanoEnsalada);
         
-        hotCakes.agregarIngrediente(cantidadLecheHotCakes);
-        hotCakes.agregarIngrediente(cantidadHuevoHotCakes);
+        hotCakes.addIngrediente(cantidadLecheHotCakes);
+        hotCakes.addIngrediente(cantidadHuevoHotCakes);
         
-        pastel.agregarIngrediente(cantidadLechePastel);
-        pastel.agregarIngrediente(cantidadHuevoPastel);
+        pastel.addIngrediente(cantidadLechePastel);
+        pastel.addIngrediente(cantidadHuevoPastel);
         
         entityManager.persist(brocoli);
         entityManager.persist(coliflor);

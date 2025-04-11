@@ -7,7 +7,7 @@ import itson.sistemarestaurantedominio.dtos.IngredienteActualizadoDTO;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.CantidadIngredienteInvalidaException;
 import itson.sistemarestaurantenegocio.excepciones.IdIngredienteNuloException;
-import itson.sistemarestaurantenegocio.excepciones.IngredienteBuscadoNoExisteException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteConsultadoNoExisteException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinCantidadException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinDireccionImagenException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinIdException;
@@ -80,7 +80,7 @@ public class EdicionIngrediente extends JFrame {
             }
 
             etqImagenIngrediente.setIcon(imagenIngrediente);
-        } catch (IngredienteBuscadoNoExisteException | IdIngredienteNuloException ex) {
+        } catch (IngredienteConsultadoNoExisteException | IdIngredienteNuloException ex) {
             LOG.severe("Error al mostrar el ingrediente " + ex.getMessage());
             
             JOptionPane.showMessageDialog(

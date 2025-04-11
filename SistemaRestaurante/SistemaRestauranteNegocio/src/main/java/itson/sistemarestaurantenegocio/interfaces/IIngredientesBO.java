@@ -6,7 +6,7 @@ import itson.sistemarestaurantedominio.dtos.IngredienteActualizadoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.excepciones.CantidadIngredienteInvalidaException;
 import itson.sistemarestaurantenegocio.excepciones.IdIngredienteNuloException;
-import itson.sistemarestaurantenegocio.excepciones.IngredienteBuscadoNoExisteException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteConsultadoNoExisteException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinCantidadException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinDireccionImagenException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinIdException;
@@ -36,7 +36,7 @@ public interface IIngredientesBO{
     public abstract List<Ingrediente> consultarIngredientes();
     
     public abstract Ingrediente consultarIngrediente(Long idIngrediente) 
-            throws IngredienteBuscadoNoExisteException,
+            throws IngredienteConsultadoNoExisteException,
             IdIngredienteNuloException;
     
     public abstract List<Ingrediente> consultarIngredientesNombre(String nombreIngrediente)

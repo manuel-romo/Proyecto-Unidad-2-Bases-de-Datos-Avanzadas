@@ -5,8 +5,12 @@ import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.EstadoComanda;
 import itson.sistemarestaurantedominio.Mesa;
 import itson.sistemarestaurantepersistencia.IMesasDAO;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultarMesaSinIdException;
+import itson.sistemarestaurantepersistencia.excepciones.MesaNoExisteException;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -33,10 +37,13 @@ public class MesasDAO implements IMesasDAO{
         Root<Mesa> entidadMesa = criteriaQuery.from(Mesa.class);
          
         // Se realiza un inner join con entre Mesas y Comandas.
-        Join<Mesa, Comanda> comandaJoin = entidadMesa.join("comandas", JoinType.INNER);
+        Join<Mesa, Comanda> joinComanda = entidadMesa.join("comandas", JoinType.LEFT);
 
         // Se obtienen solo las comandas que tengan estado Abierta
-        criteriaQuery.where(criteriaBuilder.equal(comandaJoin.get("estado"), EstadoComanda.ABIERTA));
+        criteriaQuery.where(criteriaBuilder.or(
+                criteriaBuilder.isNull(joinComanda.get("estado")),
+                criteriaBuilder.notEqual(joinComanda.get("estado"), EstadoComanda.ABIERTA)
+        ));
 
         // Se utiliza distinct para evitar que se obtenga una misma mesa más de una vez.
         criteriaQuery.select(entidadMesa)
@@ -48,6 +55,36 @@ public class MesasDAO implements IMesasDAO{
         List<Mesa> mesasDisponibles = query.getResultList();
         
         return mesasDisponibles;
+    }
+
+    @Override
+    public Mesa consultarMesaId(Long idMesa) 
+            throws MesaNoExisteException, 
+            ConsultarMesaSinIdException{
+        
+        if(idMesa == null){
+            throw new ConsultarMesaSinIdException("El id utilizado para la consulta de la mesa tiene valor nulo.");
+        }
+        
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        
+        String jpqlQuery = """
+                        SELECT m FROM Mesa m
+                        WHERE m.id = :idMesa 
+                        """;
+        
+        
+        TypedQuery<Mesa> query = entityManager.createQuery(jpqlQuery, Mesa.class);
+        
+        query.setParameter("idMesa", idMesa);
+        
+        try{
+            Mesa mesa = query.getSingleResult();
+            
+            return mesa;
+        } catch(NoResultException ex){
+            throw new MesaNoExisteException("No existe una mesa con el Id especificado.");
+        } 
     }
     
 }

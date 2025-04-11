@@ -27,9 +27,7 @@ public class Comanda implements Serializable {
     public Comanda() {
     }
     
-    public Comanda(String folio, Calendar fechaHoraCreacion, EstadoComanda estado) {
-        this.folio = folio;
-        this.fechaHoraCreacion = fechaHoraCreacion;
+    public Comanda(EstadoComanda estado) {
         this.estado = estado;
     }
 

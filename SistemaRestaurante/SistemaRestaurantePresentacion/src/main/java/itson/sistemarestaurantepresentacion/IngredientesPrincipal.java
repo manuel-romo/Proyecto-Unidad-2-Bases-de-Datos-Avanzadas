@@ -8,7 +8,7 @@ import static itson.sistemarestaurantedominio.UnidadIngrediente.MILILITRO;
 import static itson.sistemarestaurantedominio.UnidadIngrediente.PIEZA;
 import itson.sistemarestaurantedominio.Usuario;
 import itson.sistemarestaurantenegocio.excepciones.IdIngredienteNuloException;
-import itson.sistemarestaurantenegocio.excepciones.IngredienteBuscadoNoExisteException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteConsultadoNoExisteException;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
@@ -132,7 +132,7 @@ public class IngredientesPrincipal extends JFrame implements IVistaReceptoraIdIn
             
             panelIngrediente.add(crearPanelBtnVolverProductosTodos());
 
-        } catch (IngredienteBuscadoNoExisteException | IdIngredienteNuloException ex) {
+        } catch (IngredienteConsultadoNoExisteException | IdIngredienteNuloException ex) {
             LOG.log(Level.SEVERE, "Error al mostrar el ingrediente buscado. " + ex.getMessage());
             JOptionPane.showMessageDialog(
                     this, 
@@ -411,6 +411,11 @@ public class IngredientesPrincipal extends JFrame implements IVistaReceptoraIdIn
         return btnVolverProductosTodos;
     }
     
+    /**
+     * Método que permite mostrar la ventana que permite editar un ingrediente.
+     * @param idIngrediente Objeto Long que representa el Id del ingrediente
+     * que se va a editar.
+     */
     private void mostrarEditarIngrediente(Long idIngrediente){
         
         control.mostrarEditarIngrediente(this, idIngrediente);

@@ -2,11 +2,16 @@
 package itson.sistemarestaurantepersistencia;
 
 import itson.sistemarestaurantedominio.Comanda;
+import itson.sistemarestaurantedominio.Mesa;
+import itson.sistemarestaurantepersistencia.excepciones.RegistroComandaSinMesaException;
 import java.util.List;
 
 
 public interface IComandasDAO {
     
-    public List<Comanda> consultarComandas();
+    public abstract Comanda registrarComanda(Mesa mesaNuevaComanda) 
+            throws RegistroComandaSinMesaException;
+    
+    public abstract List<Comanda> consultarComandas();
     
 }

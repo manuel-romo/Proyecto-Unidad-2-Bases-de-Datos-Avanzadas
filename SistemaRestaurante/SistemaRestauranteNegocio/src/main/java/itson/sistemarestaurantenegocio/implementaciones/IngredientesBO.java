@@ -8,7 +8,7 @@ import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.CantidadIngredienteInvalidaException;
 import itson.sistemarestaurantenegocio.excepciones.IdIngredienteNuloException;
-import itson.sistemarestaurantenegocio.excepciones.IngredienteBuscadoNoExisteException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteConsultadoNoExisteException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinCantidadException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinDireccionImagenException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinIdException;
@@ -127,7 +127,7 @@ public class IngredientesBO implements IIngredientesBO{
     
     @Override
     public Ingrediente consultarIngrediente(Long idIngrediente) 
-            throws IngredienteBuscadoNoExisteException,
+            throws IngredienteConsultadoNoExisteException,
             IdIngredienteNuloException{
         
         Ingrediente ingredienteConsultado;
@@ -135,7 +135,7 @@ public class IngredientesBO implements IIngredientesBO{
             ingredienteConsultado = ingredientesDAO.consultarIngrediente(idIngrediente);
 
         } catch (IngredienteNoExisteException ex) {
-            throw new IngredienteBuscadoNoExisteException("No existe el Id del ingrediente buscado.");
+            throw new IngredienteConsultadoNoExisteException("No existe un ingrediente con el Id recibido.");
         } catch (ConsultaIngredienteSinIdException ex) {
             throw new IdIngredienteNuloException("El Id del ingrediente tiene valor nulo.");
         }

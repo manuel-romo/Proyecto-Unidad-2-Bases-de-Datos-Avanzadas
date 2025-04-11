@@ -25,6 +25,6 @@ public interface IMediador {
     public abstract void cerrarBuscadorProductos(JFrame buscadorCerrar);
     
     public abstract void mostrarSeleccionMesaComanda(JFrame frameActual);
-    public abstract void mostrarCreacionComanda(JFrame frameActual);
+    public abstract void mostrarCreacionComanda(JFrame frameActual, Long idMesa);
     
 }

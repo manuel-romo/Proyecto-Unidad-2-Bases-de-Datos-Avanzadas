@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,6 +60,23 @@ public class ProductosDAOTest {
         entityManager.persist(pastel);
 
         entityManager.getTransaction().commit();
+    }
+    
+    @AfterEach
+    public void tearDown() {
+        
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        
+        entityManager.getTransaction().begin();
+        
+        String jpqlQueryBorrarProductos = "DELETE FROM Producto";
+        
+        entityManager.createQuery(jpqlQueryBorrarProductos).executeUpdate();
+        
+        productosRegistrados = new ArrayList<>();
+        
+        entityManager.getTransaction().commit();
+                
     }
 
     @Test

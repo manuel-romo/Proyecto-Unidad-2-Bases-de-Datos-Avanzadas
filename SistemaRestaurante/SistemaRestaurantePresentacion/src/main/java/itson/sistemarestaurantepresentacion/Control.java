@@ -5,6 +5,7 @@ import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
+import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
 import itson.sistemarestaurantenegocio.interfaces.IMesasBO;
 import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
 import itson.sistemarestaurantepresentacion.excepciones.SesionUsuarioInvalidaException;
@@ -39,6 +40,7 @@ public class Control implements IMediador{
     
     
     private SeleccionMesaComanda seleccionMesaComanda;
+    private CreacionComanda formCreacionComanda;
      
     /**
      * Método que permite mostrar la pantalla inicial del sistema.
@@ -189,7 +191,14 @@ public class Control implements IMediador{
     }
 
     @Override
-    public void mostrarCreacionComanda(JFrame frameActual) {
+    public void mostrarCreacionComanda(JFrame frameActual, Long idMesa) {
+        
+        IComandasBO comandasBO = FabricaObjetoNegocio.crearComandasBO();
+        IMesasBO mesasBO = FabricaObjetoNegocio.crearMesasBO();
+        
+        formCreacionComanda = new CreacionComanda(this, mesasBO, comandasBO, idMesa);
+        formCreacionComanda.setVisible(true);
+        frameActual.dispose();
         
     }
     

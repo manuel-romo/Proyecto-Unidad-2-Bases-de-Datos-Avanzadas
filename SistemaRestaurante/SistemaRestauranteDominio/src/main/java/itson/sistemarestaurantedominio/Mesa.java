@@ -15,6 +15,8 @@ import javax.persistence.Table;
 @Table(name = "mesas")
 public class Mesa implements Serializable {
 
+    
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,7 +24,7 @@ public class Mesa implements Serializable {
     private Long id;
     
     @Column(name = "numero")
-    private Integer numeroMesa;
+    private Integer numero;
     
     @OneToMany(mappedBy = "mesa")
     private List<Comanda> comandas = new ArrayList();
@@ -31,15 +33,15 @@ public class Mesa implements Serializable {
     }
 
     public Mesa(Integer numeroMesa) {
-        this.numeroMesa = numeroMesa;
+        this.numero = numeroMesa;
     }
 
     public Integer getNumeroMesa() {
-        return numeroMesa;
+        return numero;
     }
 
     public void setNumeroMesa(Integer numeroMesa) {
-        this.numeroMesa = numeroMesa;
+        this.numero = numeroMesa;
     }
 
     public Long getId() {
@@ -56,6 +58,14 @@ public class Mesa implements Serializable {
 
     public void setComandas(List<Comanda> comandas) {
         this.comandas = comandas;
+    }
+    
+    public void addComanda(Comanda comanda){
+        if(comanda != null && !comandas.contains(comanda)){
+            comandas.add(comanda);
+            comanda.setMesa(this);
+            
+        }
     }
     
     @Override

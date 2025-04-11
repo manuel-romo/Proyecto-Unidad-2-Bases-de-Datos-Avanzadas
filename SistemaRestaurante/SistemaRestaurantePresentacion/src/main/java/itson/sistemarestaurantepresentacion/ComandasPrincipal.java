@@ -53,23 +53,6 @@ public class ComandasPrincipal extends JFrame {
     
     private void crearComanda(){
 
-        try {
-            CreacionComanda formularioCrearComanda = new CreacionComanda(usuariosBO, comandasBO, idUsuario);
-            dispose();
-            formularioCrearComanda.setVisible(true);
-            
-        } catch (UsuarioInexistenteException ex) {
-            LOG.severe("ID de usuario inexistente " + ex.getMessage());
-            JOptionPane.showMessageDialog(
-                    this,
-                    """
-                        No se pudo recuperar la información del usuario. Es posible que haya sido modificada o eliminada.
-                        Por favor, intente iniciar sesión de nuevo
-                    """, 
-                    "Error de sesión",
-                    JOptionPane.ERROR_MESSAGE);
-            mostrarInicioSesion();
-        }
     }
     
     private void mostrarInicioSesion(){

@@ -115,13 +115,21 @@ public class Producto implements Serializable {
         this.ingredientes = ingredientes;
     }
     
-    public void agregarIngrediente(IngredienteProducto ingrediente){
-        if(ingrediente != null && !ingredientes.contains(ingrediente)){
-            ingredientes.add(ingrediente);
-            ingrediente.setProducto(this);
+    /**
+     * Método que permite agregar un objeto IngredienteProducto a la lista de
+     * ingredientesProducto de este Producto, garantizando que al objeto 
+     * Ingrediente al que hace referencia el objeto IngredienteProducto se le 
+     * añada a su lista de ingredientesProducto ese mismo objeto IngredienteProducto.
+     * @param ingredienteProducto Objeto IngredienteProducto a agregar a lista de
+     * ingredientesProducto de este Producto.
+     */
+    public void addIngrediente(IngredienteProducto ingredienteProducto){
+        if(ingredienteProducto != null && !ingredientes.contains(ingredienteProducto)){
+            ingredientes.add(ingredienteProducto);
+            ingredienteProducto.setProducto(this);
             
-            if(ingrediente.getIngrediente() != null && !ingrediente.getIngrediente().getProductos().contains(ingrediente)){
-                ingrediente.getIngrediente().getProductos().add(ingrediente);
+            if(ingredienteProducto.getIngrediente() != null && !ingredienteProducto.getIngrediente().getProductos().contains(ingredienteProducto)){
+                ingredienteProducto.getIngrediente().getProductos().add(ingredienteProducto);
             }
         }
     }
