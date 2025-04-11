@@ -5,6 +5,7 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.TipoProducto;
 import itson.sistemarestaurantedominio.dtos.ProductoActualizadoDTO;
 import itson.sistemarestaurantenegocio.excepciones.NombreProductoInvalidoException;
 import itson.sistemarestaurantenegocio.excepciones.PrecioProductoInvalidoException;
@@ -25,7 +26,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -179,7 +182,7 @@ public class EdicionProducto extends javax.swing.JFrame {
         String direccionImagenString = direccionImagenProducto;
 
         ProductoActualizadoDTO productoActualizadoDTO = new ProductoActualizadoDTO(
-            idProducto, nombreProducto, precio, direccionImagenString
+            idProducto, nombreProducto, precio, (TipoProducto)comboBoxTipoProducto.getSelectedItem(), direccionImagenString
         );
 
         try {
@@ -211,6 +214,9 @@ public class EdicionProducto extends javax.swing.JFrame {
         } catch (ProductoSinDireccionImagenException ex) {
             LOG.severe("Producto sin dirección de imagen. " + ex.getMessage());
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Producto sin dirección de imagen", JOptionPane.ERROR_MESSAGE);
+        } catch (ProductoSinTipoException ex) {
+            LOG.severe("Producto sin tipo. " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Producto sin tipo", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -234,6 +240,8 @@ public class EdicionProducto extends javax.swing.JFrame {
         campoTextoNombreProducto = new javax.swing.JTextField();
         etqPrecio = new javax.swing.JLabel();
         campoTextoPrecioProducto = new javax.swing.JTextField();
+        comboBoxTipoProducto = new javax.swing.JComboBox<>();
+        etqNombre1 = new javax.swing.JLabel();
         btnRegistrar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -272,6 +280,19 @@ public class EdicionProducto extends javax.swing.JFrame {
 
         campoTextoPrecioProducto.setPreferredSize(new java.awt.Dimension(64, 31));
 
+        comboBoxTipoProducto.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        comboBoxTipoProducto.setModel(new DefaultComboBoxModel<>(TipoProducto.values()));
+        comboBoxTipoProducto.setSelectedItem(TipoProducto.PLATILLO);
+        comboBoxTipoProducto.setToolTipText("");
+        comboBoxTipoProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxTipoProductoActionPerformed(evt);
+            }
+        });
+
+        etqNombre1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        etqNombre1.setText("Tipo de producto:");
+
         javax.swing.GroupLayout panelInformacionProductoLayout = new javax.swing.GroupLayout(panelInformacionProducto);
         panelInformacionProducto.setLayout(panelInformacionProductoLayout);
         panelInformacionProductoLayout.setHorizontalGroup(
@@ -279,10 +300,12 @@ public class EdicionProducto extends javax.swing.JFrame {
             .addGroup(panelInformacionProductoLayout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addGroup(panelInformacionProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(etqPrecio)
+                    .addComponent(etqNombre1)
+                    .addComponent(comboBoxTipoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(etqNombre)
                     .addComponent(etqDatosProducto)
                     .addComponent(campoTextoNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(etqPrecio)
                     .addComponent(campoTextoPrecioProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(90, Short.MAX_VALUE))
         );
@@ -293,13 +316,17 @@ public class EdicionProducto extends javax.swing.JFrame {
                 .addComponent(etqDatosProducto)
                 .addGap(18, 18, 18)
                 .addComponent(etqNombre)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campoTextoNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(etqNombre1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comboBoxTipoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(etqPrecio)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campoTextoPrecioProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addGap(57, 57, 57))
         );
 
         btnRegistrar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -326,7 +353,6 @@ public class EdicionProducto extends javax.swing.JFrame {
 
         btnSubirFotografia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnSubirFotografia.setText("Subir fotografía");
-        btnSubirFotografia.setPreferredSize(new java.awt.Dimension(137, 27));
         btnSubirFotografia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSubirFotografiaActionPerformed(evt);
@@ -346,13 +372,11 @@ public class EdicionProducto extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel4)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(etqImagenProducto)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnSubirFotografia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(btnSubirFotografia)))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(93, 93, 93)
@@ -367,21 +391,22 @@ public class EdicionProducto extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelInformacionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnSubirFotografia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(189, 189, 189)))
-                        .addGap(18, 18, 18)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(209, 209, 209)
+                                .addComponent(btnSubirFotografia))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(panelInformacionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnRegistrar)
                             .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 12, Short.MAX_VALUE)
+                        .addGap(0, 49, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addGap(50, 50, 50)
                         .addComponent(etqImagenProducto)
@@ -403,15 +428,21 @@ public class EdicionProducto extends javax.swing.JFrame {
         mostrarProductosPrincipal();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void comboBoxTipoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxTipoProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxTipoProductoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSubirFotografia;
     private javax.swing.JTextField campoTextoNombreProducto;
     private javax.swing.JTextField campoTextoPrecioProducto;
+    private javax.swing.JComboBox<TipoProducto> comboBoxTipoProducto;
     private javax.swing.JLabel etqDatosProducto;
     private javax.swing.JLabel etqImagenProducto;
     private javax.swing.JLabel etqNombre;
+    private javax.swing.JLabel etqNombre1;
     private javax.swing.JLabel etqPrecio;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel panelBaseEncabezado;
