@@ -99,8 +99,5 @@ public class IngredienteActualizadoDTO {
     public Boolean getHabilitado() {
         return habilitado;
     }
-    
-    
-    
-    
+  
 }

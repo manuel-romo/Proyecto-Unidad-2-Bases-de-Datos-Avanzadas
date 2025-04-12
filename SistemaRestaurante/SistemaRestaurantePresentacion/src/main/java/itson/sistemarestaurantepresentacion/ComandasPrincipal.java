@@ -6,6 +6,7 @@ import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
+import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -14,36 +15,26 @@ import javax.swing.JPanel;
 
 public class ComandasPrincipal extends JFrame {
 
-    private IUsuariosBO usuariosBO;
+    private IMediador control;
     private IComandasBO comandasBO;
-    private Long idUsuario;
     
     private static final Logger LOG = Logger.getLogger(ComandasPrincipal.class.getName());
     
-    public ComandasPrincipal(IUsuariosBO usuariosBO, IComandasBO comandasBO, Long idUsuario) throws UsuarioInexistenteException {
+    public ComandasPrincipal(IMediador control, IComandasBO comandasBO){
         initComponents();
         this.setName("Selector de comandas");
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        this.usuariosBO = usuariosBO;
-        this.comandasBO = comandasBO;
-        this.idUsuario = idUsuario;
         
-        cargarNombreUsuarioEncabezado();
+        this.control = control;
+        this.comandasBO = comandasBO;
+        
+        panelBaseEncabezado.add(new Encabezado());
+        
     }
     
-    private void cargarNombreUsuarioEncabezado() throws UsuarioInexistenteException{
+    private void cargarComandas(){
         
-        Usuario usuario = usuariosBO.consultarUsuarioId(idUsuario);
-
-        idUsuario = usuario.getId();
-
-        String nombresUsuario = usuario.getNombres();
-        String apellidoPaternoUsuario = usuario.getApellidoPaterno();
-        String apellidoMaternoUsuario = usuario.getApellidoMaterno();
-
-        etqNombreUsuario.setText(apellidoPaternoUsuario + " " + apellidoMaternoUsuario + ", " + nombresUsuario);
-              
     }
     
     private void llenarTablaComandas(){
@@ -51,14 +42,12 @@ public class ComandasPrincipal extends JFrame {
         JPanel panelComanad  = new JPanel();
     }
     
-    private void crearComanda(){
-
+    private void mostrarSeleccionMesaComanda(){
+        control.mostrarSeleccionMesaComanda(this);
     }
     
-    private void mostrarInicioSesion(){
-//        IniciarSesion formularioInicioSesion = new IniciarSesion(usuariosBO);
-//        dispose();
-//        formularioInicioSesion.setVisible(true);  
+    private void mostrarMenuPrincipal(){
+        control.mostrarMenuPrincipal(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -70,13 +59,8 @@ public class ComandasPrincipal extends JFrame {
         panelComandas = new javax.swing.JPanel();
         btnVolver = new javax.swing.JButton();
         btnCrearComanda = new javax.swing.JButton();
-        panelEncabezado = new javax.swing.JPanel();
-        etqIcono = new javax.swing.JLabel();
-        etqRestauranteSahuaro = new javax.swing.JLabel();
-        etqNombreUsuario = new javax.swing.JLabel();
-        etqIconoUsuario = new javax.swing.JLabel();
-        btnCerrarSesion = new javax.swing.JButton();
         etqComandas = new javax.swing.JLabel();
+        panelBaseEncabezado = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,7 +84,6 @@ public class ComandasPrincipal extends JFrame {
 
         btnVolver.setBackground(new java.awt.Color(205, 255, 197));
         btnVolver.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnVolver.setForeground(new java.awt.Color(0, 0, 0));
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,9 +91,7 @@ public class ComandasPrincipal extends JFrame {
             }
         });
 
-        btnCrearComanda.setBackground(new java.awt.Color(255, 255, 255));
         btnCrearComanda.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnCrearComanda.setForeground(new java.awt.Color(0, 0, 0));
         btnCrearComanda.setText("Crear nueva comanda");
         btnCrearComanda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,96 +99,46 @@ public class ComandasPrincipal extends JFrame {
             }
         });
 
-        panelEncabezado.setBackground(new java.awt.Color(250, 230, 188));
-
-        etqIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoAplicacion.png"))); // NOI18N
-
-        etqRestauranteSahuaro.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        etqRestauranteSahuaro.setForeground(new java.awt.Color(0, 0, 0));
-        etqRestauranteSahuaro.setText("Restaurante el Sahuaro");
-
-        etqNombreUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        etqNombreUsuario.setForeground(new java.awt.Color(0, 0, 0));
-        etqNombreUsuario.setText("Nombre de usuario");
-
-        etqIconoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconoUsuario2.png"))); // NOI18N
-
-        btnCerrarSesion.setBackground(new java.awt.Color(253, 244, 167));
-        btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnCerrarSesion.setForeground(new java.awt.Color(0, 0, 0));
-        btnCerrarSesion.setText("Cerrar sesión");
-        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCerrarSesionActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
-        panelEncabezado.setLayout(panelEncabezadoLayout);
-        panelEncabezadoLayout.setHorizontalGroup(
-            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(etqIcono)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(etqRestauranteSahuaro)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
-                        .addComponent(etqNombreUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(etqIconoUsuario))
-                    .addComponent(btnCerrarSesion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18))
-        );
-        panelEncabezadoLayout.setVerticalGroup(
-            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(etqRestauranteSahuaro))
-                    .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(etqIcono))
-                    .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(etqIconoUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(etqNombreUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCerrarSesion)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         etqComandas.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        etqComandas.setForeground(new java.awt.Color(0, 0, 0));
         etqComandas.setText("Comandas");
+
+        javax.swing.GroupLayout panelBaseEncabezadoLayout = new javax.swing.GroupLayout(panelBaseEncabezado);
+        panelBaseEncabezado.setLayout(panelBaseEncabezadoLayout);
+        panelBaseEncabezadoLayout.setHorizontalGroup(
+            panelBaseEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panelBaseEncabezadoLayout.setVerticalGroup(
+            panelBaseEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 73, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
         panelPrincipal.setLayout(panelPrincipalLayout);
         panelPrincipalLayout.setHorizontalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelPrincipalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panelScrollComandas, javax.swing.GroupLayout.DEFAULT_SIZE, 1120, Short.MAX_VALUE)
+                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelPrincipalLayout.createSequentialGroup()
-                        .addComponent(etqComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCrearComanda)))
+                        .addContainerGap()
+                        .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(panelScrollComandas, javax.swing.GroupLayout.DEFAULT_SIZE, 1120, Short.MAX_VALUE)
+                            .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                .addComponent(etqComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCrearComanda))))
+                    .addGroup(panelPrincipalLayout.createSequentialGroup()
+                        .addGap(506, 506, 506)
+                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(panelPrincipalLayout.createSequentialGroup()
-                .addGap(506, 506, 506)
-                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         panelPrincipalLayout.setVerticalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelPrincipalLayout.createSequentialGroup()
-                .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCrearComanda)
                     .addComponent(etqComandas))
@@ -233,28 +164,19 @@ public class ComandasPrincipal extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        mostrarMenuPrincipal();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnCrearComandaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearComandaActionPerformed
-        
+        mostrarSeleccionMesaComanda();
     }//GEN-LAST:event_btnCrearComandaActionPerformed
 
-    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCerrarSesionActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnCrearComanda;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel etqComandas;
-    private javax.swing.JLabel etqIcono;
-    private javax.swing.JLabel etqIconoUsuario;
-    private javax.swing.JLabel etqNombreUsuario;
-    private javax.swing.JLabel etqRestauranteSahuaro;
+    private javax.swing.JPanel panelBaseEncabezado;
     private javax.swing.JPanel panelComandas;
-    private javax.swing.JPanel panelEncabezado;
     private javax.swing.JPanel panelPrincipal;
     private javax.swing.JScrollPane panelScrollComandas;
     // End of variables declaration//GEN-END:variables

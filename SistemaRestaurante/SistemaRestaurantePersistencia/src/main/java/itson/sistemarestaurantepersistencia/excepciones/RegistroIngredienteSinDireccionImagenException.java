@@ -3,10 +3,11 @@ package itson.sistemarestaurantepersistencia.excepciones;
 
 
 /**
- * Clase que representa una excepción lanzada cuando se intenta registrar un
- * Ingrediente sin Dirección de imagen, en la clase IngredientesDAO.
+ * Clase que representa una excepción lanzada cuando al registrar un ingrediente,
+ * se comprueba que la dirección de imagen tiene valor nulo.
+ * Utilizado por las clases que implementan la interfaz {@link IIngredientesDAO}
  * 
- * @author 
+ * @author Manuel Romo López
  */
 public class RegistroIngredienteSinDireccionImagenException extends Exception{
     

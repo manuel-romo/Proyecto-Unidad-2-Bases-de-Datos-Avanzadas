@@ -8,12 +8,12 @@ package itson.sistemarestaurantenegocio.excepciones;
  *
  * @author ramuk
  */
-public class ProductoBuscadoNoExisteException extends Exception{
+public class ProductoConsultadoNoExisteException extends Exception{
 
-    public ProductoBuscadoNoExisteException() {
+    public ProductoConsultadoNoExisteException() {
     }
 
-    public ProductoBuscadoNoExisteException(String message) {
+    public ProductoConsultadoNoExisteException(String message) {
         super(message);
     }
     

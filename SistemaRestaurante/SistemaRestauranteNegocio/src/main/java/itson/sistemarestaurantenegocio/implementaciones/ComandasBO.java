@@ -3,6 +3,7 @@ package itson.sistemarestaurantenegocio.implementaciones;
 
 import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.Mesa;
+import itson.sistemarestaurantenegocio.excepciones.ComandaSinMesaException;
 import itson.sistemarestaurantenegocio.excepciones.MesaNuevaComandaNulaException;
 import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
 import itson.sistemarestaurantepersistencia.IComandasDAO;
@@ -18,6 +19,7 @@ public class ComandasBO implements IComandasBO{
         this.comandasDAO = comandasDAO;
     }
     
+    @Override
     public Comanda registrarComanda(Mesa mesaNuevaComanda) throws MesaNuevaComandaNulaException{
         
         if(mesaNuevaComanda == null){
@@ -43,8 +45,7 @@ public class ComandasBO implements IComandasBO{
         return comandasDAO.consultarComandas();
         
     }
-    
-    
+
     
     
 }

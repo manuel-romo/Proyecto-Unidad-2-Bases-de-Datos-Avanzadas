@@ -8,8 +8,10 @@ import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
+import itson.sistemarestaurantenegocio.interfaces.IMesasBO;
 import itson.sistemarestaurantepresentacion.excepciones.SesionUsuarioInvalidaException;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
+import itson.sistemarestaurantepresentacion.utils.InsercionDatosUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -20,15 +22,22 @@ public class MenuPrincipal extends JFrame {
 
     private IMediador control;
     private IUsuariosBO usuariosBO;
+    
     private Long idUsuario;
+    
+    private IMesasBO mesasBO;
+    private IProductosBO productosBO;
+    private IIngredientesBO ingredientesBO;
+    
     
     private static final Logger LOG = Logger.getLogger(MenuPrincipal.class.getName());
     
 
-    public MenuPrincipal(IMediador control, IUsuariosBO usuariosBO) {
+    public MenuPrincipal(IMediador control, IUsuariosBO usuariosBO, IMesasBO mesasBO) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
+        this.mesasBO = mesasBO;
         try {
             this.idUsuario = SesionUsuario.getInstance().getIdUsuario();
         } catch (SesionUsuarioInvalidaException ex) {
@@ -52,25 +61,8 @@ public class MenuPrincipal extends JFrame {
         control.mostrarPantallaInicial(this);
     }
     
-    private void mostrarSeleccionComanda(){
-        IComandasBO comandasBO = FabricaObjetoNegocio.crearComandasBO();
-        try {
-            ComandasPrincipal formularioSeleccionComanda = new ComandasPrincipal(usuariosBO, comandasBO, idUsuario);
-            dispose();
-            formularioSeleccionComanda.setVisible(true);
-            
-        } catch (UsuarioInexistenteException ex) {
-            LOG.severe("ID de usuario inexistente " + ex.getMessage());
-            JOptionPane.showMessageDialog(
-                    this,
-                    """
-                        No se pudo recuperar la información del usuario. Es posible que haya sido modificada o eliminada.
-                        Por favor, intente iniciar sesión de nuevo
-                    """, 
-                    "Error de sesión",
-                    JOptionPane.ERROR_MESSAGE);
-            mostrarInicioSesion();
-        }
+    private void mostrarComandasPrincipal(){
+        control.mostrarComandasPrincipal(this);
     }
     
     private void mostrarProductosPrincipal(){
@@ -82,11 +74,12 @@ public class MenuPrincipal extends JFrame {
        
     }
     
+    private void cargarDatosPrueba(){
+        InsercionDatosUtils.insertarDatosPrueba();
+    }
     
-    
-    
-    private void mostrarInicioSesion(){
-        control.mostrarInicioSesion(this);
+    private void eliminarDatos(){
+        
     }
 
     
@@ -100,6 +93,8 @@ public class MenuPrincipal extends JFrame {
         btnModuloClientesFrecuentes = new javax.swing.JButton();
         btnModuloClientesFrecuentes1 = new javax.swing.JButton();
         panelBaseEncabezado = new javax.swing.JPanel();
+        btnInsercionDatosPrueba = new javax.swing.JButton();
+        btnEliminacionDatos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 0));
@@ -148,28 +143,60 @@ public class MenuPrincipal extends JFrame {
         panelBaseEncabezado.setPreferredSize(new java.awt.Dimension(870, 84));
         panelBaseEncabezado.setLayout(new java.awt.BorderLayout());
 
+        btnInsercionDatosPrueba.setBackground(new java.awt.Color(255, 255, 153));
+        btnInsercionDatosPrueba.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnInsercionDatosPrueba.setText("Insertar datos de prueba");
+        if(InsercionDatosUtils.hayRegistroPrevioMesas()){
+            btnInsercionDatosPrueba.setEnabled(false);
+        }
+        btnInsercionDatosPrueba.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsercionDatosPruebaActionPerformed(evt);
+            }
+        });
+
+        btnEliminacionDatos.setBackground(new java.awt.Color(255, 204, 204));
+        btnEliminacionDatos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnEliminacionDatos.setText("Eliminar datos");
+        if(InsercionDatosUtils.hayRegistroPrevioMesas()){
+            btnInsercionDatosPrueba.setEnabled(false);
+        }
+        btnEliminacionDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminacionDatosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(263, 263, 263)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnModuloClientesFrecuentes1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnModuloProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnModuloComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnModuloIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnModuloClientesFrecuentes))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(263, 263, 263)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnModuloClientesFrecuentes1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnModuloProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnModuloComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnModuloIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnModuloClientesFrecuentes)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(302, 302, 302)
+                        .addComponent(btnInsercionDatosPrueba))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(339, 339, 339)
+                        .addComponent(btnEliminacionDatos)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelBaseEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(71, 71, 71)
+                .addGap(64, 64, 64)
                 .addComponent(btnModuloComandas)
-                .addGap(32, 32, 32)
+                .addGap(31, 31, 31)
                 .addComponent(btnModuloProductos)
                 .addGap(30, 30, 30)
                 .addComponent(btnModuloIngredientes)
@@ -177,7 +204,11 @@ public class MenuPrincipal extends JFrame {
                 .addComponent(btnModuloClientesFrecuentes)
                 .addGap(41, 41, 41)
                 .addComponent(btnModuloClientesFrecuentes1)
-                .addContainerGap(163, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
+                .addComponent(btnInsercionDatosPrueba)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEliminacionDatos)
+                .addGap(23, 23, 23))
         );
 
         pack();
@@ -188,7 +219,7 @@ public class MenuPrincipal extends JFrame {
     }//GEN-LAST:event_btnModuloProductosActionPerformed
 
     private void btnModuloComandasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModuloComandasActionPerformed
-        mostrarSeleccionComanda();
+        mostrarComandasPrincipal();
     }//GEN-LAST:event_btnModuloComandasActionPerformed
 
     private void btnModuloIngredientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModuloIngredientesActionPerformed
@@ -203,8 +234,18 @@ public class MenuPrincipal extends JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnModuloClientesFrecuentes1ActionPerformed
 
+    private void btnInsercionDatosPruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsercionDatosPruebaActionPerformed
+        cargarDatosPrueba();
+    }//GEN-LAST:event_btnInsercionDatosPruebaActionPerformed
+
+    private void btnEliminacionDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminacionDatosActionPerformed
+        
+    }//GEN-LAST:event_btnEliminacionDatosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEliminacionDatos;
+    private javax.swing.JButton btnInsercionDatosPrueba;
     private javax.swing.JButton btnModuloClientesFrecuentes;
     private javax.swing.JButton btnModuloClientesFrecuentes1;
     private javax.swing.JButton btnModuloComandas;

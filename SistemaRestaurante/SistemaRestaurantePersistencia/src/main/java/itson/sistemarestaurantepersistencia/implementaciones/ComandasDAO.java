@@ -50,6 +50,10 @@ public class ComandasDAO implements IComandasDAO{
         
         entityManager.persist(comanda);
         
+        entityManager.flush();
+        
+        entityManager.refresh(comanda);
+        
         entityManager.getTransaction().commit();
         
         return comanda;

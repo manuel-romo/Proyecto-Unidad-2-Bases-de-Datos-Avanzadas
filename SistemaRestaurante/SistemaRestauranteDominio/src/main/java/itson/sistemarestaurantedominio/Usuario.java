@@ -8,10 +8,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 
 @Entity
-@Table(name = "usuarios")
+@Table(
+        name = "usuarios",
+        uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"correo_electronico", "contrasenia"})
+    })
 public class Usuario implements Serializable {
 
     @Id
@@ -19,19 +24,19 @@ public class Usuario implements Serializable {
     @Column(name = "id_usuario")
     private Long id;
     
-    @Column(name = "nombres", nullable = false)
+    @Column(name = "nombres", length = 50, nullable = false)
     private String nombres;
     
-    @Column(name = "apellido_paterno", nullable = false)
+    @Column(name = "apellido_paterno", length = 50, nullable = false)
     private String apellidoPaterno;
     
-    @Column(name = "apellido_materno", nullable = false)
+    @Column(name = "apellido_materno", length = 50, nullable = false)
     private String apellidoMaterno;
     
-    @Column(name = "correo_electronico", nullable = false, unique = true)
+    @Column(name = "correo_electronico", length = 320, nullable = false)
     private String correoElectronico;
     
-    @Column(name = "contrasenia", nullable = false, unique = true)
+    @Column(name = "contrasenia", nullable = false)
     private String contrasenia;
 
     public Long getId() {

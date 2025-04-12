@@ -10,6 +10,7 @@ import itson.sistemarestaurantenegocio.excepciones.IdIngredienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteConsultadoNoExisteException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinCantidadException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinDireccionImagenException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteSinHabilitadoException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinIdException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinNombreException;
 import itson.sistemarestaurantenegocio.excepciones.IngredienteSinUnidadException;
@@ -218,9 +219,10 @@ public class EdicionIngrediente extends JFrame {
         UnidadIngrediente unidad = (UnidadIngrediente) comboBoxUnidadIngrediente.getSelectedItem();
         Float cantidad = Float.valueOf(campoTextoCantidadProducto.getText());      
         String direccionImagenString = direccionImagenIngrediente;
+        Boolean habilitado = true;
         
         IngredienteActualizadoDTO ingredienteActualizadoDTO = 
-                new IngredienteActualizadoDTO(idIngrediente, nombreIngrediente, unidad, cantidad, direccionImagenString);
+                new IngredienteActualizadoDTO(idIngrediente, nombreIngrediente, unidad, cantidad, direccionImagenString, habilitado);
         
         try {
             ingredientesBO.actualizarIngrediente(ingredienteActualizadoDTO);
@@ -229,31 +231,83 @@ public class EdicionIngrediente extends JFrame {
             
         } catch (NombreIngredienteInvalidoException ex) {
             LOG.severe("Nombre de ingrediente inváldio. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Nombre de ingrediente inválido", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Nombre de ingrediente inválido", 
+                    JOptionPane.ERROR_MESSAGE);
+            
         } catch (CantidadIngredienteInvalidaException ex){
             LOG.severe("Cantidad del ingrediente inválida. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Cantidad del ingrediente inválida", JOptionPane.ERROR_MESSAGE);  
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Cantidad del ingrediente inválida", 
+                    JOptionPane.ERROR_MESSAGE);  
+            
         } catch(IngredienteYaExisteException ex){
             LOG.severe("Ingrediente existente. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente existente", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Ingrediente existente", 
+                    JOptionPane.ERROR_MESSAGE);
+            
         } catch (IngredienteSinUnidadException ex) {
             LOG.severe("Ingrediente sin unidad. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin unidad", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Ingrediente sin unidad", 
+                    JOptionPane.ERROR_MESSAGE);
+            
         } catch (IngredienteSinNombreException ex) {
             LOG.severe("Ingrediente sin nombre. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin nombre", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Ingrediente sin nombre", 
+                    JOptionPane.ERROR_MESSAGE);
+            
         } catch (IngredienteSinDireccionImagenException ex) {
             LOG.severe("Ingrediente sin dirección de imagen. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin dirección de imagen", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Ingrediente sin dirección de imagen", 
+                    JOptionPane.ERROR_MESSAGE);
+            
         } catch (IngredienteSinCantidadException ex) {
             LOG.severe("Ingrediente sin cantidad. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente sin cantidad", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Ingrediente sin cantidad", 
+                    JOptionPane.ERROR_MESSAGE);
+            
         } catch (IngredienteNoExisteException ex) {
             LOG.severe("Ingrediente no existe. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente no existe", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Ingrediente no existe", 
+                    JOptionPane.ERROR_MESSAGE);
+            
         } catch (IngredienteSinIdException ex) {
             LOG.severe("Ingrediente no tiene Id. " + ex.getMessage());
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ingrediente no tiene Id", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Ingrediente no tiene Id", 
+                    JOptionPane.ERROR_MESSAGE);
+            
+        } catch (IngredienteSinHabilitadoException ex) {
+            LOG.severe("Ingrediente no tiene valor de estado habilitado/deshabilitado. " + ex.getMessage());
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Ingrediente no tiene valor de estado habilitado/deshabilitado", 
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
     

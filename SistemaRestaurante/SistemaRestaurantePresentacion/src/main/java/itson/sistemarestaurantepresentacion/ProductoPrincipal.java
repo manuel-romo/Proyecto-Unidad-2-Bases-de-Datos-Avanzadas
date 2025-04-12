@@ -1,7 +1,7 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Producto;
-import itson.sistemarestaurantenegocio.excepciones.ProductoBuscadoNoExisteException;
+import itson.sistemarestaurantenegocio.excepciones.ProductoConsultadoNoExisteException;
 import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
 import itson.sistemarestaurantepresentacion.excepciones.ImagenNoEncontradaException;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
@@ -96,7 +96,7 @@ public class ProductoPrincipal extends JFrame implements IVistaReceptoraIdProduc
             
             panelProducto.add(crearPanelBtnVolverProductosTodos());
 
-        } catch (ProductoBuscadoNoExisteException ex) {
+        } catch (ProductoConsultadoNoExisteException ex) {
             LOG.log(Level.SEVERE, "Error al mostrar el producto buscado. " + ex.getMessage());
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al mostrar el producto buscado", JOptionPane.ERROR_MESSAGE);
         }
