@@ -77,8 +77,6 @@ public class IngredientesPrincipal extends JFrame implements IVistaReceptoraIdIn
      * principal del módulo de ingredientes.
      * @param control Objeto que implementa la interfaz IMediador, es el control que
      * gestiona el flujo entre ventanas.
-     * @param usuariosBO Objeto que implementa la interfaz IUsuariosBO, permite ejecutar
-     * operaciones de negocio relacionados con los Usuarios.
      * @param ingredientesBO Objeto que implementa la interfaz IIngredientesBO, permite ejecutar
      * operaciones de negocio relacionados con los Ingredientes.
      */

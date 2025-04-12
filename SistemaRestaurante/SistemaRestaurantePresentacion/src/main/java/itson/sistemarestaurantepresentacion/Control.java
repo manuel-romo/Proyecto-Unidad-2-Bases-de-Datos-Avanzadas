@@ -3,30 +3,25 @@ package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
-import itson.sistemarestaurantenegocio.excepciones.UsuarioInexistenteException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
 import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
 import itson.sistemarestaurantenegocio.interfaces.IMesasBO;
 import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
-import itson.sistemarestaurantepresentacion.excepciones.SesionUsuarioInvalidaException;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
 import itson.sistemarestaurantepresentacion.interfaces.IVistaReceptoraIdIngrediente;
 import itson.sistemarestaurantepresentacion.interfaces.IVistaReceptoraIdProducto;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.crypto.SealedObject;
 import javax.swing.JFrame;
 
 
 public class Control implements IMediador{
 
-    private PantallaInicial pantallaInicial;
-    private InicioSesion formInicioSesion;
-    private MenuPrincipal formMenuPrincipal;
-    
     private IVistaReceptoraIdIngrediente formReceptorRespuestaBusquedaIngrediente;
     private IVistaReceptoraIdProducto formReceptorRespuestaBusquedaProducto;
     
+    
+    private PantallaInicial pantallaInicial;
+    private InicioSesion formInicioSesion;
+    private MenuPrincipal formMenuPrincipal;
     
     private IngredientesPrincipal formIngredientesPrincipal;
     private RegistroIngrediente formRegistroIngrediente;
@@ -38,9 +33,10 @@ public class Control implements IMediador{
     private EdicionProducto formEdicionProducto;
     private BuscadorProductos formBuscadorProductos;
     
-    
-    private SeleccionMesaComanda seleccionMesaComanda;
-    private CreacionComanda formCreacionComanda;
+    private ComandasPrincipal formComadasPrincipal;
+    private SeleccionMesaComanda formSeleccionMesaComanda;
+    private InformacionComanda formInformacionComanda;
+    private SeleccionCantidadProductoComanda formSeleccionCantidadProductoComanda;
      
     /**
      * Método que permite mostrar la pantalla inicial del sistema.
@@ -76,8 +72,8 @@ public class Control implements IMediador{
     public void mostrarMenuPrincipal(JFrame frameActual) { 
         frameActual.dispose();
         IUsuariosBO usuariosBO = FabricaObjetoNegocio.crearUsuariosBO();
-
-        formMenuPrincipal = new MenuPrincipal(this, usuariosBO);
+        IMesasBO mesasBO = FabricaObjetoNegocio.crearMesasBO();
+        formMenuPrincipal = new MenuPrincipal(this, usuariosBO, mesasBO);
 
         formMenuPrincipal.setVisible(true);
     }
@@ -124,7 +120,7 @@ public class Control implements IMediador{
     }
     
     @Override
-    public void cerrarBuscador(JFrame buscadorCerrar){   
+    public void cerrarBuscadorIngredientes(JFrame buscadorCerrar){   
         formReceptorRespuestaBusquedaIngrediente.habilitar(true);
         buscadorCerrar.dispose();
     }
@@ -166,27 +162,29 @@ public class Control implements IMediador{
     public void actualizarVentanaResultadoBusquedaProductos(JFrame buscadorProductos, Long idProducto) {
         formReceptorRespuestaBusquedaProducto.setIdProducto(idProducto);
         formReceptorRespuestaBusquedaProducto.habilitar(true);
-        if (formProductosPrincipal != null) {
-            // Recarga la lista completa de productos
-            formProductosPrincipal.cargarProductos();
-        }
         buscadorProductos.dispose();
     }
     
     @Override
     public void cerrarBuscadorProductos(JFrame buscadorCerrar) {
         formReceptorRespuestaBusquedaProducto.habilitar(true);
-        if (formProductosPrincipal != null) {
-            // Llama al método para recargar la lista de productos
-            formProductosPrincipal.cargarProductos();
-        }
         buscadorCerrar.dispose();
+    }
+    
+    
+    @Override
+    public void mostrarComandasPrincipal(JFrame frameActual){
+        IComandasBO comandasBO = FabricaObjetoNegocio.crearComandasBO();
+        formComadasPrincipal = new ComandasPrincipal(this, comandasBO);
+        formComadasPrincipal.setVisible(true);
+        frameActual.dispose();
     }
 
     @Override
     public void mostrarSeleccionMesaComanda(JFrame frameActual) {
         IMesasBO mesasBO = FabricaObjetoNegocio.crearMesasBO();
-        seleccionMesaComanda = new SeleccionMesaComanda(this, mesasBO);
+        formSeleccionMesaComanda = new SeleccionMesaComanda(this, mesasBO);
+        formSeleccionMesaComanda.setVisible(true);
         frameActual.dispose();
     }
 
@@ -195,12 +193,38 @@ public class Control implements IMediador{
         
         IComandasBO comandasBO = FabricaObjetoNegocio.crearComandasBO();
         IMesasBO mesasBO = FabricaObjetoNegocio.crearMesasBO();
+        IProductosBO productosBO = FabricaObjetoNegocio.crearProductosBO();
         
-        formCreacionComanda = new CreacionComanda(this, mesasBO, comandasBO, idMesa);
-        formCreacionComanda.setVisible(true);
+        formInformacionComanda = new InformacionComanda(this, mesasBO, comandasBO, productosBO, idMesa);
+        formInformacionComanda.setVisible(true);
         frameActual.dispose();
         
     }
+
+    @Override
+    public void mostrarSeleccionCantidadProducto(JFrame frameActual, Long idProducto) {
+        
+        IProductosBO productosBO = FabricaObjetoNegocio.crearProductosBO();
+        frameActual.setEnabled(false);
+        formSeleccionCantidadProductoComanda = new SeleccionCantidadProductoComanda(this, productosBO, idProducto);
+        formSeleccionCantidadProductoComanda.setVisible(true);
+        
+    }
+    
+    @Override
+    public void actualizarVentanaCantidadProductoSeleccionada(JFrame seleccionProductos, Long idProducto, float cantidad) {
+        formInformacionComanda.setCantidadProducto(idProducto, cantidad);
+        seleccionProductos.dispose();
+        formInformacionComanda.setVisible(true);
+    }
+
+    @Override
+    public void cerrarSeleccionCantidadProducto(JFrame seleccionCantidadadProductoCerrar) {
+        seleccionCantidadadProductoCerrar.dispose();
+        formInformacionComanda.setVisible(true);
+    }
+    
+    
     
     
 }

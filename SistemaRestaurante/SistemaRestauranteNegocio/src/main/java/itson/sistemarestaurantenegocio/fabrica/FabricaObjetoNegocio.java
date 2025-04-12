@@ -39,7 +39,8 @@ public class FabricaObjetoNegocio {
     
     public static IProductosBO crearProductosBO(){
         IProductosDAO productosDAO = new ProductosDAO();
-        IProductosBO productosBO = new ProductosBO(productosDAO);
+        IIngredientesDAO ingredientesDAO = new IngredientesDAO();
+        IProductosBO productosBO = new ProductosBO(productosDAO, ingredientesDAO);
         return productosBO;   
     }
     

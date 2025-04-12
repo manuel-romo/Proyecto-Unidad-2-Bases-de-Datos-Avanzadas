@@ -38,7 +38,5 @@ public interface IProductosDAO {
             RegistroProductoSinDireccionImagenException,
             ProductoNoExisteException,
             ActualizacionProductoSinIdException;
-            
-    
 
 }

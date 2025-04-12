@@ -171,7 +171,7 @@ public class BuscadorIngredientes extends JFrame {
     }
     
     private void cerrar(){
-        control.cerrarBuscador(this);
+        control.cerrarBuscadorIngredientes(this);
     }
     
 

@@ -15,7 +15,9 @@ import itson.sistemarestaurantepersistencia.IMesasDAO;
 import itson.sistemarestaurantepersistencia.excepciones.ConsultaIngredienteSinIdException;
 import itson.sistemarestaurantepersistencia.excepciones.ConsultarMesaSinIdException;
 import itson.sistemarestaurantepersistencia.excepciones.IngredienteNoExisteException;
+import itson.sistemarestaurantepersistencia.excepciones.MesaMismoNumeroException;
 import itson.sistemarestaurantepersistencia.excepciones.MesaNoExisteException;
+import itson.sistemarestaurantepersistencia.excepciones.RegistroMesaSinNumeroException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -189,8 +191,7 @@ public class MesasDAOTest {
                 () -> mesasDAO.consultarMesaId(ID_MESA_CONSULTAR));
         
     }
-    
-    
+   
   
     @Test
     public void testConsultarMesaIdNulo(){
@@ -201,6 +202,57 @@ public class MesasDAOTest {
         
         Exception ex = assertThrows(ConsultarMesaSinIdException.class, 
                 () -> mesasDAO.consultarMesaId(ID_MESA_CONSULTAR));
+        
+    }
+    
+    @Test
+    public void registroMesaOk(){
+        
+        IMesasDAO mesasDAO = new MesasDAO();
+        
+        final Integer NUMERO_MESA_REGISTRAR = 10;
+        
+        Mesa mesaRegistrada = assertDoesNotThrow(() -> mesasDAO.registrarMesa(NUMERO_MESA_REGISTRAR));
+        
+        assertNotNull(mesaRegistrada);
+        
+        assertEquals(NUMERO_MESA_REGISTRAR, mesaRegistrada.getNumeroMesa());
+         
+    }
+    
+    @Test
+    public void registroMesaSinNumeroGeneraExcepcion(){
+        
+        IMesasDAO mesasDAO = new MesasDAO();
+        
+        final Integer NUMERO_MESA_REGISTRAR = null;
+        
+        Exception ex = assertThrows(RegistroMesaSinNumeroException.class, () -> 
+                mesasDAO.registrarMesa(NUMERO_MESA_REGISTRAR));
+        
+    }
+    
+    @Test
+    public void registroMesaConNumeroRepetidoGeneraExcepcion(){
+        
+        IMesasDAO mesasDAO = new MesasDAO();
+        
+        final Integer NUMERO_MESA_REGISTRAR = 2;
+        
+        Exception ex = assertThrows(MesaMismoNumeroException.class, () -> 
+                mesasDAO.registrarMesa(NUMERO_MESA_REGISTRAR));
+    }
+    
+    @Test
+    public void consultarMesasOk(){
+        
+        IMesasDAO mesasDAO = new MesasDAO();
+        
+        List<Mesa> mesasConsultadas = mesasDAO.consultarMesas();
+        
+        assertNotNull(mesasConsultadas);
+        
+        assertEquals(mesasRegistradas, mesasConsultadas);
         
     }
     

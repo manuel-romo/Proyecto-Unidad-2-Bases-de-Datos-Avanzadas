@@ -36,7 +36,7 @@ public class Comanda implements Serializable {
     @Column(name = "id_comanda")
     private Long id;
 
-    @Column(name = "folio", nullable = false)
+    @Column(name = "folio", length = 15,nullable = false)
     private String folio;
     
     @Temporal(TemporalType.TIMESTAMP)

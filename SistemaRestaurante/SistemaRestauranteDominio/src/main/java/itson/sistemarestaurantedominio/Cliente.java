@@ -45,19 +45,19 @@ public class Cliente implements Serializable {
     @Column(name = "id_cliente")
     private Long id;
     
-    @Column(name = "nombres", nullable = false)
+    @Column(name = "nombres", length = 50, nullable = false)
     private String nombres;
     
-    @Column(name = "apellido_paterno", nullable = false)
+    @Column(name = "apellido_paterno", length = 50, nullable = false)
     private String apellidoPaterno;
     
-    @Column(name = "apellido_materno", nullable = false)
+    @Column(name = "apellido_materno", length = 50, nullable = false)
     private String apellidoMaterno;
     
-    @Column(name = "telefono", nullable = false, unique = true)
+    @Column(name = "telefono", length = 10, nullable = false, unique = true)
     private String telefono;
     
-    @Column(name = "correo_electronico", nullable = true, unique = true)
+    @Column(name = "correo_electronico", length = 320, nullable = true, unique = true)
     private String correoElectronico;
     
     @Temporal(TemporalType.TIMESTAMP)

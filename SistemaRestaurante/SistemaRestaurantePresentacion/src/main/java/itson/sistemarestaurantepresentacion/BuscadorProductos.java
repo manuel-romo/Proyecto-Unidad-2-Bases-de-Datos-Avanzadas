@@ -153,7 +153,7 @@ public class BuscadorProductos extends JFrame {
     }
     
     private void cerrar(){
-        control.cerrarBuscador(this);
+        control.cerrarBuscadorProductos(this);
     }
 
     /**

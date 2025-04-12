@@ -4,9 +4,12 @@ package itson.sistemarestaurantenegocio.interfaces;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantedominio.dtos.ProductoActualizadoDTO;
+import itson.sistemarestaurantenegocio.excepciones.IdProductoNuloException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteConsultadoNoExisteException;
+import itson.sistemarestaurantenegocio.excepciones.IngredienteSinIdException;
 import itson.sistemarestaurantenegocio.excepciones.NombreProductoInvalidoException;
 import itson.sistemarestaurantenegocio.excepciones.PrecioProductoInvalidoException;
-import itson.sistemarestaurantenegocio.excepciones.ProductoBuscadoNoExisteException;
+import itson.sistemarestaurantenegocio.excepciones.ProductoConsultadoNoExisteException;
 import itson.sistemarestaurantenegocio.excepciones.ProductoSinDireccionImagenException;
 import itson.sistemarestaurantenegocio.excepciones.ProductoSinIdException;
 import itson.sistemarestaurantenegocio.excepciones.ProductoSinNombreException;
@@ -47,9 +50,9 @@ public interface IProductosBO {
      *
      * @param idProducto El ID del producto a buscar.
      * @return El producto encontrado.
-     * @throws ProductoBuscadoNoExisteException Si no existe un producto con el ID especificado.
+     * @throws ProductoConsultadoNoExisteException Si no existe un producto con el ID especificado.
      */
-    public abstract Producto consultarProductoPorId(Long idProducto) throws ProductoBuscadoNoExisteException;
+    public abstract Producto consultarProductoPorId(Long idProducto) throws ProductoConsultadoNoExisteException;
 
     /**
      * Registra un nuevo producto.
@@ -85,6 +88,7 @@ public interface IProductosBO {
      * @throws ProductoSinPrecioException Si el producto no tiene precio.
      * @throws ProductoSinTipoException Si el producto no tiene tipo.
      * @throws ProductoSinDireccionImagenException Si el producto no tiene dirección de imagen.
+     * @throws ProductoConsultadoNoExisteException Si el producto no existe.
      */
     public abstract void actualizarProducto(ProductoActualizadoDTO productoActualizadoDTO)
             throws NombreProductoInvalidoException, 
@@ -93,7 +97,16 @@ public interface IProductosBO {
                    ProductoSinIdException, 
                    ProductoSinNombreException, 
                    ProductoSinPrecioException, 
-                   ProductoSinTipoException, 
-                   ProductoNoExisteException,
-                   ProductoSinDireccionImagenException;
+                   ProductoSinTipoException,
+                   ProductoSinDireccionImagenException,
+                   ProductoConsultadoNoExisteException;
+    
+    public abstract boolean consultarDisponibilidadProducto(Long idProducto,  float cantidadProducto)
+            throws IdProductoNuloException,
+            ProductoConsultadoNoExisteException,
+            IngredienteSinIdException,
+            IngredienteConsultadoNoExisteException;
+    
+    public void eliminarIngredientes();
+
 }

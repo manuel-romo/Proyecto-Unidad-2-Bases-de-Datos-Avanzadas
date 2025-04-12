@@ -1,5 +1,6 @@
 package itson.sistemarestaurantepersistencia.implementaciones;
 
+import itson.sistemarestaurantedominio.IngredienteProducto;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.TipoProducto;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;

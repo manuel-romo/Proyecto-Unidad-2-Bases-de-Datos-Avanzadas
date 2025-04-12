@@ -3,10 +3,10 @@ package itson.sistemarestaurantepresentacion;
 import itson.sistemarestaurantedominio.Mesa;
 import itson.sistemarestaurantenegocio.interfaces.IMesasBO;
 import itson.sistemarestaurantepresentacion.interfaces.IMediador;
+import itson.sistemarestaurantepresentacion.utils.ImagenesUtils;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -23,7 +23,7 @@ public class SeleccionMesaComanda extends JFrame {
     
     private Color COLOR_PANEL_MESA_DISPONIBLE = new Color(245, 236, 237);
     private Color COLOR_BOTON_SELECCIONAR_MESA = new Color(255, 227, 86);
-    private Font FUENTE_TEXTO_PANEL_MESA_DISPONIBLE = new Font("Segoe UI", Font.BOLD, 20);
+    private Font FUENTE_TEXTO_PANEL_MESA_DISPONIBLE = new Font("Segoe UI", Font.BOLD, 15);
     
     public SeleccionMesaComanda(IMediador control, IMesasBO mesasBO) {
         initComponents();
@@ -46,9 +46,7 @@ public class SeleccionMesaComanda extends JFrame {
         for(Mesa mesaDisponible: mesasDisponibles){
             
             panelMesas.add(crearPanelMesaDisponible(mesaDisponible));
-            
-            
-            
+
         }
         
     }
@@ -63,41 +61,55 @@ public class SeleccionMesaComanda extends JFrame {
     private JPanel crearPanelMesaDisponible(Mesa mesaDisponible){
         
         JPanel panelMesaDisponible = new JPanel();
+        
+        panelMesaDisponible.setBackground(COLOR_PANEL_MESA_DISPONIBLE);
            
         panelMesaDisponible.setLayout(new GridLayout(1,2));
         
-        panelMesaDisponible.add(crearPanelImagenMesa());
+        panelMesaDisponible.add(crearPanelNumeroImagenMesa(mesaDisponible));
         
-        panelMesaDisponible.add(crearPanelNumeroBtnSeleccionarMesa(mesaDisponible));
+        panelMesaDisponible.add(crearPanelBtnSeleccionarMesa(mesaDisponible));
         
         return panelMesaDisponible;
         
     }
     
-    private JPanel crearPanelImagenMesa(){
+    private JPanel crearPanelNumeroImagenMesa(Mesa mesaDisponible){
         
-        JPanel panelImagenMesa = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        JPanel panelNumeroImagenMesa = new JPanel(new FlowLayout(FlowLayout.LEADING));
         
         JLabel etqImagenMesa = new JLabel();
         
-        etqImagenMesa.setIcon(new ImageIcon(getClass().getResource("imagenMesa.png")));
+        ImageIcon imagenMesa = ImagenesUtils.redimensionarImagen(
+                new ImageIcon(getClass().getResource("/imagenMesa.png")), 
+                50, 
+                50);
+        
+        etqImagenMesa.setIcon(imagenMesa);
        
-        panelImagenMesa.add(etqImagenMesa);
+        panelNumeroImagenMesa.add(new JPanel());
         
-        return panelImagenMesa;
-    }
-    
-    private JPanel crearPanelNumeroBtnSeleccionarMesa(Mesa mesaDisponible){
+        panelNumeroImagenMesa.add(etqImagenMesa);
         
-        JPanel panelNumeroMesa = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+        panelNumeroImagenMesa.add(new JPanel());
         
-        JLabel etqNumeroMesa = new JLabel(String.valueOf(mesaDisponible.getNumeroMesa()));
+        
+        JLabel etqNumeroMesa = new JLabel("Número: " + String.format("%02d",mesaDisponible.getNumeroMesa()));
         
         etqNumeroMesa.setFont(FUENTE_TEXTO_PANEL_MESA_DISPONIBLE);
        
-        panelNumeroMesa.add(etqNumeroMesa);
+        panelNumeroImagenMesa.add(etqNumeroMesa);
+        
+        return panelNumeroImagenMesa;
+    }
+    
+    private JPanel crearPanelBtnSeleccionarMesa(Mesa mesaDisponible){
+        
+        JPanel panelNumeroMesa = new JPanel(new FlowLayout(FlowLayout.TRAILING));
         
         panelNumeroMesa.add(crearBtnSeleccionarMesa(mesaDisponible.getId()));
+        
+        panelNumeroMesa.add(new JPanel());
         
         return panelNumeroMesa; 
     }
@@ -117,6 +129,10 @@ public class SeleccionMesaComanda extends JFrame {
     
     private void seleccionarMesa(Long idMesa){
         control.mostrarCreacionComanda(this, idMesa);
+    }
+    
+    private void mostrarComandasPrincipal(){
+        control.mostrarComandasPrincipal(this);
     }
     
     @SuppressWarnings("unchecked")
@@ -277,7 +293,7 @@ public class SeleccionMesaComanda extends JFrame {
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        mostrarComandasPrincipal();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
