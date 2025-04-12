@@ -79,12 +79,6 @@ public class InicioSesion extends JFrame {
         control.mostrarMenuPrincipal(this);
     }
     
-    private void limpiarCampos(){
-        campoTxtCorreoElectronico.setText("");
-        campoTxtContrasenia.setText("");
-    }
-    
-    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -258,16 +252,9 @@ public class InicioSesion extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        // TODO CORREGIR
-        // iniciarSesion();
-        SesionUsuario.crearInstancia(2L);
 
-        datosEncabezado.setNombresUsuario("Maria");
-        datosEncabezado.setApellidoPaternoUsuario("dfsfs");
-        // Imagen de perfil de usuario simulada.
-        datosEncabezado.setDireccionImagenUsuario("/imagenIconoUsuario.png");
-        
-        mostrarMenuPrincipal();
+        iniciarSesion();
+       
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnRegistrarUsuario1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarUsuario1ActionPerformed

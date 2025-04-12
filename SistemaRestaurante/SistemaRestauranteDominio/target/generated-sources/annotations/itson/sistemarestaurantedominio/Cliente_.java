@@ -7,7 +7,7 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2025-04-11T22:17:57", comments="EclipseLink-2.7.12.v20230209-rNA")
+@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2025-04-11T23:42:58", comments="EclipseLink-2.7.12.v20230209-rNA")
 @StaticMetamodel(Cliente.class)
 public class Cliente_ { 
 
@@ -17,6 +17,7 @@ public class Cliente_ {
     public static volatile SingularAttribute<Cliente, Long> id;
     public static volatile SingularAttribute<Cliente, String> telefono;
     public static volatile SingularAttribute<Cliente, String> correoElectronico;
+    public static volatile SingularAttribute<Cliente, Boolean> esFrecuente;
     public static volatile SingularAttribute<Cliente, String> nombres;
     public static volatile SingularAttribute<Cliente, String> apellidoMaterno;
 

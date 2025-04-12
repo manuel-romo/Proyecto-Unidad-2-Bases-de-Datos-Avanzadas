@@ -25,19 +25,13 @@ public class MenuPrincipal extends JFrame {
     
     private Long idUsuario;
     
-    private IMesasBO mesasBO;
-    private IProductosBO productosBO;
-    private IIngredientesBO ingredientesBO;
-    
-    
     private static final Logger LOG = Logger.getLogger(MenuPrincipal.class.getName());
     
-
-    public MenuPrincipal(IMediador control, IUsuariosBO usuariosBO, IMesasBO mesasBO) {
+    public MenuPrincipal(IMediador control) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
-        this.mesasBO = mesasBO;
+
         try {
             this.idUsuario = SesionUsuario.getInstance().getIdUsuario();
         } catch (SesionUsuarioInvalidaException ex) {
@@ -52,7 +46,6 @@ public class MenuPrincipal extends JFrame {
         }
         
         this.control = control;  
-        this.usuariosBO = usuariosBO;
         
         panelBaseEncabezado.add(new Encabezado());
     }
@@ -75,6 +68,7 @@ public class MenuPrincipal extends JFrame {
     }
     
     private void cargarDatosPrueba(){
+        btnInsercionDatosPrueba.setEnabled(false);
         InsercionDatosUtils.insertarDatosPrueba();
     }
     

@@ -71,9 +71,7 @@ public class Control implements IMediador{
     @Override
     public void mostrarMenuPrincipal(JFrame frameActual) { 
         frameActual.dispose();
-        IUsuariosBO usuariosBO = FabricaObjetoNegocio.crearUsuariosBO();
-        IMesasBO mesasBO = FabricaObjetoNegocio.crearMesasBO();
-        formMenuPrincipal = new MenuPrincipal(this, usuariosBO, mesasBO);
+        formMenuPrincipal = new MenuPrincipal(this);
 
         formMenuPrincipal.setVisible(true);
     }
