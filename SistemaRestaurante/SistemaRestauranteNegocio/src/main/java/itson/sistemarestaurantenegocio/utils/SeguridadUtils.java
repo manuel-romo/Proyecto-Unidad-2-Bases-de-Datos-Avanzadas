@@ -15,6 +15,7 @@ public class SeguridadUtils {
     
     public static String generarHashSha256(String contrasenia) {
         
+        //Cambiar por un algoritmo de encriptación
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(contrasenia.getBytes());

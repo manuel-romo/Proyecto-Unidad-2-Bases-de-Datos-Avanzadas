@@ -67,7 +67,6 @@ public class UsuariosBO implements IUsuariosBO{
        
     }
     
-    
     @Override
     public Usuario consultarUsuarioId(Long idUsuario) throws UsuarioInexistenteException{
         

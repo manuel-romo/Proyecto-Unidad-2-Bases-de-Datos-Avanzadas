@@ -1,45 +1,50 @@
 package itson.sistemarestaurantedominio.dtos;
-
-import java.util.Calendar;
 /**
- * Clase DTO que representa los datos necesarios para registrar un cliente
+ * Clase DTO que representa los datos necesarios para actualizar la información de un cliente
  * @author Yuri Germán García López
- * ID: 0000025283
+ * ID: 00000252583
  */
-public class NuevoClienteDTO {
+public class ClienteActualizadoDTO {
     
     /**
      * Declaración de atributos de la clase
      */
+    private Long id;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String telefono;
     private String correoElectronico;
-    private Calendar fechaRegistro;
-
+    private Boolean esFrecuente;
+    
     /**
-     * Método constructor para instanciar la clase NuevoClienteDTO
-     * @param nombre Representa el/los nombre del cliente
+     * Método constructor para instanciar la clase ClienteActualizadoDTO
+     * @param id Representa el id del cliente
+     * @param nombre Representa el nombre del cliente
      * @param apellidoPaterno Representa el apellido paterno del cliente
      * @param apellidoMaterno Representa el apellido materno del cliente
      * @param telefono Representa el teléfono del cliente
      * @param correoElectronico Representa el correo electrónico del cliente
-     * @param fechaRegistro Representa la fecha cuando se registró el cliente
+     * @param esFrecuente Representa si un cliente es frecuente o no
      */
-    public NuevoClienteDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String correoElectronico, Calendar fechaRegistro) {
+    public ClienteActualizadoDTO(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String correoElectronico, Boolean esFrecuente) {
+        this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.telefono = telefono;
         this.correoElectronico = correoElectronico;
-        this.fechaRegistro = fechaRegistro;
+        this.esFrecuente = esFrecuente;
     }
 
     /**
      * Getters para cada atributo de la clase
      */
     
+    public Long getId() {
+        return id;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -60,8 +65,8 @@ public class NuevoClienteDTO {
         return correoElectronico;
     }
 
-    public Calendar getFechaRegistro() {
-        return fechaRegistro;
+    public Boolean getEsFrecuente() {
+        return esFrecuente;
     }
-
+        
 }

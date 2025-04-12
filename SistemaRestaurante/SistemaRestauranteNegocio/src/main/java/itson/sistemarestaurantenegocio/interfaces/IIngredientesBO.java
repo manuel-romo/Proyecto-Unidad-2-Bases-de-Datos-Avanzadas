@@ -1,4 +1,3 @@
-
 package itson.sistemarestaurantenegocio.interfaces;
 
 import itson.sistemarestaurantedominio.Ingrediente;
