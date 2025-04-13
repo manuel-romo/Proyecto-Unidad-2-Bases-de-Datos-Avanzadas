@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: itson.sistemarestaurantepersistencia.implementaciones.MesasDAOTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.429 s -- in itson.sistemarestaurantepersistencia.implementaciones.MesasDAOTest

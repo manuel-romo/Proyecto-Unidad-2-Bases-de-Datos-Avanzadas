@@ -13,8 +13,10 @@ public interface IUsuariosBO {
     
     
     public abstract Usuario iniciarSesion(CorreoContraseniaInicioSesionDTO contraseniaInicioSesionDTO) 
-            throws FormatoContraseniaInvalidoException, FormatoCorreoElectronicoInvalidoException, 
-            UsuarioInexistenteException, ContraseniaIncorrectaException;
+            throws FormatoContraseniaInvalidoException, 
+            FormatoCorreoElectronicoInvalidoException, 
+            UsuarioInexistenteException, 
+            ContraseniaIncorrectaException;
     
     public abstract Usuario consultarUsuarioId(Long idUsuario) throws UsuarioInexistenteException;
 }

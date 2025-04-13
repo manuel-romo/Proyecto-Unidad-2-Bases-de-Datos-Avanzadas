@@ -25,7 +25,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -42,6 +41,9 @@ public class EdicionIngrediente extends JFrame {
     private Long idIngrediente;
     private String direccionImagenIngrediente;
     private DatosEncabezado datosEncabezado;
+    
+    private int ANCHO_IMAGEN_INGREDIENTE = 200;
+    private int ALTO_IMAGEN_INGREDIENTE = 200;
     
     private static final Logger LOG = Logger.getLogger(EdicionIngrediente.class.getName());
 
@@ -74,7 +76,11 @@ public class EdicionIngrediente extends JFrame {
 
             ImageIcon imagenIngrediente;
             try {
-                imagenIngrediente = ImagenesUtils.obtenerImagen(ingredienteRecuperado.getDireccionImagen());
+                ImageIcon imagenIngredienteSinRedimensionar = ImagenesUtils.obtenerImagen(ingredienteRecuperado.getDireccionImagen());
+                imagenIngrediente = ImagenesUtils.redimensionarImagen(
+                        imagenIngredienteSinRedimensionar, 
+                        ANCHO_IMAGEN_INGREDIENTE, 
+                        ALTO_IMAGEN_INGREDIENTE);
             } catch (ImagenNoEncontradaException ex) {
                 imagenIngrediente = new ImageIcon(getClass().getResource("/imagenIngredientePredeterminada.png"));
                 LOG.severe("Error al cargar la imagen del ingrediente. " + ex.getMessage());
@@ -176,7 +182,10 @@ public class EdicionIngrediente extends JFrame {
 
                         ImageIcon imagenProducto = new ImageIcon(bytesImagenSeleccionada);
 
-                        ImageIcon imagenRedimensionada = ImagenesUtils.redimensionarImagen(imagenProducto, 200, 200);
+                        ImageIcon imagenRedimensionada = ImagenesUtils.redimensionarImagen(
+                                imagenProducto, 
+                                ANCHO_IMAGEN_INGREDIENTE, 
+                                ALTO_IMAGEN_INGREDIENTE);
 
                         etqImagenIngrediente.setIcon(imagenRedimensionada);
                         
