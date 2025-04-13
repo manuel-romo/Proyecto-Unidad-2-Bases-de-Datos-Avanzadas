@@ -43,9 +43,6 @@ public class ClientesDAO implements IClientesDAO{
     private final int LONGITUD_APELLIDO_PATERNO = 50;
     private final int LONGITUD_APELLIDO_MATERNO = 50;
     
-    //TODO método de registrarCliente pendiente
-    
-    
     /**
      * Método para registrar un nuevo cliente
      * @param nuevoClienteDTO Representa un objeto de tipo nuevoClienteDTO

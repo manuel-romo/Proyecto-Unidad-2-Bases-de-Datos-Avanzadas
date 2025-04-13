@@ -25,7 +25,6 @@ import java.util.List;
  * ID: 00000252583
  */
 public interface IClientesDAO {
-    //TODO revisar actualizarCliente y terminar eliminarCliente
     
     /**
      * Método abstracto para registrar un nuevo cliente

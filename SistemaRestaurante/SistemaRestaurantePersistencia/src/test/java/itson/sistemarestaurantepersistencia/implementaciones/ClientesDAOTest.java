@@ -1,12 +1,6 @@
 package itson.sistemarestaurantepersistencia.implementaciones;
 
 import itson.sistemarestaurantedominio.Cliente;
-import itson.sistemarestaurantedominio.Comanda;
-import itson.sistemarestaurantedominio.EstadoComanda;
-import itson.sistemarestaurantedominio.Mesa;
-import itson.sistemarestaurantedominio.Producto;
-import itson.sistemarestaurantedominio.ProductoComanda;
-import itson.sistemarestaurantedominio.TipoProducto;
 import itson.sistemarestaurantedominio.dtos.ClienteActualizadoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
 import itson.sistemarestaurantepersistencia.excepciones.ClienteMismoCorreoExistenteException;
@@ -26,7 +20,6 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -180,21 +173,19 @@ public class ClientesDAOTest {
     @AfterEach
     public void tearDown() {
         
-//        EntityManager entityManager = ManejadorConexiones.getEntityManager();
-//        
-//        entityManager.getTransaction().begin();
-//        
-//        String jpqlQueryBorrarClientes = "DELETE FROM Cliente";
-//
-//        entityManager.createQuery(jpqlQueryBorrarClientes).executeUpdate();
-//        
-//        clientesRegistrados = new ArrayList<>();
-//        
-//        entityManager.getTransaction().commit();
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        
+        entityManager.getTransaction().begin();
+        
+        String jpqlQueryBorrarClientes = "DELETE FROM Cliente";
+
+        entityManager.createQuery(jpqlQueryBorrarClientes).executeUpdate();
+        
+        clientesRegistrados = new ArrayList<>();
+        
+        entityManager.getTransaction().commit();
         
     }
-
-    //TODO pruebas para consultarCliente, actualizarCliente, eliminarCliente, consultarVisitasCliente, obtenerGastoTotalComandasCliente
     
     /**
      * Tests para registrar clientes
