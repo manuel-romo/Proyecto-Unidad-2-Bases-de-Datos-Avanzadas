@@ -20,6 +20,7 @@ itson\sistemarestaurantedominio\TipoProducto.class
 itson\sistemarestaurantedominio\Ingrediente.class
 itson\sistemarestaurantedominio\Ingrediente_.class
 itson\sistemarestaurantedominio\IngredienteProducto.class
+itson\sistemarestaurantedominio\dtos\ClienteActualizadoDTO.class
 itson\sistemarestaurantedominio\Cliente_.class
 itson\sistemarestaurantedominio\dtos\ProductoActualizadoDTO.class
 itson\sistemarestaurantedominio\dtos\NuevoProductoDTO.class

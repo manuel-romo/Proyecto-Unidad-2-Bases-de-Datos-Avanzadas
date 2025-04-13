@@ -92,8 +92,8 @@ public class ComandasDAOTest {
         Calendar fechaRegistroCliente2 = Calendar.getInstance();
         fechaRegistroCliente1.set(2025, 2, 20);
 
-        Cliente cliente1 = new Cliente("Ana", "López", "Arellano", "6441234567", fechaRegistroCliente1);
-        Cliente cliente2 = new Cliente("Esteban", "Contreras", "Arroyo", "6447894561", fechaRegistroCliente2);
+        Cliente cliente1 = new Cliente("Ana", "López", "Arellano", "6441234567", fechaRegistroCliente1, false);
+        Cliente cliente2 = new Cliente("Esteban", "Contreras", "Arroyo", "6447894561", fechaRegistroCliente2, false);
         
         cliente1.agregarComanda(comanda1);
         cliente2.agregarComanda(comanda3);

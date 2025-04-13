@@ -56,85 +56,96 @@ public class ClientesDAO implements IClientesDAO{
      * @throws ClienteMismoCorreoExistenteException
      * @throws ClienteMismoTelefonoExistenteException
      * @throws RegistroClienteFormatoInvalidoException
-     * @throws ClienteMismoCorreoTelefonoExistenteException 
      */
     @Override
     public Cliente registrarCliente(NuevoClienteDTO nuevoClienteDTO) 
             throws RegistroClienteSinNombreException,
             RegistroClienteSinTelefonoException,
             RegistroClienteSinCorreoException,
-            ClienteMismoCorreoExistenteException,
-            ClienteMismoTelefonoExistenteException,
             RegistroClienteFormatoInvalidoException,
-            ClienteMismoCorreoTelefonoExistenteException{
+            ClienteMismoCorreoExistenteException,
+            ClienteMismoTelefonoExistenteException{
         
         //Se valida que el nombre del cliente no sea nulo
         if(nuevoClienteDTO.getNombre() == null || nuevoClienteDTO.getNombre().isBlank()){
-            throw new RegistroClienteSinNombreException("El cliente que se intentó registrar no tiene Nombre.");
+            throw new RegistroClienteSinNombreException("El cliente que se intento registrar no tiene Nombre.");
         }
         
         //Se valida que el apellido paterno del cliente no sea nulo
         if(nuevoClienteDTO.getApellidoPaterno()== null || nuevoClienteDTO.getApellidoPaterno().isBlank()){
-            throw new RegistroClienteSinNombreException("El cliente que se intentó registrar no tiene Apellido Paterno.");
+            throw new RegistroClienteSinNombreException("El cliente que se intento registrar no tiene Apellido Paterno.");
         }
         
         //Se valiad que el apellido materno del cliente no sea nulo
         if(nuevoClienteDTO.getApellidoMaterno() == null || nuevoClienteDTO.getApellidoMaterno().isBlank()){
-            throw new RegistroClienteSinNombreException("El ingrediente que se intentó registrar no tiene Nombre.");
+            throw new RegistroClienteSinNombreException("El ingrediente que se intento registrar no tiene Apellido Materno.");
         }
         
         //Se valida que el correo electrónico del cliente no sea nulo
         if(nuevoClienteDTO.getCorreoElectronico() == null || nuevoClienteDTO.getCorreoElectronico().isBlank()){
-            throw new RegistroClienteSinCorreoException("El cliente que se intentó registrar no tiene Correo Electrónico.");
+            throw new RegistroClienteSinCorreoException("El cliente que se intento registrar no tiene Correo Electronico.");
         }
         
         //Se valida que el teléfono del cliente no sea nulo
-        if(nuevoClienteDTO.getCorreoElectronico() == null || nuevoClienteDTO.getCorreoElectronico().isBlank()){
-            throw new RegistroClienteSinCorreoException("El cliente que se intentó registrar no tiene Correo Electrónico.");
+        if(nuevoClienteDTO.getTelefono() == null || nuevoClienteDTO.getTelefono().isBlank()){
+            throw new RegistroClienteSinTelefonoException("El cliente que se intento registrar no tiene Telefono.");
         }
         
         //Se valida que la longitud del nombre no exceda los límites
         if(nuevoClienteDTO.getNombre().length() > LONGITUD_NOMBRE){
-            throw new RegistroClienteFormatoInvalidoException("La longitud del Nombre del cliente que se intentó registrar excede los límites.");
+            throw new RegistroClienteFormatoInvalidoException("La longitud del Nombre del cliente que se intento registrar excede los limites.");
         }
         
         //Se valida que la longitud del apellido paterno no exceda los límites
         if(nuevoClienteDTO.getApellidoPaterno().length() > LONGITUD_APELLIDO_PATERNO){
-            throw new RegistroClienteFormatoInvalidoException("La longitud del Apellido Paterno del cliente que se intentó registrar excede los límites.");
+            throw new RegistroClienteFormatoInvalidoException("La longitud del Apellido Paterno del cliente que se intento registrar excede los limites.");
         }
         
         //Se valida que la longitud del apellido materno no exceda los límites
         if(nuevoClienteDTO.getApellidoMaterno().length() > LONGITUD_APELLIDO_MATERNO){
-            throw new RegistroClienteFormatoInvalidoException("La longitud del Apellido Materno del cliente que se intentó registrar excede los límites.");
+            throw new RegistroClienteFormatoInvalidoException("La longitud del Apellido Materno del cliente que se intento registrar excede los limites.");
         }
         
         //Se valida que la longitud del correo electrónico del cliente no exceda los límites
         if(nuevoClienteDTO.getCorreoElectronico().length() > LONGITUD_CORRE0_ELECTRONICO){
-            throw new RegistroClienteFormatoInvalidoException("La longitud del Correo Electrónico del cliente que se intentó registrar excede los límites.");
+            throw new RegistroClienteFormatoInvalidoException("La longitud del Correo Electrónico del cliente que se intento registrar excede los limites.");
         }
         
         //Se valida que la longitud del teléfono del cliente no exceda los límites
         if(nuevoClienteDTO.getTelefono().length() > LONGITUD_TELEFONO){
-            throw new RegistroClienteFormatoInvalidoException("La longitud del Teléfono del cliente que se intentó registrar excede los límites.");
+            throw new RegistroClienteFormatoInvalidoException("La longitud del Telefono del cliente que se intento registrar excede los limites.");
         }
         
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         
-        String jpqlQuery = """
+        String jpqlQueryCorreo = """
                         SELECT c FROM Cliente c
-                        WHERE c.correo_electronico = :correo_electronico
-                        AND c.telefono = :telefono
+                        WHERE c.correoElectronico = :correo_electronico
                         """;
         
-        Query query = entityManager.createQuery(jpqlQuery);
+        Query queryCorreo = entityManager.createQuery(jpqlQueryCorreo);
         
-        query.setParameter("correo_electronico", nuevoClienteDTO.getCorreoElectronico());
-        query.setParameter("telefono", nuevoClienteDTO.getTelefono());
+        queryCorreo.setParameter("correo_electronico", nuevoClienteDTO.getCorreoElectronico());
         
-        int cantidadClientesMismoCorreoTelefono = query.getResultList().size();
+        String jpqlQueryTelefono = """
+                        SELECT c FROM Cliente c
+                        WHERE c.telefono = :telefono
+                        """;
         
-        if(cantidadClientesMismoCorreoTelefono > 0){
-            throw new ClienteMismoCorreoTelefonoExistenteException("Ya existe un cliente con el mismo Correo Electrónico y Teléfono.");
+        Query queryTelefono = entityManager.createQuery(jpqlQueryTelefono);
+        
+        queryTelefono.setParameter("telefono", nuevoClienteDTO.getTelefono());
+        
+        int cantidadClientesMismoTelefono = queryTelefono.getResultList().size();
+        
+        int cantidadClientesMismoCorreo = queryCorreo.getResultList().size();
+        
+        if(cantidadClientesMismoTelefono > 0){
+            throw new ClienteMismoTelefonoExistenteException("Ya existe un cliente con el mismo Telefono.");
+        }
+        
+        if(cantidadClientesMismoCorreo > 0){
+            throw new ClienteMismoCorreoExistenteException("Ya existe un cliente con el mismo Correo Electronico.");
         }
         
         entityManager.getTransaction().begin();
@@ -146,7 +157,7 @@ public class ClientesDAO implements IClientesDAO{
                 nuevoClienteDTO.getTelefono(), 
                 nuevoClienteDTO.getCorreoElectronico(), 
                 nuevoClienteDTO.getFechaRegistro(), 
-                Boolean.FALSE); //Por defecto un cliente nuevo no será frecuente hasta que se registre como uno
+                false);
         
         entityManager.persist(cliente);
         
@@ -171,7 +182,7 @@ public class ClientesDAO implements IClientesDAO{
         
         Root<Cliente> entidadCliente = criteriaQuery.from(Cliente.class);
         
-        criteriaQuery.select(entidadCliente).orderBy(criteraBuilder.asc(entidadCliente.get("nombre")));
+        criteriaQuery.select(entidadCliente).orderBy(criteraBuilder.asc(entidadCliente.get("nombres")));
         
         TypedQuery<Cliente> query = entityManager.createQuery(criteriaQuery);
         
@@ -198,18 +209,18 @@ public class ClientesDAO implements IClientesDAO{
         
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
 
-        CriteriaBuilder criteraBuilder = entityManager.getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         
-        CriteriaQuery<Cliente> criteriaQuery = criteraBuilder.createQuery(Cliente.class);
+        CriteriaQuery<Cliente> criteriaQuery = criteriaBuilder.createQuery(Cliente.class);
 
-        Root<Cliente> entidadIngrediente = criteriaQuery.from(Cliente.class);
+        Root<Cliente> entidadCliente = criteriaQuery.from(Cliente.class);
 
-        criteriaQuery.select(entidadIngrediente).where(criteraBuilder.equal(entidadIngrediente.get("id_cliente"), idCliente));
+        criteriaQuery.select(entidadCliente).where(criteriaBuilder.equal(entidadCliente.get("id"), idCliente));
 
         TypedQuery<Cliente> query = entityManager.createQuery(criteriaQuery);
+        
         try{
             return query.getSingleResult();
-            
         } catch(NoResultException ex){
             throw new ClienteNoExisteException("No existe un cliente con Id especificado.");
         }
@@ -241,8 +252,8 @@ public class ClientesDAO implements IClientesDAO{
         criteriaQuery
                 .select(entidadCliente)
                 .where(criteriaBuilder.like(
-                        criteriaBuilder.lower(entidadCliente.get("nombre")), "%" + nombreCliente.toLowerCase() + "%"))
-                .orderBy(criteriaBuilder.asc(entidadCliente.get("nombre")));
+                        criteriaBuilder.lower(entidadCliente.get("nombres")), "%" + nombreCliente.toLowerCase() + "%"))
+                .orderBy(criteriaBuilder.asc(entidadCliente.get("nombres")));
         
         TypedQuery<Cliente> query = entityManager.createQuery(criteriaQuery);
         
@@ -254,12 +265,14 @@ public class ClientesDAO implements IClientesDAO{
     /**
      * Método para consultar a clientes por teléfono
      * @param telefonoCliente Representa el teléfono del cliente
-     * @return Lista de clientes
+     * @return Objeto de tipo de cliente
      * @throws ConsultaClienteSinTelefonoException 
+     * @throws ClienteNoExisteException
      */
     @Override
-    public List<Cliente> consultarClientesTelefono(String telefonoCliente) 
-            throws ConsultaClienteSinTelefonoException{
+    public Cliente consultarClientesTelefono(String telefonoCliente) 
+            throws ConsultaClienteSinTelefonoException,
+            ClienteNoExisteException{
         
         if(telefonoCliente == null){
             throw new ConsultaClienteSinTelefonoException("El telefono utilizado para la consulta de cliente tiene valor nulo.");
@@ -275,15 +288,15 @@ public class ClientesDAO implements IClientesDAO{
         
         criteriaQuery
                 .select(entidadCliente)
-                .where(criteriaBuilder.like(
-                        criteriaBuilder.lower(entidadCliente.get("telefono")), "%" + telefonoCliente + "%"))
-                .orderBy(criteriaBuilder.asc(entidadCliente.get("nombre")));
+                .where(criteriaBuilder.equal(entidadCliente.get("telefono"), telefonoCliente));
         
         TypedQuery<Cliente> query = entityManager.createQuery(criteriaQuery);
         
-        List<Cliente> clientes = query.getResultList();
-        
-        return clientes;
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException ex) {
+            throw new ClienteNoExisteException("No existe cliente con el telefono proporcionado.");
+        }
     }
 
     /**
@@ -291,10 +304,12 @@ public class ClientesDAO implements IClientesDAO{
      * @param correoCliente Representa el correo electrónico del cliente
      * @return Lista de clientes
      * @throws ConsultaClienteSinCorreoException 
+     * @throws ClienteNoExisteException
      */
     @Override
-    public List<Cliente> consultarClientesCorreo(String correoCliente) 
-            throws ConsultaClienteSinCorreoException{
+    public Cliente consultarClientesCorreo(String correoCliente) 
+            throws ConsultaClienteSinCorreoException,
+            ClienteNoExisteException{
         
         if(correoCliente == null){
             throw new ConsultaClienteSinCorreoException("El correo utilizado para la consulta de cliente tiene valor nulo");
@@ -310,15 +325,91 @@ public class ClientesDAO implements IClientesDAO{
         
         criteriaQuery
                 .select(entidadCliente)
-                .where(criteriaBuilder.like(
-                        criteriaBuilder.lower(entidadCliente.get("correo_electronico")), "%" + correoCliente.toLowerCase() + "%"))
-                .orderBy(criteriaBuilder.asc(entidadCliente.get("nombre")));
+                .where(criteriaBuilder.equal(entidadCliente.get("correoElectronico"), correoCliente));
         
         TypedQuery<Cliente> query = entityManager.createQuery(criteriaQuery);
         
-        List<Cliente> clientes = query.getResultList();
+        try{
+            return query.getSingleResult();
+        } catch(NoResultException ex){
+            throw new ClienteNoExisteException("No existe cliente con el correo electronico proporcionado.");
+        }
+    }
+    
+    @Override
+    public int consultarVisitasCliente(Long idCliente)
+            throws ConsultaClienteSinIdException{
         
-        return clientes;
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        
+        //Comprobamos el id del cliente
+        String jpqlQueryValidarId = """
+                        SELECT c FROM Cliente c
+                        WHERE c.id = :id_cliente
+                        """;
+        
+        TypedQuery<Cliente> queryValidarId = entityManager.createQuery(jpqlQueryValidarId, Cliente.class);
+        
+        queryValidarId.setParameter("id_cliente", idCliente);
+        
+        try{
+            queryValidarId.getSingleResult();
+        } catch(NoResultException ex){
+            throw new ConsultaClienteSinIdException("No existe un cliente con Id especificado.");
+        }
+        
+        String jpqlQuery = """
+                        SELECT COUNT(c) FROM Cliente c
+                        JOIN c.comandas com
+                        WHERE c.id = :id_cliente
+                        """;
+        
+        Query query = entityManager.createQuery(jpqlQuery);
+
+        query.setParameter("id_cliente", idCliente);
+        
+        int cantidadVisitasCliente = query.getResultList().size();
+        
+        return cantidadVisitasCliente;
+    }
+    
+    @Override
+    public float obtenerGastoTotalComandasCliente(Long idCliente)
+        throws ConsultaClienteSinIdException{
+        
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        
+        //Comprobamos el id del cliente
+        String jpqlQueryValidarId = """
+                        SELECT c FROM Cliente c
+                        WHERE c.id = :id_cliente
+                        """;
+        
+        TypedQuery<Cliente> queryValidarId = entityManager.createQuery(jpqlQueryValidarId, Cliente.class);
+        
+        queryValidarId.setParameter("id_cliente", idCliente);
+        
+        try{
+            queryValidarId.getSingleResult();
+        } catch(NoResultException ex){
+            throw new ConsultaClienteSinIdException("No existe un cliente con Id especificado.");
+        }
+        
+        String jpqlQuery = """
+                        SELECT SUM(pc.precioUnitario * pc.cantidad)
+                        FROM Cliente c
+                        JOIN c.comandas com
+                        JOIN com.productosSolicitados pc
+                        WHERE c.id = :idCliente
+                        """;
+        
+        Query query = entityManager.createQuery(jpqlQuery);
+
+        query.setParameter("id_cliente", idCliente);
+        
+        float gastoTotalComandasCliente = (float) query.getSingleResult();
+        
+        return gastoTotalComandasCliente;
     }
 
     /**
@@ -330,6 +421,7 @@ public class ClientesDAO implements IClientesDAO{
      * @throws ClienteMismoCorreoExistenteException
      * @throws ClienteNoExisteException
      * @throws RegistroClienteSinIdException 
+     * @throws ClienteMismoTelefonoExistenteException
      */
     @Override
     public void actualizarCliente(ClienteActualizadoDTO clienteActualizadoDTO) 
@@ -338,30 +430,71 @@ public class ClientesDAO implements IClientesDAO{
             RegistroClienteSinTelefonoException,
             ClienteMismoCorreoExistenteException,
             ClienteNoExisteException,
-            RegistroClienteSinIdException{
+            RegistroClienteSinIdException,
+            ClienteMismoTelefonoExistenteException,
+            RegistroClienteFormatoInvalidoException{
         
-        if(clienteActualizadoDTO.getNombre() == null){
-            throw new RegistroClienteSinNombreException("El cliente que se intentó registrar no tiene Nombre.");
+        //Se valida que el nombre no sea nulo ni vacío
+        if(clienteActualizadoDTO.getNombre() == null || clienteActualizadoDTO.getNombre().isBlank()){
+            throw new RegistroClienteSinNombreException("El cliente que se intento actualizar no tiene Nombre.");
         }
         
+        //Se valida que el apellido paterno no sea nulo ni vacío
+        if(clienteActualizadoDTO.getApellidoPaterno()== null || clienteActualizadoDTO.getApellidoPaterno().isBlank()){
+            throw new RegistroClienteSinNombreException("El cliente que se intento actualizar no tiene Apellido Paterno.");
+        }
+        
+        //Se valida que el apellido materno no sea nulo ni vacío
+        if(clienteActualizadoDTO.getApellidoMaterno()== null || clienteActualizadoDTO.getApellidoMaterno().isBlank()){
+            throw new RegistroClienteSinNombreException("El cliente que se intento actualizar no tiene Apellido Materno.");
+        }
+        
+        //Se valida que el correo electrónico no sea nulo ni vacío
         if(clienteActualizadoDTO.getCorreoElectronico() == null){
-            throw new RegistroClienteSinCorreoException("El cliente que se intentó registrar no tiene Correo Electronico.");
+            throw new RegistroClienteSinCorreoException("El cliente que se intento actualizar no tiene Correo Electronico.");
         }
         
-        if(clienteActualizadoDTO.getTelefono() == null){
-            throw new RegistroClienteSinTelefonoException("El cliente que se intentó registrar no tiene Telefono.");
+        //Se valida que el teléfono no sea nulo ni vacío
+        if(clienteActualizadoDTO.getTelefono() == null || clienteActualizadoDTO.getTelefono().isBlank()){
+            throw new RegistroClienteSinTelefonoException("El cliente que se intento actualizar no tiene Telefono.");
         }
         
-        if(clienteActualizadoDTO.getId() == null){
-            throw new RegistroClienteSinIdException("El cliente que se intentó registrar no tiene Nombre.");
+        //Se valida que el id no sea nulo ni vacío
+        if(clienteActualizadoDTO.getId() == null || clienteActualizadoDTO.getCorreoElectronico().isBlank()){
+            throw new RegistroClienteSinIdException("El cliente que se intento actualizar no tiene Nombre.");
+        }
+        
+        //Se valida que la longitud del nombre no exceda los límites
+        if(clienteActualizadoDTO.getNombre().length() > LONGITUD_NOMBRE){
+            throw new RegistroClienteFormatoInvalidoException("La longitud del Nombre del cliente que se intento actualizar excede los limites.");
+        }
+        
+        //Se valida que la longitud del apellido paterno no exceda los límites
+        if(clienteActualizadoDTO.getApellidoPaterno().length() > LONGITUD_APELLIDO_PATERNO){
+            throw new RegistroClienteFormatoInvalidoException("La longitud del Apellido Paterno del cliente que se intento actualizar excede los limites.");
+        }
+        
+        //Se valida que la longitud del apellido materno no exceda los límites
+        if(clienteActualizadoDTO.getApellidoMaterno().length() > LONGITUD_APELLIDO_MATERNO){
+            throw new RegistroClienteFormatoInvalidoException("La longitud del Apellido Materno del cliente que se intento actualizar excede los limites.");
+        }
+        
+        //Se valida que la longitud del correo electrónico del cliente no exceda los límites
+        if(clienteActualizadoDTO.getCorreoElectronico().length() > LONGITUD_CORRE0_ELECTRONICO){
+            throw new RegistroClienteFormatoInvalidoException("La longitud del Correo Electrónico del cliente que se intento actualizar excede los limites.");
+        }
+        
+        //Se valida que la longitud del teléfono del cliente no exceda los límites
+        if(clienteActualizadoDTO.getTelefono().length() > LONGITUD_TELEFONO){
+            throw new RegistroClienteFormatoInvalidoException("La longitud del Telefono del cliente que se intento actualizar excede los limites.");
         }
         
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         
-        //Comprobamos que el cliente
+        //Comprobamos el id del cliente
         String jpqlQueryValidarId = """
                         SELECT c FROM Cliente c
-                        WHERE c.id_cliente = :id_cliente
+                        WHERE c.id = :id_cliente
                         """;
         
         TypedQuery<Cliente> queryValidarId = entityManager.createQuery(jpqlQueryValidarId, Cliente.class);
@@ -376,24 +509,35 @@ public class ClientesDAO implements IClientesDAO{
 
         //Comprobamos si existe otro cliente con el mismo correo electrónico
         
-        String jpqlQuery = """
+        String jpqlQueryCorreo = """
                         SELECT c FROM Cliente c
-                        WHERE c.correo_electronico = :correo_electronico 
-                        AND c.id_cliente != :id_cliente
+                        WHERE c.correoElectronico = :correo_electronico
                         """;
         
-        Query query = entityManager.createQuery(jpqlQuery);
+        Query queryCorreo = entityManager.createQuery(jpqlQueryCorreo);
         
-        query.setParameter("nombre", clienteActualizadoDTO.getNombre());
-        query.setParameter("apellido_paterno", clienteActualizadoDTO.getApellidoPaterno());
-        query.setParameter("apellido_materno", clienteActualizadoDTO.getApellidoMaterno());
-        query.setParameter("telefono", clienteActualizadoDTO.getTelefono());
-        query.setParameter("correo_electronico", clienteActualizadoDTO.getCorreoElectronico());
-        query.setParameter("id_cliente", clienteActualizadoDTO.getId());
+        queryCorreo.setParameter("correo_electronico", clienteActualizadoDTO.getCorreoElectronico());
         
-        int cantidadClientesMismoCorreoElectronico = query.getResultList().size();
+        String jpqlQueryTelefono = """
+                        SELECT c FROM Cliente c
+                        WHERE c.telefono = :telefono
+                        """;
         
-        if(cantidadClientesMismoCorreoElectronico > 0){
+        Query queryTelefono = entityManager.createQuery(jpqlQueryTelefono);
+        
+        //Comprobamos si existe otro cliente con el mismo teléfono 
+        
+        queryTelefono.setParameter("telefono", clienteActualizadoDTO.getTelefono());
+        
+        int cantidadClientesMismoTelefono = queryTelefono.getResultList().size();
+        
+        int cantidadClientesMismoCorreo = queryCorreo.getResultList().size();
+        
+        if(cantidadClientesMismoTelefono > 0){
+            throw new ClienteMismoTelefonoExistenteException("Ya existe un cliente con el mismo Telefono.");
+        }
+        
+        if(cantidadClientesMismoCorreo > 0){
             throw new ClienteMismoCorreoExistenteException("Ya existe un cliente con el mismo Correo Electronico.");
         }
         
@@ -405,13 +549,13 @@ public class ClientesDAO implements IClientesDAO{
 
         Root<Cliente> root = criteriaUpdate.from(Cliente.class);
 
-        criteriaUpdate.set("nombre", clienteActualizadoDTO.getNombre());
-        criteriaUpdate.set("apellido_paterno", clienteActualizadoDTO.getApellidoPaterno());
-        criteriaUpdate.set("apellido_materno", clienteActualizadoDTO.getApellidoMaterno());
+        criteriaUpdate.set("nombres", clienteActualizadoDTO.getNombre());
+        criteriaUpdate.set("apellidoPaterno", clienteActualizadoDTO.getApellidoPaterno());
+        criteriaUpdate.set("apellidoMaterno", clienteActualizadoDTO.getApellidoMaterno());
         criteriaUpdate.set("telefono", clienteActualizadoDTO.getTelefono());
-        criteriaUpdate.set("correo_electronico", clienteActualizadoDTO.getCorreoElectronico());
+        criteriaUpdate.set("correoElectronico", clienteActualizadoDTO.getCorreoElectronico());
 
-        criteriaUpdate.where(criteriaBuilder.equal(root.get("id_cliente"), clienteActualizadoDTO.getId()));
+        criteriaUpdate.where(criteriaBuilder.equal(root.get("id"), clienteActualizadoDTO.getId()));
 
         entityManager.createQuery(criteriaUpdate).executeUpdate();
 
@@ -422,10 +566,27 @@ public class ClientesDAO implements IClientesDAO{
      * Método para eliminar a clientes
      */
     @Override
-    public void eliminarCliente(Long idCliente) {
+    public void eliminarCliente(Long idCliente) 
+            throws ConsultaClienteSinIdException{
         
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         
+        //Comprobamos el id del cliente
+        String jpqlQueryValidarId = """
+                        SELECT c FROM Cliente c
+                        WHERE c.id = :id_cliente
+                        """;
+        
+        TypedQuery<Cliente> queryValidarId = entityManager.createQuery(jpqlQueryValidarId, Cliente.class);
+        
+        queryValidarId.setParameter("id_cliente", idCliente);
+        
+        try{
+            queryValidarId.getSingleResult();
+        } catch(NoResultException ex){
+            throw new ConsultaClienteSinIdException("No existe un cliente con Id especificado.");
+        }
+
         entityManager.getTransaction().begin();
         
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -434,7 +595,7 @@ public class ClientesDAO implements IClientesDAO{
         
         Root<Cliente> entidadCliente = criteriaDelete.from(Cliente.class);
 
-        criteriaDelete.where(criteriaBuilder.equal(entidadCliente.get("id_cliente"), idCliente));
+        criteriaDelete.where(criteriaBuilder.equal(entidadCliente.get("id"), idCliente));
         
         entityManager.createQuery(criteriaDelete).executeUpdate();
         

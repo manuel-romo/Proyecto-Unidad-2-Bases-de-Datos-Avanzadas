@@ -3,8 +3,8 @@ package itson.sistemarestaurantenegocio.interfaces;
 import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantedominio.dtos.ClienteActualizadoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
-import itson.sistemarestaurantenegocio.excepciones.ClienteConsultaSinIdException;
 import itson.sistemarestaurantenegocio.excepciones.ClienteConsultadoNoExisteException;
+import itson.sistemarestaurantenegocio.excepciones.ClienteInexistenteException;
 import itson.sistemarestaurantenegocio.excepciones.ClienteRegistroSinIDException;
 import itson.sistemarestaurantenegocio.excepciones.ClienteSinCorreoException;
 import itson.sistemarestaurantenegocio.excepciones.ClienteSinIdException;
@@ -13,16 +13,18 @@ import itson.sistemarestaurantenegocio.excepciones.ClienteSinTelefonoException;
 import itson.sistemarestaurantenegocio.excepciones.CorreoClienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.CorreoClienteYaExisteException;
 import itson.sistemarestaurantenegocio.excepciones.FormatoRegistroClienteException;
-import itson.sistemarestaurantenegocio.excepciones.FormatoRegistroClienteInvalidoException;
 import itson.sistemarestaurantenegocio.excepciones.IdClienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.MismoCorreoException;
+import itson.sistemarestaurantenegocio.excepciones.MismoTelefonoException;
 import itson.sistemarestaurantenegocio.excepciones.NombreClienteInvalidoException;
 import itson.sistemarestaurantenegocio.excepciones.NombreClienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.RegistroClienteMismoTelefonoCorreoExistenteException;
 import itson.sistemarestaurantenegocio.excepciones.TelefonoClienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.TelefonoClienteYaExisteException;
 import itson.sistemarestaurantepersistencia.excepciones.ActualizacionClienteSinIdException;
+import itson.sistemarestaurantepersistencia.excepciones.ClienteMismoTelefonoExistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.ClienteNoExisteException;
+import itson.sistemarestaurantepersistencia.excepciones.ConsultaClienteSinIdException;
 import java.util.List;
 /**
  * Clase Interfaz BO que incluye los métodos necesarios
@@ -44,6 +46,7 @@ public interface IClientesBO {
      * @throws CorreoClienteYaExisteException
      * @throws TelefonoClienteYaExisteException
      * @throws FormatoRegistroClienteException 
+     * @throws RegistroClienteMismoTelefonoCorreoExistenteException
      */
     public abstract Cliente registrarCliente(NuevoClienteDTO nuevoClienteDTO)
             throws ClienteSinNombreException, 
@@ -86,18 +89,44 @@ public interface IClientesBO {
      * @param telefonoCliente Representa el teléfono del cliente
      * @return Lista de clientes
      * @throws TelefonoClienteNuloException 
+     * @throws ClienteInexistenteException
      */
-    public abstract List<Cliente> consultarClientesTelefono(String telefonoCliente)
-            throws TelefonoClienteNuloException;
+    public abstract Cliente consultarClientesTelefono(String telefonoCliente)
+            throws TelefonoClienteNuloException,
+            ClienteInexistenteException;
     
     /**
      * Método abstracto para consultar clientes por correo electrónico
      * @param correoCliente Representa el correo del cliente
      * @return Lista de clientes
      * @throws CorreoClienteNuloException 
+     * @throws ClienteInexistenteException
      */
-    public abstract List<Cliente> consultarClientesCorreo(String correoCliente)
-            throws CorreoClienteNuloException;
+    public abstract Cliente consultarClientesCorreo(String correoCliente)
+            throws CorreoClienteNuloException,
+            ClienteInexistenteException;
+    
+    /**
+     * Método abstracto para consultar el número de visitas del cliente al restaurante
+     * @param idCliente Representa el id del cliente
+     * @return Número de visitas del cliente
+     * @throws ClienteSinIdException
+     * @throws ConsultaClienteSinIdException 
+     */
+    public abstract int consultarVisitasCliente(Long idCliente)
+            throws ClienteSinIdException,
+            ConsultaClienteSinIdException;
+    
+    /**
+     * Método abstracto para calcular el gasto total en comandas de un cliente
+     * @param idCliente Representa el id del cliente
+     * @return Gasto total en comandas del cliente
+     * @throws ClienteSinIdException
+     * @throws ConsultaClienteSinIdException
+     */
+    public abstract float calcularGastoTotalComandasCliente(Long idCliente)
+            throws ClienteSinIdException,
+            ConsultaClienteSinIdException;
     
     /**
      * Método abstracto para actualizar la información de un cliente
@@ -113,6 +142,8 @@ public interface IClientesBO {
      * @throws MismoCorreoException
      * @throws ClienteRegistroSinIDException
      * @throws FormatoRegistroClienteException 
+     * @throws ClienteMismoTelefonoExistenteException
+     * @throws MismoTelefonoException
      */
     public abstract void actualizarCliente(ClienteActualizadoDTO clienteActualizadoDTO)
             throws ClienteSinNombreException, 
@@ -125,10 +156,17 @@ public interface IClientesBO {
             ClienteSinIdException,
             MismoCorreoException,
             ClienteRegistroSinIDException,
-            FormatoRegistroClienteException;
+            FormatoRegistroClienteException,
+            ClienteMismoTelefonoExistenteException,
+            MismoTelefonoException;
     
     /**
      * Método abstracto para la eliminación de un cliente
+     * @param idCliente
+     * @throws ClienteSinIdException
+     * @throws ConsultaClienteSinIdException 
      */
-    public abstract void eliminarCliente();
+    public abstract void eliminarCliente(Long idCliente)
+            throws ClienteSinIdException,
+            ConsultaClienteSinIdException;
 }

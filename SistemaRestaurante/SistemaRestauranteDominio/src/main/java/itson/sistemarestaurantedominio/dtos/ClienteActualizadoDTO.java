@@ -15,7 +15,6 @@ public class ClienteActualizadoDTO {
     private String apellidoMaterno;
     private String telefono;
     private String correoElectronico;
-    private Boolean esFrecuente;
     
     /**
      * Método constructor para instanciar la clase ClienteActualizadoDTO
@@ -25,16 +24,14 @@ public class ClienteActualizadoDTO {
      * @param apellidoMaterno Representa el apellido materno del cliente
      * @param telefono Representa el teléfono del cliente
      * @param correoElectronico Representa el correo electrónico del cliente
-     * @param esFrecuente Representa si un cliente es frecuente o no
      */
-    public ClienteActualizadoDTO(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String correoElectronico, Boolean esFrecuente) {
+    public ClienteActualizadoDTO(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String correoElectronico) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.telefono = telefono;
         this.correoElectronico = correoElectronico;
-        this.esFrecuente = esFrecuente;
     }
 
     /**
@@ -65,8 +62,4 @@ public class ClienteActualizadoDTO {
         return correoElectronico;
     }
 
-    public Boolean getEsFrecuente() {
-        return esFrecuente;
-    }
-        
 }

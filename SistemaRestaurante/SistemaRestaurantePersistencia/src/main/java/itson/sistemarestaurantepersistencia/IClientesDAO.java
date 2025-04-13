@@ -36,15 +36,15 @@ public interface IClientesDAO {
      * @throws RegistroClienteSinCorreoException
      * @throws ClienteMismoCorreoExistenteException
      * @throws ClienteMismoTelefonoExistenteException 
+     * @throws RegistroClienteFormatoInvalidoException
      */
     public abstract Cliente registrarCliente(NuevoClienteDTO nuevoClienteDTO)
             throws RegistroClienteSinNombreException,
             RegistroClienteSinTelefonoException,
             RegistroClienteSinCorreoException,
-            ClienteMismoCorreoExistenteException,
-            ClienteMismoTelefonoExistenteException,
             RegistroClienteFormatoInvalidoException,
-            ClienteMismoCorreoTelefonoExistenteException;
+            ClienteMismoCorreoExistenteException,
+            ClienteMismoTelefonoExistenteException;
     
     /**
      * Método abstracto para consultar a todos los clientes
@@ -75,20 +75,30 @@ public interface IClientesDAO {
     /**
      * Método abstracto para consultar clientes por teléfono
      * @param telefonoCliente Representa el teléfono del cliente
-     * @return Lista de clientes
+     * @return Objeto de tipo cliente
      * @throws ConsultaClienteSinTelefonoException 
+     * @throws ClienteNoExisteException
      */
-    public abstract List<Cliente> consultarClientesTelefono(String telefonoCliente)
-            throws ConsultaClienteSinTelefonoException;
+    public abstract Cliente consultarClientesTelefono(String telefonoCliente)
+            throws ConsultaClienteSinTelefonoException,
+            ClienteNoExisteException;
     
     /**
      * Método abstracto para consultar clientes por correo electrónico
      * @param correoCliente Representa el correo electrónico del cliente
-     * @return Lista de clientes
+     * @return Objeto de tipo cliente
      * @throws ConsultaClienteSinCorreoException 
+     * @throws ClienteNoExisteException
      */
-    public abstract List<Cliente> consultarClientesCorreo(String correoCliente)
-            throws ConsultaClienteSinCorreoException;
+    public abstract Cliente consultarClientesCorreo(String correoCliente)
+            throws ConsultaClienteSinCorreoException,
+            ClienteNoExisteException;
+    
+    public abstract int consultarVisitasCliente(Long idCliente)
+            throws ConsultaClienteSinIdException;
+    
+    public abstract float obtenerGastoTotalComandasCliente(Long idCliente)
+            throws ConsultaClienteSinIdException;
     
     /**
      * Método abstracto para actualizar los datos de un cliente
@@ -100,6 +110,8 @@ public interface IClientesDAO {
      * @throws ClienteNoExisteException
      * @throws RegistroClienteSinIdException
      * @throws ActualizacionClienteSinIdException 
+     * @throws ClienteMismoTelefonoExistenteException
+     * @throws RegistroClienteFormatoInvalidoException
      */
     public abstract void actualizarCliente(ClienteActualizadoDTO clienteActualizadoDTO)
             throws RegistroClienteSinNombreException,
@@ -108,12 +120,16 @@ public interface IClientesDAO {
             ClienteMismoCorreoExistenteException,
             ClienteNoExisteException,
             RegistroClienteSinIdException,
-            ActualizacionClienteSinIdException;
+            ActualizacionClienteSinIdException,
+            ClienteMismoTelefonoExistenteException,
+            RegistroClienteFormatoInvalidoException;
     
     /**
      * Método abstracto para eliminar clientes
      * @param idCliente Representa el id del cliente
+     * @throws ConsultaClienteSinIdException
      */
-    public abstract void eliminarCliente(Long idCliente);
+    public abstract void eliminarCliente(Long idCliente)
+            throws ConsultaClienteSinIdException;
     
 }

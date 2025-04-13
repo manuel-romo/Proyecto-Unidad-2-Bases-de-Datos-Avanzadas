@@ -1,23 +1,22 @@
 package itson.sistemarestaurantenegocio.excepciones;
 /**
- * Clase que representa una excepción personalizada, cuando se comprueba que el correo del
- * Cliente recibido para realizar alguna operación de negocio ya está registrado
+ * Clase que representa una excepción personalizada, cuando se registra un cliente sin teléfono o crreo
  * @author Yuri Germán García López
  * ID: 0000025283
  */
-public class MismoCorreoException extends Exception{
+public class ClienteInexistenteException extends Exception{
 
     /**
      * Constructor por defecto
      */
-    public MismoCorreoException() {
+    public ClienteInexistenteException() {
     }
 
     /**
      * Constructor que recibe el mensaje de la excepción
      * @param msg Representa el mensaje con el que la excepción es lanzada
      */
-    public MismoCorreoException(String msg) {
+    public ClienteInexistenteException(String msg) {
         super(msg);
     }
 }

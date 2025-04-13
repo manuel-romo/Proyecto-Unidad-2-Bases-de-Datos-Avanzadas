@@ -4,6 +4,7 @@ import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantedominio.dtos.ClienteActualizadoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
 import itson.sistemarestaurantenegocio.excepciones.ClienteConsultadoNoExisteException;
+import itson.sistemarestaurantenegocio.excepciones.ClienteInexistenteException;
 import itson.sistemarestaurantenegocio.excepciones.ClienteRegistroSinIDException;
 import itson.sistemarestaurantenegocio.excepciones.ClienteSinCorreoException;
 import itson.sistemarestaurantenegocio.excepciones.ClienteSinIdException;
@@ -12,9 +13,9 @@ import itson.sistemarestaurantenegocio.excepciones.ClienteSinTelefonoException;
 import itson.sistemarestaurantenegocio.excepciones.CorreoClienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.CorreoClienteYaExisteException;
 import itson.sistemarestaurantenegocio.excepciones.FormatoRegistroClienteException;
-import itson.sistemarestaurantenegocio.excepciones.FormatoRegistroClienteInvalidoException;
 import itson.sistemarestaurantenegocio.excepciones.IdClienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.MismoCorreoException;
+import itson.sistemarestaurantenegocio.excepciones.MismoTelefonoException;
 import itson.sistemarestaurantenegocio.excepciones.NombreClienteInvalidoException;
 import itson.sistemarestaurantenegocio.excepciones.NombreClienteNuloException;
 import itson.sistemarestaurantenegocio.excepciones.RegistroClienteMismoTelefonoCorreoExistenteException;
@@ -24,7 +25,6 @@ import itson.sistemarestaurantenegocio.interfaces.IClientesBO;
 import itson.sistemarestaurantepersistencia.IClientesDAO;
 import itson.sistemarestaurantepersistencia.excepciones.ActualizacionClienteSinIdException;
 import itson.sistemarestaurantepersistencia.excepciones.ClienteMismoCorreoExistenteException;
-import itson.sistemarestaurantepersistencia.excepciones.ClienteMismoCorreoTelefonoExistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.ClienteMismoTelefonoExistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.ClienteNoExisteException;
 import itson.sistemarestaurantepersistencia.excepciones.ConsultaClienteSinCorreoException;
@@ -37,8 +37,6 @@ import itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinIdExce
 import itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinNombreException;
 import itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinTelefonoException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  * Clase BO que representa la lógica de negocio y validaciones
  * Para cada método del módulo de clientes
@@ -127,8 +125,6 @@ public class ClientesBO implements IClientesBO {
             throw new CorreoClienteYaExisteException("El correo ingresado ya se encuentra registrado.");
         } catch (ClienteMismoTelefonoExistenteException ex) {
             throw new TelefonoClienteYaExisteException("El telefono ingresado ya se encuentra registrado.");
-        } catch (ClienteMismoCorreoTelefonoExistenteException ex) {
-            throw new RegistroClienteMismoTelefonoCorreoExistenteException("El correo ingresado ya se encuentra registrado.");
         } catch (RegistroClienteSinCorreoException ex) {
             throw new ClienteSinCorreoException("El cliente no tiene un correo.");
         } catch (RegistroClienteSinNombreException ex) {
@@ -150,7 +146,53 @@ public class ClientesBO implements IClientesBO {
         
         return listaClientesConsultados;
     }
+    
+    /**
+     * Método para consultar el número de visitas que a tenido un cliente al restaurante
+     * @param idCliente Representa el Id del cliente
+     * @return Número de visitas del clinte
+     * @throws ClienteSinIdException
+     * @throws ConsultaClienteSinIdException 
+     */
+    @Override
+    public int consultarVisitasCliente(Long idCliente)
+            throws ClienteSinIdException,
+            ConsultaClienteSinIdException{
+            
+        int numeroVisitasCliente;
+        
+        try{
+            numeroVisitasCliente = clientesDAO.consultarVisitasCliente(idCliente);
+        } catch(ConsultaClienteSinIdException ex){
+            throw new ClienteSinIdException("El Id del cliente tiene valor nulo.");
+        }
+        
+        return numeroVisitasCliente;
+    }
 
+    /**
+     * Método para calcular el gasto total en comandas del cliente
+     * @param idCliente Representa el id del cliente
+     * @return Gasto total en comandas del cliente
+     * @throws ClienteSinIdException
+     * @throws ConsultaClienteSinIdException 
+     */
+    @Override
+    public float calcularGastoTotalComandasCliente(Long idCliente)
+            throws ClienteSinIdException,
+            ConsultaClienteSinIdException{
+        
+        float gastoTotalComandasCliente;
+        
+        try{
+            gastoTotalComandasCliente = clientesDAO.obtenerGastoTotalComandasCliente(idCliente);
+        } catch(ConsultaClienteSinIdException ex){
+            throw new ClienteSinIdException("El Id del cliente tiene valor nulo.");
+        }
+        
+        return gastoTotalComandasCliente;
+    }
+    
     /**
      * Método que permite consultar clientes por Id
      * @param idCliente Representa el id del cliente
@@ -200,15 +242,17 @@ public class ClientesBO implements IClientesBO {
      * @throws TelefonoClienteNuloException 
      */
     @Override
-    public List<Cliente> consultarClientesTelefono(String telefonoCliente) 
-            throws TelefonoClienteNuloException {
+    public Cliente consultarClientesTelefono(String telefonoCliente) 
+            throws TelefonoClienteNuloException,
+            ClienteInexistenteException{
         
         try{
-            List<Cliente> listaClientesConsultados = clientesDAO.consultarClientesTelefono(telefonoCliente);
-            
-            return listaClientesConsultados;
+            Cliente clienteConsultado = clientesDAO.consultarClientesTelefono(telefonoCliente);
+            return clienteConsultado;
         } catch(ConsultaClienteSinTelefonoException ex){
             throw new TelefonoClienteNuloException("El telefono del cliente tiene valor nulo");
+        } catch (ClienteNoExisteException ex) {
+            throw new ClienteInexistenteException("");
         }
     }
 
@@ -219,15 +263,17 @@ public class ClientesBO implements IClientesBO {
      * @throws CorreoClienteNuloException 
      */
     @Override
-    public List<Cliente> consultarClientesCorreo(String correoCliente) 
-            throws CorreoClienteNuloException {
+    public Cliente consultarClientesCorreo(String correoCliente) 
+            throws CorreoClienteNuloException ,
+            ClienteInexistenteException{
         
         try{
-            List<Cliente> listaClientesConsultados = clientesDAO.consultarClientesCorreo(correoCliente);
-            
-            return listaClientesConsultados;
+            Cliente clienteConsultado = clientesDAO.consultarClientesCorreo(correoCliente);
+            return clienteConsultado;
         } catch(ConsultaClienteSinCorreoException ex){
             throw new CorreoClienteNuloException("El correo electronico del cliente tiene valor nulo");
+        } catch (ClienteNoExisteException ex) {
+            throw new ClienteInexistenteException("No existe cliente con el correo electronico proporcionado.");
         }
     }
 
@@ -238,6 +284,8 @@ public class ClientesBO implements IClientesBO {
      * @throws ClienteSinCorreoException
      * @throws ClienteSinTelefonoException
      * @throws CorreoClienteYaExisteException 
+     * @throws ClienteMismoTelefonoExistenteException
+     * @throws MismoTelefonoException
      */
     @Override
     public void actualizarCliente(ClienteActualizadoDTO clienteActualizadoDTO) 
@@ -251,7 +299,9 @@ public class ClientesBO implements IClientesBO {
             ClienteSinIdException,
             MismoCorreoException,
             ClienteRegistroSinIDException,
-            FormatoRegistroClienteException{
+            FormatoRegistroClienteException,
+            ClienteMismoTelefonoExistenteException,
+            MismoTelefonoException{
         
         if(clienteActualizadoDTO.getNombre() == null || clienteActualizadoDTO.getNombre().isBlank()){
             throw new NombreClienteInvalidoException("Debe ingresar un nombre para el cliente.");
@@ -304,20 +354,32 @@ public class ClientesBO implements IClientesBO {
         } catch (RegistroClienteSinNombreException ex) {
             throw new ClienteSinNombreException("El cliente no tiene un nombre.");
         } catch (RegistroClienteSinTelefonoException ex) {
-            throw new ClienteSinTelefonoException("El cliente no tiene cantidad.");
+            throw new ClienteSinTelefonoException("El cliente no tiene teléfono.");
         } catch (ClienteMismoCorreoExistenteException ex) {
             throw new MismoCorreoException("El correo ingresado ya esta registrado.");
         } catch (RegistroClienteSinIdException ex) {
             throw new ClienteRegistroSinIDException("El cliente no tiene id.");
+        } catch (ClienteMismoTelefonoExistenteException ex){
+            throw new MismoTelefonoException("El teléfono ingresado ya está registrado.");
         }       
     }
 
     /**
      * Método para eliminar clientes
+     * @param idCliente
+     * @throws ClienteSinIdException
+     * @throws ConsultaClienteSinIdException 
      */
     @Override
-    public void eliminarCliente() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void eliminarCliente(Long idCliente) 
+            throws ClienteSinIdException,
+            ConsultaClienteSinIdException{
+        
+        try{
+            clientesDAO.eliminarCliente(idCliente);
+        }catch(ConsultaClienteSinIdException ex){
+           throw new ClienteSinIdException("El cliente no tiene id");
+        }
     }
    
 }
