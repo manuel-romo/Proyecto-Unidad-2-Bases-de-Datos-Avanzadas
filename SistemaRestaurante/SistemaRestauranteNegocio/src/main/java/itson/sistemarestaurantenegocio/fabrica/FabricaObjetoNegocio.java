@@ -1,6 +1,7 @@
 
 package itson.sistemarestaurantenegocio.fabrica;
 
+import itson.sistemarestaurantenegocio.implementaciones.ClientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
@@ -10,12 +11,15 @@ import itson.sistemarestaurantenegocio.implementaciones.IngredientesBO;
 import itson.sistemarestaurantenegocio.implementaciones.MesasBO;
 import itson.sistemarestaurantenegocio.implementaciones.ProductosBO;
 import itson.sistemarestaurantenegocio.implementaciones.UsuariosBO;
+import itson.sistemarestaurantenegocio.interfaces.IClientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IMesasBO;
+import itson.sistemarestaurantepersistencia.IClientesDAO;
 import itson.sistemarestaurantepersistencia.IComandasDAO;
 import itson.sistemarestaurantepersistencia.IIngredientesDAO;
 import itson.sistemarestaurantepersistencia.IMesasDAO;
 import itson.sistemarestaurantepersistencia.IProductosDAO;
 import itson.sistemarestaurantepersistencia.IUsuariosDAO;
+import itson.sistemarestaurantepersistencia.implementaciones.ClientesDAO;
 import itson.sistemarestaurantepersistencia.implementaciones.ComandasDAO;
 import itson.sistemarestaurantepersistencia.implementaciones.IngredientesDAO;
 import itson.sistemarestaurantepersistencia.implementaciones.MesasDAO;
@@ -54,5 +58,11 @@ public class FabricaObjetoNegocio {
         IMesasDAO mesasDAO = new MesasDAO();
         IMesasBO mesasBO = new MesasBO(mesasDAO);
         return mesasBO;   
+    }
+    
+    public static IClientesBO crearClientesBO(){
+        IClientesDAO clientesDAO = new ClientesDAO();
+        IClientesBO clientesBO = new ClientesBO(clientesDAO);
+        return clientesBO;
     }
 }

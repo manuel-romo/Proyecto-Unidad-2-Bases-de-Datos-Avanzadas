@@ -30,8 +30,11 @@ public interface IMediador {
     public abstract void mostrarSeleccionCantidadProducto(JFrame frameActual, Long idMesa);
     public abstract void actualizarVentanaCantidadProductoSeleccionada(JFrame seleccionProductos, Long idProducto, float cantidad);
     public abstract void cerrarSeleccionCantidadProducto(JFrame seleccionCantidadadProductoCerrar);
-
-
     
-    
+    public abstract void mostrarClientesPrincipal(JFrame framActual);
+    public abstract void mostrarRegistroClienteFrecuente(JFrame frameActual);
+    public abstract void mostrarEditarCliente(JFrame frameActual, Long idIngrediente);
+    public abstract void mostrarBuscadorClientes(IVistaReceptoraIdCliente vistaReceptoraIdCliente);
+    public abstract void actualizarVentanaResultadoBusquedaCliente(JFrame buscadorClientes, Long idCliente);
+    public abstract void cerrarBuscadorClientes(JFrame buscadorCerrar);
 }

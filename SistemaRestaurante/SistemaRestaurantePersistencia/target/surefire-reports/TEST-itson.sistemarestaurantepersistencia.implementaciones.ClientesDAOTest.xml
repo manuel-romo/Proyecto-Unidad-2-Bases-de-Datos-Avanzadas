@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="1.095" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="2.97" tests="40" errors="0" skipped="0" failures="2">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
-    <property name="java.class.path" value="C:\Users\Usuario\Documents\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePersistencia\target\test-classes;C:\Users\Usuario\Documents\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePersistencia\target\classes;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.core\2.7.12\org.eclipse.persistence.core-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.asm\9.4.0\org.eclipse.persistence.asm-9.4.0.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.antlr\2.7.12\org.eclipse.persistence.antlr-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa\2.7.12\org.eclipse.persistence.jpa-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.jpql\2.7.12\org.eclipse.persistence.jpa.jpql-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.moxy\2.7.12\org.eclipse.persistence.moxy-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\jakarta.persistence\2.2.3\jakarta.persistence-2.2.3.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.modelgen.processor\2.7.12\org.eclipse.persistence.jpa.modelgen.processor-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Usuario\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\Usuario\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.3\junit-jupiter-params-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\Usuario\.m2\repository\edu\student\itson\dissof\SistemaRestauranteDominio\1.0\SistemaRestauranteDominio-1.0.jar;C:\Users\Usuario\.m2\repository\com\mysql\mysql-connector-j\9.2.0\mysql-connector-j-9.2.0.jar;C:\Users\Usuario\.m2\repository\com\google\protobuf\protobuf-java\4.29.0\protobuf-java-4.29.0.jar;"/>
+    <property name="java.class.path" value="C:\Users\Usuario\Documents\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePersistencia\target\test-classes;C:\Users\Usuario\Documents\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePersistencia\target\classes;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.core\2.7.12\org.eclipse.persistence.core-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.asm\9.4.0\org.eclipse.persistence.asm-9.4.0.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.antlr\2.7.12\org.eclipse.persistence.antlr-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa\2.7.12\org.eclipse.persistence.jpa-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.jpql\2.7.12\org.eclipse.persistence.jpa.jpql-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.moxy\2.7.12\org.eclipse.persistence.moxy-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\jakarta.persistence\2.2.3\jakarta.persistence-2.2.3.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.modelgen.processor\2.7.12\org.eclipse.persistence.jpa.modelgen.processor-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Usuario\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\Usuario\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.3\junit-jupiter-params-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\Usuario\Documents\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestauranteDominio\target\SistemaRestauranteDominio-1.0.jar;C:\Users\Usuario\.m2\repository\com\mysql\mysql-connector-j\9.2.0\mysql-connector-j-9.2.0.jar;C:\Users\Usuario\.m2\repository\com\google\protobuf\protobuf-java\4.29.0\protobuf-java-4.29.0.jar;"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="user.variant" value=""/>
@@ -15,10 +15,9 @@
     <property name="user.country" value="MX"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-21\bin"/>
-    <property name="sun.java.command" value="C:\Users\Usuario\AppData\Local\Temp\surefire7010470127540367509\surefirebooter-20250413004407605_3.jar C:\Users\Usuario\AppData\Local\Temp\surefire7010470127540367509 2025-04-13T00-44-07_494-jvmRun1 surefire-20250413004407605_1tmp surefire_0-20250413004407605_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\Usuario\AppData\Local\Temp\surefire1685144892285213836\surefirebooter-20250413011143766_3.jar C:\Users\Usuario\AppData\Local\Temp\surefire1685144892285213836 2025-04-13T01-11-41_978-jvmRun1 surefire-20250413011143766_1tmp surefire_0-20250413011143766_2tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="test" value="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest#eliminarClienteOk"/>
-    <property name="surefire.test.class.path" value="C:\Users\Usuario\Documents\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePersistencia\target\test-classes;C:\Users\Usuario\Documents\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePersistencia\target\classes;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.core\2.7.12\org.eclipse.persistence.core-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.asm\9.4.0\org.eclipse.persistence.asm-9.4.0.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.antlr\2.7.12\org.eclipse.persistence.antlr-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa\2.7.12\org.eclipse.persistence.jpa-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.jpql\2.7.12\org.eclipse.persistence.jpa.jpql-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.moxy\2.7.12\org.eclipse.persistence.moxy-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\jakarta.persistence\2.2.3\jakarta.persistence-2.2.3.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.modelgen.processor\2.7.12\org.eclipse.persistence.jpa.modelgen.processor-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Usuario\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\Usuario\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.3\junit-jupiter-params-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\Usuario\.m2\repository\edu\student\itson\dissof\SistemaRestauranteDominio\1.0\SistemaRestauranteDominio-1.0.jar;C:\Users\Usuario\.m2\repository\com\mysql\mysql-connector-j\9.2.0\mysql-connector-j-9.2.0.jar;C:\Users\Usuario\.m2\repository\com\google\protobuf\protobuf-java\4.29.0\protobuf-java-4.29.0.jar;"/>
+    <property name="surefire.test.class.path" value="C:\Users\Usuario\Documents\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePersistencia\target\test-classes;C:\Users\Usuario\Documents\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestaurantePersistencia\target\classes;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.core\2.7.12\org.eclipse.persistence.core-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.asm\9.4.0\org.eclipse.persistence.asm-9.4.0.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.antlr\2.7.12\org.eclipse.persistence.antlr-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa\2.7.12\org.eclipse.persistence.jpa-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.jpql\2.7.12\org.eclipse.persistence.jpa.jpql-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.moxy\2.7.12\org.eclipse.persistence.moxy-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\jakarta.persistence\2.2.3\jakarta.persistence-2.2.3.jar;C:\Users\Usuario\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.modelgen.processor\2.7.12\org.eclipse.persistence.jpa.modelgen.processor-2.7.12.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Usuario\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\Usuario\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.3\junit-jupiter-params-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\Usuario\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\Usuario\Documents\GitHub\Proyecto-Unidad-2-Bases-de-Datos-Avanzadas\SistemaRestaurante\SistemaRestauranteDominio\target\SistemaRestauranteDominio-1.0.jar;C:\Users\Usuario\.m2\repository\com\mysql\mysql-connector-j\9.2.0\mysql-connector-j-9.2.0.jar;C:\Users\Usuario\.m2\repository\com\google\protobuf\protobuf-java\4.29.0\protobuf-java-4.29.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\Usuario"/>
     <property name="user.language" value="es"/>
@@ -31,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\Usuario\AppData\Local\Temp\surefire7010470127540367509\surefirebooter-20250413004407605_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Usuario\AppData\Local\Temp\surefire1685144892285213836\surefirebooter-20250413011143766_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.3+7-LTS-152"/>
@@ -60,8 +59,164 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="eliminarClienteOk" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="1.065">
-    <system-out><![CDATA[[EL Info]: 2025-04-13 00:44:08.524--ServerSession(101874302)--EclipseLink, version: Eclipse Persistence Services - 2.7.12.v20230209-e5c4074ef3
+  <testcase name="consultarClientePorIdOk" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="1.11">
+    <system-out><![CDATA[[EL Info]: 2025-04-13 01:11:44.902--ServerSession(867288517)--EclipseLink, version: Eclipse Persistence Services - 2.7.12.v20230209-e5c4074ef3
+]]></system-out>
+  </testcase>
+  <testcase name="registrarClienteApellidoMaternoExcedeLongitudGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.042">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteFormatoInvalidoException: La longitud del Apellido Materno del cliente que se intento registrar excede los limites.
+]]></system-out>
+  </testcase>
+  <testcase name="actualizarClienteNombreExcedeLongitudGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.036">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteFormatoInvalidoException: La longitud del Nombre del cliente que se intento actualizar excede los limites.
+]]></system-out>
+  </testcase>
+  <testcase name="actualizarClienteCorreoNuloGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.031">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinCorreoException: El cliente que se intento actualizar no tiene Correo Electronico.
+]]></system-out>
+  </testcase>
+  <testcase name="consultarClientePorTelefonoOk" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.044"/>
+  <testcase name="registrarClienteMismoTelefonoGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.065">
+    <failure message="Expected itson.sistemarestaurantepersistencia.excepciones.ClienteMismoTelefonoExistenteException to be thrown, but nothing was thrown." type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Expected itson.sistemarestaurantepersistencia.excepciones.ClienteMismoTelefonoExistenteException to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:73)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3115)
+	at itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest.registrarClienteMismoTelefonoGeneraExcepcion(ClientesDAOTest.java:458)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></failure>
+  </testcase>
+  <testcase name="consultarVisitasClienteSinIdGeneraException" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.048">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.ConsultaClienteSinIdException: No existe un cliente con Id especificado.
+]]></system-out>
+  </testcase>
+  <testcase name="consultarClienteTelefonoNoExisteGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.056">
+    <system-out><![CDATA[Error: No existe cliente con el telefono proporcionado.
+]]></system-out>
+  </testcase>
+  <testcase name="actualizarClienteOk" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.138">
+    <system-out><![CDATA[[EL Info]: 2025-04-13 01:11:46.006--ServerSession(613630562)--EclipseLink, version: Eclipse Persistence Services - 2.7.12.v20230209-e5c4074ef3
+]]></system-out>
+  </testcase>
+  <testcase name="registrarClienteSinTelefonoGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.04">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinTelefonoException: El cliente que se intento registrar no tiene Telefono.
+]]></system-out>
+  </testcase>
+  <testcase name="registrarClienteSinCorreoGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.033">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinCorreoException: El cliente que se intento registrar no tiene Correo Electronico.
+]]></system-out>
+  </testcase>
+  <testcase name="consultarClientePorCorreoOk" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.042"/>
+  <testcase name="actualizarClienteApellidoPaternoExcedeLongitudGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.033">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteFormatoInvalidoException: La longitud del Apellido Paterno del cliente que se intento actualizar excede los limites.
+]]></system-out>
+  </testcase>
+  <testcase name="registrarClienteTelefonoExcedeLongitudGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.032">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteFormatoInvalidoException: La longitud del Telefono del cliente que se intento registrar excede los limites.
+]]></system-out>
+  </testcase>
+  <testcase name="consultarClienteIdNoExisteGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.036">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.ClienteNoExisteException: No existe un cliente con Id especificado.
+]]></system-out>
+  </testcase>
+  <testcase name="registrarClienteApellidoPaternoExcedeLongitudGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.033">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteFormatoInvalidoException: La longitud del Apellido Paterno del cliente que se intento registrar excede los limites.
+]]></system-out>
+  </testcase>
+  <testcase name="actualizarClienteNombreNuloGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.038">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinNombreException: El cliente que se intento actualizar no tiene Nombre.
+]]></system-out>
+  </testcase>
+  <testcase name="registrarClienteSinApellidoPaternoGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.03">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinNombreException: El cliente que se intento registrar no tiene Apellido Paterno.
+]]></system-out>
+  </testcase>
+  <testcase name="consultarClienteCorreoNoExisteGeneraException" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.039">
+    <system-out><![CDATA[Error: No existe cliente con el correo electronico proporcionado.
+]]></system-out>
+  </testcase>
+  <testcase name="consultarClienteCorreoNuloGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.03">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.ConsultaClienteSinCorreoException: El correo utilizado para la consulta de cliente tiene valor nulo
+]]></system-out>
+  </testcase>
+  <testcase name="consultarClientePorNombreOk" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.188"/>
+  <testcase name="consultarClientesOk" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.101">
+    <system-out><![CDATA[edu.student.itson.dissof.sistemarestaurantedominio.dtos.Cliente[ id=1456 ]
+[EL Info]: 2025-04-13 01:11:46.724--ServerSession(765329253)--EclipseLink, version: Eclipse Persistence Services - 2.7.12.v20230209-e5c4074ef3
+]]></system-out>
+  </testcase>
+  <testcase name="registrarClienteNombreExcedeLongitudGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.031">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteFormatoInvalidoException: La longitud del Nombre del cliente que se intento registrar excede los limites.
+]]></system-out>
+  </testcase>
+  <testcase name="registrarClienteOk" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.045"/>
+  <testcase name="registrarClienteMismoCorreGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.04">
+    <failure message="Expected itson.sistemarestaurantepersistencia.excepciones.ClienteMismoCorreoExistenteException to be thrown, but nothing was thrown." type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Expected itson.sistemarestaurantepersistencia.excepciones.ClienteMismoCorreoExistenteException to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:73)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3115)
+	at itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest.registrarClienteMismoCorreGeneraExcepcion(ClientesDAOTest.java:425)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></failure>
+  </testcase>
+  <testcase name="registrarClienteSinNombreGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.027">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinNombreException: El cliente que se intento registrar no tiene Nombre.
+]]></system-out>
+  </testcase>
+  <testcase name="eliminarClienteSinIdGeneraException" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.045">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.ConsultaClienteSinIdException: No existe un cliente con Id especificado.
+]]></system-out>
+  </testcase>
+  <testcase name="actualizarClienteMismoTelefonoGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.04">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.ClienteMismoTelefonoExistenteException: Ya existe un cliente con el mismo Telefono.
+]]></system-out>
+  </testcase>
+  <testcase name="actualizarClienteApellidoMaternoNuloGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.028">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinNombreException: El cliente que se intento actualizar no tiene Apellido Materno.
+]]></system-out>
+  </testcase>
+  <testcase name="actualizarClienteApellidoPaternoNuloGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.031">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinNombreException: El cliente que se intento actualizar no tiene Apellido Paterno.
+]]></system-out>
+  </testcase>
+  <testcase name="actualizarClienteTelefonoNuloGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.029">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinTelefonoException: El cliente que se intento actualizar no tiene Telefono.
+]]></system-out>
+  </testcase>
+  <testcase name="actualizarClienteApellidoMaternoExcedeLongitudGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.028">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteFormatoInvalidoException: La longitud del Apellido Materno del cliente que se intento actualizar excede los limites.
+]]></system-out>
+  </testcase>
+  <testcase name="consultarClienteTelefonoNuloGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.027">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.ConsultaClienteSinTelefonoException: El telefono utilizado para la consulta de cliente tiene valor nulo.
+]]></system-out>
+  </testcase>
+  <testcase name="consultarVisitasClienteOk" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.041"/>
+  <testcase name="actualizarClienteTelefonoExcedeLongitudGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.031">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteFormatoInvalidoException: La longitud del Telefono del cliente que se intento actualizar excede los limites.
+]]></system-out>
+  </testcase>
+  <testcase name="eliminarClienteOk" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.05"/>
+  <testcase name="registrarClienteSinApellidoMaternoGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.029">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.RegistroClienteSinNombreException: El ingrediente que se intento registrar no tiene Apellido Materno.
+]]></system-out>
+  </testcase>
+  <testcase name="actualizarClienteMismoCorreoGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.038">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.ClienteMismoCorreoExistenteException: Ya existe un cliente con el mismo Correo Electronico.
+]]></system-out>
+  </testcase>
+  <testcase name="consultarClienteNombreNuloGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.026">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.ConsultaClienteSinNombreException: El nombre utilizado para la consulta de cliente tiene valor nulo.
+]]></system-out>
+  </testcase>
+  <testcase name="consultarClienteIdNuloGeneraExcepcion" classname="itson.sistemarestaurantepersistencia.implementaciones.ClientesDAOTest" time="0.089">
+    <system-out><![CDATA[Error: itson.sistemarestaurantepersistencia.excepciones.ConsultaClienteSinIdException: El Id utilizado para la consulta del cliente tiene valor nulo.
+[EL Info]: 2025-04-13 01:11:47.406--ServerSession(1775525066)--EclipseLink, version: Eclipse Persistence Services - 2.7.12.v20230209-e5c4074ef3
 ]]></system-out>
   </testcase>
 </testsuite>

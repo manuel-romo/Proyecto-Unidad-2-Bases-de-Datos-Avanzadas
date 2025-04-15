@@ -64,7 +64,10 @@ public class MenuPrincipal extends JFrame {
     
     private void mostrarIngredientesPrincipal(){
         control.mostrarIngredientesPrincipal(this);
-       
+    }
+    
+    private void mostrarClientesPrincipal(){
+        control.mostrarClientesPrincipal(this);
     }
     
     private void cargarDatosPrueba(){
@@ -221,7 +224,7 @@ public class MenuPrincipal extends JFrame {
     }//GEN-LAST:event_btnModuloIngredientesActionPerformed
 
     private void btnModuloClientesFrecuentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModuloClientesFrecuentesActionPerformed
-        // TODO add your handling code here:
+        mostrarClientesPrincipal();
     }//GEN-LAST:event_btnModuloClientesFrecuentesActionPerformed
 
     private void btnModuloClientesFrecuentes1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModuloClientesFrecuentes1ActionPerformed

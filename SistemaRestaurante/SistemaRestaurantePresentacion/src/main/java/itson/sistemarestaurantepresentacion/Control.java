@@ -4,6 +4,7 @@ package itson.sistemarestaurantepresentacion;
 import itson.sistemarestaurantenegocio.interfaces.IIngredientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IUsuariosBO;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetoNegocio;
+import itson.sistemarestaurantenegocio.interfaces.IClientesBO;
 import itson.sistemarestaurantenegocio.interfaces.IComandasBO;
 import itson.sistemarestaurantenegocio.interfaces.IMesasBO;
 import itson.sistemarestaurantenegocio.interfaces.IProductosBO;
@@ -37,6 +38,8 @@ public class Control implements IMediador{
     private SeleccionMesaComanda formSeleccionMesaComanda;
     private InformacionComanda formInformacionComanda;
     private SeleccionCantidadProductoComanda formSeleccionCantidadProductoComanda;
+    
+    private ClientesPrincipal formClientesPrincipal;
      
     /**
      * Método que permite mostrar la pantalla inicial del sistema.
@@ -222,7 +225,13 @@ public class Control implements IMediador{
         formInformacionComanda.setVisible(true);
     }
     
-    
+    @Override
+    public void mostrarClientesPrincipal(JFrame frameActual){
+        IClientesBO clientesBO = FabricaObjetoNegocio.crearClientesBO();
+        formClientesPrincipal = new ClientesPrincipal(this, clientesBO);
+        formClientesPrincipal.setVisible(true);
+        frameActual.dispose();
+    }
     
     
 }
